@@ -4,6 +4,7 @@ import os
 
 import MySQLdb
 import json
+import datetime
 from google.appengine.api import urlfetch
 
 
@@ -11,6 +12,14 @@ CLOUDSQL_PROJECT = '<hoopspredict>'
 CLOUDSQL_INSTANCE = '<chris-bosh>'
 
 db = MySQLdb.connect(db = "c9", user = "tdliu")
+
+'''
+db = MySQLdb.connect(
+                unix_socket='/cloudsql/{}:{}'.format(
+                    CLOUDSQL_PROJECT,
+                    CLOUDSQL_INSTANCE),
+                user='root')
+'''
 
 c = db.cursor()
 
@@ -24,7 +33,6 @@ def drop_raw_user_picks_table():
     DROP TABLE IF EXISTS raw_user_picks;
     """
 
-"select * from user_picks join (select )"
 
 # Table for processed user picks with results
 # Last pick and whether or not it was correct
@@ -53,17 +61,12 @@ def insert_user_picks_table():
     WHERE a.team_pick != "";
     """
     
-def refresh_user_picks_table():
+def refresh_user_picks_table(c):
     c.execute(drop_user_picks_table())
     c.execute(create_user_picks_table())
     c.execute(insert_user_picks_table())
     return 0
-    
 
-"WITH (select user_id, game_id, max(created_ts) as created_ts from user_picks group by user_id, game_id)"
-
-c.execute(create_user_picks_table())
-c.execute("INSERT INTO user_picks VALUES (NOW(), 'tony_test', 123456, 'MIA')")
     
 def create_games_table():
     return """
@@ -77,7 +80,7 @@ def drop_games_table():
 
 # Get today's games and get results from yesterday
 # takes in today's date
-def insert_games_table(curr_date):
+def insert_games_table(curr_date, c):
     #curr_date = 20161007
     url = 'http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json'.format(curr_date)
     r = urlfetch.fetch(url)
@@ -89,7 +92,7 @@ def insert_games_table(curr_date):
     return 0
 
     
-def update_games_table(curr_date):
+def update_games_table(curr_date, c):
     prev_date = curr_date - 1
     url = 'http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json'.format(prev_date)
     r = urlfetch.fetch(url)
@@ -104,6 +107,46 @@ def update_games_table(curr_date):
         WHERE game_id = %s;""", (game['hTeam']['score'], game['vTeam']['score'], winner, game['gameId']))
     return 0
     
+def get_started():
+    db = MySQLdb.connect(db = "c9", user = "tdliu")
+    c = db.cursor()
+    c.execute(drop_games_table())
+    c.execute(create_games_table())
+    c.execute(drop_raw_user_picks_table())
+    c.execute(create_raw_user_picks_table())
+    db.commit()
+    db.close()
+    return 0
+    
+    
+def daily_update(curr_date = None):
+    db = MySQLdb.connect(db = "c9", user = "tdliu")
+    c = db.cursor()
+    if curr_date is None:
+        now = datetime.datetime.now()
+        curr_date = "{}{}{}".format(now.year, now.month, now.day)
+        curr_date = int(curr_date)
+    print "Updating games table"
+    update_games_table(curr_date, c)
+    print "Refreshing user picks table"
+    refresh_user_picks_table(c)
+    print "Inserting new games"
+    insert_games_table(curr_date, c)
+    db.commit()
+    db.close()
+    return curr_date
+  
+CURR_DATE = 20161006
+  
+get_started()
+curr_date = 20161006
+daily_update(curr_date)
+curr_date = 20161007
+daily_update(curr_date)
+curr_date = 20161008
+daily_update(curr_date)
+
+'''
 c.execute(create_user_picks_table())
 c.execute(drop_games_table())
 c.execute(create_games_table())
@@ -116,45 +159,8 @@ insert_games_table(curr_date)
 curr_date = 20161008
 update_games_table(curr_date)
 insert_games_table(curr_date)
-
-
-
-# table for most recent picks to be displayed
-# joins games and users and gets today's and yesterday's games
-
-
-# daily_update
-
-#c.execute("INSERT INTO games (league, game_id, home, away, winner) values ('NBA', 123, 'TOR', 'MIA', 'MIA')")
-
-'''
-def get_nba_daily_games(date):
-
-    #url = 'http://data.nba.net/data/10s/prod/v1/20161001/scoreboard.json'
-    url = 'http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json'.format(date)
-    r = urlfetch.fetch(url)
-    games = json.loads(r.content)['games']
-    game_info = []
-    for game in games:
-        game_info.append(GameInfo(game['gameId'], game['hTeam']['triCode'], game['vTeam']['triCode'], date))
-    return game_info
-    
-class GameInfo:
-    def __init__(self, game_id, home, away, date):
-        self.id = game_id
-        self.home = home
-        self.away = away
-        self.date = date
-        
-        
 '''
 
 
 
-'''
-db = MySQLdb.connect(
-                unix_socket='/cloudsql/{}:{}'.format(
-                    CLOUDSQL_PROJECT,
-                    CLOUDSQL_INSTANCE),
-                user='root')
-'''
+

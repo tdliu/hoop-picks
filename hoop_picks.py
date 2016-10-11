@@ -20,13 +20,13 @@ import urllib
 #import schedule
 
 from google.appengine.api import users
-from google.appengine.ext import ndb
 import MySQLdb
 
 
 import jinja2
 import webapp2
 
+'''
 class GameInfo:
     def __init__(self, game_id, home, away, date, home_score, away_score):
         self.id = game_id
@@ -35,7 +35,7 @@ class GameInfo:
         self.date = date
         self.home_score = home_score
         self.away_score = away_score
-
+'''
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -58,7 +58,7 @@ c = db.cursor()
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        curr_date = 20161008
+        curr_date = 20161006
         #nba_games = schedule.get_nba_daily_games(curr_date)
         user = users.get_current_user()
         if user:
@@ -69,18 +69,6 @@ class MainPage(webapp2.RequestHandler):
             url_linktext = 'Login'
         db = MySQLdb.connect(db = "c9", user = "tdliu")
         c = db.cursor()
-        '''
-        c.execute("select game_id, home, away, date, home_score, away_score from games;".format(curr_date))
-        curr_games = []
-        prev_games = []
-        for (game_id, home, away, date, home_score, away_score) in c.fetchall():
-            if curr_date == date:
-                curr_games.append(GameInfo(game_id, home, away, date, None, None))
-            else:
-                prev_games.append(GameInfo(game_id, home, away, date, home_score, away_score))
-        # Only display submit pick for curr_date games
-        '''
-        #curr_picks = []
         curr_games = []
         prev_games = []
         curr_picks = [] 
@@ -104,10 +92,6 @@ class MainPage(webapp2.RequestHandler):
                 else:
                     curr_games.append({'game_id': game_id, 'home': home, 'away': away, 'date': date, 'team_pick': team_pick})
             
-            #for (game_id, team_pick) in c.fetchall():
-            #    curr_picks.append({'game_id': game_id, 'team_pick': team_pick})
-            
-        
         template_values = {
             'user': user,
             #'guestbook_name': urllib.quote_plus(guestbook_name),
