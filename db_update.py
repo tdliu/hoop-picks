@@ -5,13 +5,41 @@ import os
 import MySQLdb
 import json
 import datetime
+#import unittest
+
 from google.appengine.api import urlfetch
+from google.appengine.ext import ndb
 
 
 CLOUDSQL_PROJECT = '<hoopspredict>'
 CLOUDSQL_INSTANCE = '<chris-bosh>'
 
 db = MySQLdb.connect(db = "c9", user = "tdliu")
+
+class Participant(ndb.Model):
+    abbrev_name = ndb.StringProperty()
+    
+    
+
+class Event(ndb.Model):
+    season = ndb.IntegerProperty()
+    gameId = ndb.IntegerProperty()
+    home = ndb.KeyProperty(kind = Participant) # Use participant generated ID
+    away = ndb.KeyProperty(kind = Participant)
+    home_score = ndb.IntegerProperty()
+    away_score= ndb.IntegerProperty()
+    winner= ndb.KeyProperty(kind = Participant)
+    #participants = ndb.KeyProperty(kind = Participant, repeated = True)
+    
+    
+class Pick(ndb.Model):
+    user_id = ndb.StringProperty()
+    created = ndb.DateTimeProperty(auto_now = True)
+    event = ndb.KeyProperty(kind = Event)
+    
+
+
+    # Teams are classes
 
 '''
 db = MySQLdb.connect(
@@ -135,8 +163,6 @@ def daily_update(curr_date = None):
     db.commit()
     db.close()
     return curr_date
-  
-CURR_DATE = 20161006
   
 get_started()
 curr_date = 20161006

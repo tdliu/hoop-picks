@@ -22,10 +22,26 @@ import urllib
 from google.appengine.api import users
 import MySQLdb
 
-
 import jinja2
 import webapp2
 
+CLOUDSQL_PROJECT = 'hoop-picks'
+CLOUDSQL_INSTANCE = 'chris-bosh'
+
+def get_db():
+    if os.getenv('SERVER_SOFTWARE', '').startswith('Google App Engine/'):
+        db = MySQLdb.connect(
+            unix_socket='/cloudsql/{}:{}'.format(
+                CLOUDSQL_PROJECT,
+                CLOUDSQL_INSTANCE),
+            user='root')
+    else:
+        print "hi"
+        db = MySQLdb.connect(db = "c9", user = "tdliu")
+    return db
+    
+db = MySQLdb.connect(db = "c9", user = "tdliu")
+c = db.cursor()
 '''
 class GameInfo:
     def __init__(self, game_id, home, away, date, home_score, away_score):
@@ -45,9 +61,9 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 DEFAULT_GUESTBOOK_NAME = 'default_guestbook'
 
-db = MySQLdb.connect(db = "c9", user = "tdliu")
+#db = MySQLdb.connect(db = "c9", user = "tdliu")
 
-c = db.cursor()
+#c = db.cursor()
 
 
 
@@ -58,7 +74,7 @@ c = db.cursor()
 class MainPage(webapp2.RequestHandler):
 
     def get(self):
-        curr_date = 20161006
+        curr_date = 20161008
         #nba_games = schedule.get_nba_daily_games(curr_date)
         user = users.get_current_user()
         if user:
@@ -67,7 +83,8 @@ class MainPage(webapp2.RequestHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
-        db = MySQLdb.connect(db = "c9", user = "tdliu")
+        db = get_db()
+        #db = MySQLdb.connect(db = "c9", user = "tdliu")
         c = db.cursor()
         curr_games = []
         prev_games = []
@@ -116,7 +133,9 @@ class MakePickHandler(webapp2.RequestHandler):
         game_id = self.request.get("game_id")
         team_pick = self.request.get("picked_team")
         #self.response.out.write("<p>{}</p>".format(user_id))
-        db = MySQLdb.connect(db = "c9", user = "tdliu")
+        #db = MySQLdb.connect(db = "c9", user = "tdliu")
+
+        db = get_db()
         c = db.cursor()
         c.execute("INSERT INTO raw_user_picks VALUES (NOW(), %s, %s, %s);", (user.user_id(), game_id, team_pick))
         db.commit()
