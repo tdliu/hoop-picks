@@ -60,8 +60,8 @@
       <form action="/make_pick" method="post">
         <div class="form-group">
           <label for="game">{{ curr_game['away'] }} @ {{ curr_game['home'] }}:</label>
-          {% if curr_game['team_pick'] %}
-            <p>Your current pick is {{ curr_game['team_pick'] }}</p>
+          {% if curr_game['pick'] %}
+            <p>Your current pick is {{ curr_game['pick'] }}</p>
           {% endif %}
           <select name="picked_team">
             <option></option>
@@ -69,7 +69,7 @@
             <option value={{ curr_game['away'] }}>{{ curr_game['away'] }}</option>
             <input type = "hidden" name = "game_id" value = {{ curr_game['game_id'] }}>
           </select>
-          {% if curr_game['team_pick'] %}
+          {% if curr_game['pick'] %}
             <br><input type="submit" value="Change Pick">
           {% else %}
             <br><input type="submit" value="Submit Pick">
@@ -80,8 +80,8 @@
       <h3>Previous games</h3>
       {% for prev_game in prev_games %}
       <div class="row">
-        {% if prev_game['team_pick'] %}
-          {{ prev_game['away'] }} {{ prev_game['away_score'] }} @ {{ prev_game['home'] }} {{ prev_game['home_score'] }}: You picked {{ prev_game['team_pick'] }}
+        {% if prev_game['pick'] %}
+          {{ prev_game['away'] }} {{ prev_game['away_score'] }} @ {{ prev_game['home'] }} {{ prev_game['home_score'] }}: You picked {{ prev_game['pick'] }}
         {% else %}
           {{ prev_game['away'] }} {{ prev_game['away_score'] }} @ {{ prev_game['home'] }} {{ prev_game['home_score'] }}
         {% endif %}
