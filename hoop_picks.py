@@ -142,7 +142,7 @@ class MainPage(webapp2.RequestHandler):
             'prev_games': prev_games,
             'curr_date': curr_date,
         }
-        template = JINJA_ENVIRONMENT.get_template('index.html')
+        template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         self.response.write(template.render(template_values))
 # [END main_page]
 

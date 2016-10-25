@@ -1,0 +1,21 @@
+.pick-card {
+	text-align: center;
+	border-style: solid;
+	border-width: 1px;
+	border-color: black;
+	border-radius: 5px;
+	margin: 5px;
+}
+
+.pick-card-header {
+
+}
+
+.pick-card-panel {
+	
+	transition: .25s;
+}
+
+.pick-card-panel:hover {
+	background-color: #DDD;
+}
