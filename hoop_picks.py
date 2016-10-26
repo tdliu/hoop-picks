@@ -21,6 +21,10 @@ import urllib
 from google.appengine.api import users
 from google.appengine.ext import ndb
 import datetime
+#import data_classes as dc
+from data_classes import Option, Outcome, Event, Pick
+import logging
+import json
 
 import jinja2
 import webapp2
@@ -37,6 +41,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 # will be consistent. However, the write rate should be limited to
 # ~1/second.
 
+'''
 class Option(ndb.Model):
     abbrev_name = ndb.StringProperty()
 
@@ -87,7 +92,7 @@ def submit_sample_games():
     Event(id = "11600035", season = 2016, date = 20161008, options = [ndb.Key(Option, "SAS"), ndb.Key(Option, "ATL")]),
     ])
     return
-
+'''
 # [START main_page]
 class MainPage(webapp2.RequestHandler):
 
@@ -104,7 +109,7 @@ class MainPage(webapp2.RequestHandler):
             url = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
 
-        curr_date = 20161006
+        curr_date = 20161007
         curr_games_qry = Event.query().filter(Event.date == curr_date)
         curr_games_raw = curr_games_qry.fetch()
         curr_games = []
@@ -146,13 +151,6 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 # [END main_page]
 
-'''
-class Pick(ndb.Model):
-    user_id = ndb.StringProperty()
-    last_updated = ndb.DateTimeProperty(auto_now = True)
-    event = ndb.KeyProperty(kind = Event)
-    pick = ndb.KeyProperty(kind = Option)
-'''
 
 class MakePickHandler(webapp2.RequestHandler):
     def post(self):
@@ -184,6 +182,12 @@ class MakePickHandler(webapp2.RequestHandler):
         # print curr_pick       
         self.redirect('/')
 
+class PickHandler(webapp2.RequestHandler):
+    def post(self):
+        logging.info(self.request.body)
+        data = json.loads(self.request.body)
+        self.response.out.write(json.dumps(data))
+
 '''
 # [START guestbook]
 class Guestbook(webapp2.RequestHandler):
@@ -214,6 +218,7 @@ class Guestbook(webapp2.RequestHandler):
 # [START app]
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/make_pick', MakePickHandler)
+    ('/make_pick', MakePickHandler),
+    ('/pick/', PickHandler)
 ], debug=True)
 # [END app]
