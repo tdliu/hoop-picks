@@ -19,6 +19,7 @@ class Event(ndb.Model):
     options = ndb.KeyProperty(kind = Option, repeated = True) # Use participant generated ID
     #away = ndb.KeyProperty(kind = Option)
     outcome = ndb.StructuredProperty(Outcome, default = Outcome())
+    start_time = ndb.DateTimeProperty()
     #participants = ndb.KeyProperty(kind = Participant, repeated = True)
     
     
