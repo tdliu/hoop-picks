@@ -189,8 +189,15 @@ class PickHandler(webapp2.RequestHandler):
         user_id = data['user_id']
         game_id = data['game_id']
         team = data['team']
+        # MAGIC
+        # validate:
+            #game has not started yet
+            #team is a valid choice
+            # etc.
 
-<<<<<<< HEAD
+        responseData = { 'success' : True }
+        self.response.out.write(json.dumps(responseData))
+
 class CronDbUpdate(webapp2.RequestHandler):
     def post(self):
         # do stuff
@@ -200,15 +207,7 @@ class CronDbUpdate(webapp2.RequestHandler):
         curr_date = int(curr_date)        
         insert_curr_nba_games(curr_date)
         #update_nba_games(date)
-=======
-        # MAGIC
-        # validate:
-            #game has not started yet
-            #team is a valid choice
-            # etc.
 
-        responseData = { 'success' : True }
-        self.response.out.write(json.dumps(responseData))
 
 
 # --------------------- HANDLERS TO IMPLEMENT --------------------
@@ -242,15 +241,11 @@ class GameHandler(webapp2.RequestHandler):
             },
         ]
         self.response.out.write(json.dumps(responseData))
->>>>>>> 8e4ef88fd101013f9c417894578dda4ffb6b937f
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/make_pick', MakePickHandler),
     ('/pick/', PickHandler),
-<<<<<<< HEAD
-    ('/db_update', CronDbUpdate)
-=======
+    ('/db_update', CronDbUpdate),
     ('/game/', GameHandler)
->>>>>>> 8e4ef88fd101013f9c417894578dda4ffb6b937f
 ], debug=True)
