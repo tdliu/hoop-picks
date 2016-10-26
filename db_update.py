@@ -1,10 +1,15 @@
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
+import datetime
+import json
 
 from data_classes import Option, Outcome, Event, Pick
 
 def insert_curr_nba_games(curr_date):
-    url = 'http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json'.format(curr_date)
+    print json.loads
+
+    url =  "http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json".format(curr_date)
+    #import json
     r = urlfetch.fetch(url)
     games = json.loads(r.content)['games']
     events = []
@@ -12,7 +17,7 @@ def insert_curr_nba_games(curr_date):
     	hteam = Option.get_or_insert("nba{}".format(game['hTeam']['triCode']), tri_code = game['hTeam']['triCode'])
     	vteam = Option.get_or_insert("nba{}".format(game['vTeam']['triCode']), tri_code = game['vTeam']['triCode'])
     	#events.append(Event(id = "nba{}".format(game['gameId']), season = int(game['seasonYear']), options = [ndb.Key(Option, game['hTeam']['triCode']), ndb.Key(Option, game['vTeam']['triCode'])]))
-    	events.append(Event(id = "nba{}".format(game['gameId']), season = int(game['seasonYear']), date =curr_date, options = [hteam.key, vteam.key]))
+    	events.append(Event(id = "nba{}".format(game['gameId']), season = int(game['seasonYear']), date =curr_date, options = [hteam.key, vteam.key], start_time = datetime.datetime.strptime( game['startTimeUTC'], "%Y-%m-%dT%H:%M:%S.000Z")))
     ndb.put_multi(events)
 
 def update_nba_games(date):

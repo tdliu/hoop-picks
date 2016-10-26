@@ -23,7 +23,7 @@ from google.appengine.ext import ndb
 import datetime
 #import data_classes as dc
 from data_classes import Option, Outcome, Event, Pick
-import db_update
+import db_update as db
 import logging
 import json
 
@@ -42,58 +42,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 # will be consistent. However, the write rate should be limited to
 # ~1/second.
 
-'''
-class Option(ndb.Model):
-    tri_code = ndb.StringProperty()
 
-class Outcome(ndb.Model):
-    scores = ndb.IntegerProperty(repeated = True)
-    #home_score = ndb.IntegerProperty()
-    #away_score = ndb.IntegerProperty()
-    correct = ndb.KeyProperty(kind = Option)
-    
-
-class Event(ndb.Model):
-    event_type = ndb.StringProperty()
-    gameId = ndb.IntegerProperty()
-    season = ndb.IntegerProperty()
-    date = ndb.IntegerProperty()
-    options = ndb.KeyProperty(kind = Option, repeated = True) # Use participant generated ID
-    #away = ndb.KeyProperty(kind = Option)
-    outcome = ndb.StructuredProperty(Outcome)
-    #participants = ndb.KeyProperty(kind = Participant, repeated = True)
-    
-    
-class Pick(ndb.Model):
-    user_id = ndb.StringProperty()
-    last_updated = ndb.DateTimeProperty(auto_now = True)
-    prev_picks = ndb.KeyProperty(kind = Option, repeated = True)
-    event = ndb.KeyProperty(kind = Event)
-    pick = ndb.KeyProperty(kind = Option)
-
-
-
-def submit_sample_games():
-    ndb.put_multi([Option(id = "PHI", tri_code = "PHI"), Option(id = "WAS", tri_code = "WAS"), Option(id = "IND", tri_code = "IND"), Option(id = "CHI", tri_code = "CHI"), Option(id = "BKN", tri_code = "BKN"), Option(id = "DET", tri_code = "DET"), Option(id = "CHA", tri_code = "CHA"), Option(id = "BOS", tri_code = "BOS"), Option(id = "MEM", tri_code = "MEM"), Option(id = "ATL", tri_code = "ATL"), Option(id = "GSW", tri_code = "GSW"), Option(id = "SAC", tri_code = "SAC"), Option(id = "POR", tri_code = "POR"), Option(id = "PHX", tri_code = "PHX"), Option(id = "LAL", tri_code = "LAL"), Option(id = "DEN", tri_code = "DEN"), Option(id = "BOS", tri_code = "BOS"), Option(id = "CHA", tri_code = "CHA"), Option(id = "NYK", tri_code = "NYK"), Option(id = "CLE", tri_code = "CLE"), Option(id = "MIA", tri_code = "MIA"), Option(id = "MIN", tri_code = "MIN"), Option(id = "MIL", tri_code = "MIL"), Option(id = "DAL", tri_code = "DAL"), Option(id = "SAS" ,tri_code = "SAS")])
-
-    ndb.put_multi([
-    Event(id = "11600021", season = 2016, date = 20161006, options = [ndb.Key(Option, "PHI"), ndb.Key(Option, "WAS")], outcome = Outcome(scores = [119, 125], correct = ndb.Key(Option, "WAS"))),
-    Event(id = "11600022", season = 2016, date = 20161006, options = [ndb.Key(Option, "IND"), ndb.Key(Option, "CHI")], outcome = Outcome(scores = [115, 108], correct = ndb.Key(Option, "IND"))),
-    Event(id = "11600024", season = 2016, date = 20161006, options = [ndb.Key(Option, "BKN"), ndb.Key(Option, "DET")], outcome = Outcome(scores = [101, 94], correct = ndb.Key(Option, "DET"))),
-    Event(id = "11600025", season = 2016, date = 20161006, options = [ndb.Key(Option, "CHA"), ndb.Key(Option, "BOS")], outcome = Outcome(scores = [92, 107], correct = ndb.Key(Option, "CHA"))),
-    Event(id = "11600026", season = 2016, date = 20161006, options = [ndb.Key(Option, "GSW"), ndb.Key(Option, "SAC")], outcome = Outcome(scores = [105, 96], correct = ndb.Key(Option, "GSW"))),
-    Event(id = "11600027", season = 2016, date = 20161007, options = [ndb.Key(Option, "POR"), ndb.Key(Option, "PHX")], outcome = Outcome(scores = [115, 110], correct = ndb.Key(Option, "POR"))),
-    Event(id = "11600028", season = 2016, date = 20161007, options = [ndb.Key(Option, "LAL"), ndb.Key(Option, "DEN")], outcome = Outcome(scores = [97, 101], correct = ndb.Key(Option, "DEN"))),
-    Event(id = "11600029", season = 2016, date = 20161008, options = [ndb.Key(Option, "BOS"), ndb.Key(Option, "CHA")]),
-    Event(id = "11600031", season = 2016, date = 20161008, options = [ndb.Key(Option, "NYK"), ndb.Key(Option, "BKN")]),
-    Event(id = "11600033", season = 2016, date = 20161008, options = [ndb.Key(Option, "CLE"), ndb.Key(Option, "PHI")]),
-    Event(id = "11600030", season = 2016, date = 20161008, options = [ndb.Key(Option, "CHI"), ndb.Key(Option, "IND")]),
-    Event(id = "11600032", season = 2016, date = 20161008, options = [ndb.Key(Option, "MIA"), ndb.Key(Option, "MIN")]),
-    Event(id = "11600034", season = 2016, date = 20161008, options = [ndb.Key(Option, "MIL"), ndb.Key(Option, "DAL")]),
-    Event(id = "11600035", season = 2016, date = 20161008, options = [ndb.Key(Option, "SAS"), ndb.Key(Option, "ATL")]),
-    ])
-    return
-'''
 # [START main_page]
 class MainPage(webapp2.RequestHandler):
 
