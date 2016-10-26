@@ -23,6 +23,7 @@ from google.appengine.ext import ndb
 import datetime
 #import data_classes as dc
 from data_classes import Option, Outcome, Event, Pick
+import db_update
 import logging
 import json
 
@@ -43,7 +44,7 @@ JINJA_ENVIRONMENT = jinja2.Environment(
 
 '''
 class Option(ndb.Model):
-    abbrev_name = ndb.StringProperty()
+    tri_code = ndb.StringProperty()
 
 class Outcome(ndb.Model):
     scores = ndb.IntegerProperty(repeated = True)
@@ -73,7 +74,7 @@ class Pick(ndb.Model):
 
 
 def submit_sample_games():
-    ndb.put_multi([Option(id = "PHI", abbrev_name = "PHI"), Option(id = "WAS", abbrev_name = "WAS"), Option(id = "IND", abbrev_name = "IND"), Option(id = "CHI", abbrev_name = "CHI"), Option(id = "BKN", abbrev_name = "BKN"), Option(id = "DET", abbrev_name = "DET"), Option(id = "CHA", abbrev_name = "CHA"), Option(id = "BOS", abbrev_name = "BOS"), Option(id = "MEM", abbrev_name = "MEM"), Option(id = "ATL", abbrev_name = "ATL"), Option(id = "GSW", abbrev_name = "GSW"), Option(id = "SAC", abbrev_name = "SAC"), Option(id = "POR", abbrev_name = "POR"), Option(id = "PHX", abbrev_name = "PHX"), Option(id = "LAL", abbrev_name = "LAL"), Option(id = "DEN", abbrev_name = "DEN"), Option(id = "BOS", abbrev_name = "BOS"), Option(id = "CHA", abbrev_name = "CHA"), Option(id = "NYK", abbrev_name = "NYK"), Option(id = "CLE", abbrev_name = "CLE"), Option(id = "MIA", abbrev_name = "MIA"), Option(id = "MIN", abbrev_name = "MIN"), Option(id = "MIL", abbrev_name = "MIL"), Option(id = "DAL", abbrev_name = "DAL"), Option(id = "SAS" ,abbrev_name = "SAS")])
+    ndb.put_multi([Option(id = "PHI", tri_code = "PHI"), Option(id = "WAS", tri_code = "WAS"), Option(id = "IND", tri_code = "IND"), Option(id = "CHI", tri_code = "CHI"), Option(id = "BKN", tri_code = "BKN"), Option(id = "DET", tri_code = "DET"), Option(id = "CHA", tri_code = "CHA"), Option(id = "BOS", tri_code = "BOS"), Option(id = "MEM", tri_code = "MEM"), Option(id = "ATL", tri_code = "ATL"), Option(id = "GSW", tri_code = "GSW"), Option(id = "SAC", tri_code = "SAC"), Option(id = "POR", tri_code = "POR"), Option(id = "PHX", tri_code = "PHX"), Option(id = "LAL", tri_code = "LAL"), Option(id = "DEN", tri_code = "DEN"), Option(id = "BOS", tri_code = "BOS"), Option(id = "CHA", tri_code = "CHA"), Option(id = "NYK", tri_code = "NYK"), Option(id = "CLE", tri_code = "CLE"), Option(id = "MIA", tri_code = "MIA"), Option(id = "MIN", tri_code = "MIN"), Option(id = "MIL", tri_code = "MIL"), Option(id = "DAL", tri_code = "DAL"), Option(id = "SAS" ,tri_code = "SAS")])
 
     ndb.put_multi([
     Event(id = "11600021", season = 2016, date = 20161006, options = [ndb.Key(Option, "PHI"), ndb.Key(Option, "WAS")], outcome = Outcome(scores = [119, 125], correct = ndb.Key(Option, "WAS"))),
@@ -126,16 +127,16 @@ class MainPage(webapp2.RequestHandler):
                 curr_pick = curr_pick_qry.fetch()
                 print curr_pick
                 if len(curr_pick) > 0:
-                    curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().abbrev_name, 'away': curr_game.options[1].get().abbrev_name, 'date': curr_game.date, 'pick': curr_pick[0].pick.get().abbrev_name})
+                    curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code, 'date': curr_game.date, 'pick': curr_pick[0].pick.get().tri_code})
                 else:
-                    curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().abbrev_name, 'away': curr_game.options[1].get().abbrev_name, 'date': curr_game.date})
+                    curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code, 'date': curr_game.date})
             else:
-                curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().abbrev_name, 'away': curr_game.options[1].get().abbrev_name, 'date': curr_game.date})
+                curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code, 'date': curr_game.date})
         prev_games_qry = Event.query().filter(Event.date < curr_date)
         prev_games_raw = prev_games_qry.fetch()
-        for prev_game in prev_games_raw:
-            prev_games.append({'game_id': prev_game.key.id(), 'home': prev_game.options[0].get().abbrev_name, 'away': prev_game.options[1].get().abbrev_name, 'date': curr_game.date, 'home_score': prev_game.outcome.scores[0], 'away_score': prev_game.outcome.scores[1]})
-        #curr_game = curr_games[0]
+        #if len(prev_games_raw) > 0:
+         #   for prev_game in prev_games_raw:
+          #      prev_games.append({'game_id': prev_game.key.id(), 'home': prev_game.options[0].get().tri_code, 'away': prev_game.options[1].get().tri_code, 'home_score': prev_game.outcome.scores[0], 'away_score': prev_game.outcome.scores[1]})
 
 
 
@@ -188,11 +189,21 @@ class PickHandler(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         self.response.out.write(json.dumps(data))
 
+class CronDbUpdate(webapp2.RequestHandler):
+    def post(self):
+        # do stuff
+        #now = datetime.datetime.now()
+        now = datetime.date.today()
+        curr_date = "{}{}{}".format(now.year, now.month, now.day)
+        curr_date = int(curr_date)        
+        insert_curr_nba_games(curr_date)
+        #update_nba_games(date)
 
 # [START app]
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/make_pick', MakePickHandler),
-    ('/pick/', PickHandler)
+    ('/pick/', PickHandler),
+    ('/db_update', CronDbUpdate)
 ], debug=True)
 # [END app]
