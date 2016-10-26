@@ -231,7 +231,6 @@ class GameHandler(webapp2.RequestHandler):
         ]
         self.response.out.write(json.dumps(responseData))
 
-
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/make_pick', MakePickHandler),
