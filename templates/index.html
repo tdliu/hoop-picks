@@ -80,21 +80,35 @@
 
     {% raw %}
     <script id="pick-card-template" type="text/x-handlebars-template">
-      <div class="pick-card-container small-12 medium-6 large-3 columns">
+
+      {{#if isLast}}
+        <div class="pick-card-container small-12 medium-6 large-3 columns end">
+      {{else }}
+        <div class="pick-card-container small-12 medium-6 large-3 columns">
+      {{/if}}
+      
         <div class="pick-card large-12 columns">
           <div class="pick-card-header large-12 columns">
             <div class="time"> {{time}}</div>
           </div>
           <div class="row">
-            <div class="pick-card-option large-6 columns">
+            {{#if homePicked}}
+            <div class="pick-card-option home large-6 columns picked">{{else}}
+            <div class="pick-card-option home large-6 columns">
+            {{/if}}
               <div class="team-name"> {{home}} </div>
+              <input name="team" type="hidden" value="home">
               <input name="game_id" type="hidden" value="{{game_id}}">
-              <input name="team_id" type="hidden" value="{{team_id}}">
+              <input name="team" type="hidden" value="{{home}}">
             </div>
-            <div class="pick-card-option large-6 columns">
+            {{#if awayPicked}}
+            <div class="pick-card-option away large-6 columns picked"> {{else}}
+            <div class="pick-card-option away large-6 columns">
+            {{/if}}
               <div class="team-name"> {{away}}</div>
+              <input name="team" type="hidden" value="away">
               <input name="game_id" type="hidden" value="{{game_id}}">
-              <input name="team_id" type="hidden" value="{{team_id}}">
+              <input name="team" type="hidden" value="{{away}}">
             </div>
           </div>    
         </div>

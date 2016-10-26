@@ -185,7 +185,6 @@ class MakePickHandler(webapp2.RequestHandler):
 class PickHandler(webapp2.RequestHandler):
     def post(self):
         data = json.loads(self.request.body)
-        user_id = data['user_id']
         game_id = data['game_id']
         team = data['team']
 
@@ -196,6 +195,7 @@ class PickHandler(webapp2.RequestHandler):
             # etc.
 
         responseData = { 'success' : True }
+        logging.info(team);
         self.response.out.write(json.dumps(responseData))
 
 

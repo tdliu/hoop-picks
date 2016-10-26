@@ -37,12 +37,16 @@ a {
 }
 
 .pick-card-option {
-	
 	transition: .25s;
+	cursor: pointer;
+}
+
+.pick-card-option.picked {	
+	background-color: orange;
 }
 
 .pick-card-option:hover {
-	background-color: #DDD;
+	background-color: orange;
 }
 
 .pick-card-header .time {
