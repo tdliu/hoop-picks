@@ -11,14 +11,26 @@ function getGamesByDate(date, user, callback) {
   });
 }
 
-function pick(pickID, callback) {
+function pick() {
 	$.ajax({
       type: "POST",
       url: "/pick/",
       dataType: 'json',
-      data: JSON.stringify({ message: " BACON " })
+      data: JSON.stringify({ user_id: " the user id ", game_id: " the game id", team: " the team" })
     })
     .done(function( data ) {
-        alert( "Pick has been recorded: " + data['message']);
+        //alert( "Pick has been recorded: " + data['message']);
+    });
+}
+
+
+function game() {
+	$.ajax({
+      type: "GET",
+      url: "/game/?date=sometimestamp",
+      dataType: 'json'
+    })
+    .done(function( data ) {
+    	console.log(data);
     });
 }

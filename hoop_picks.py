@@ -184,41 +184,57 @@ class MakePickHandler(webapp2.RequestHandler):
 
 class PickHandler(webapp2.RequestHandler):
     def post(self):
-        logging.info(self.request.body)
         data = json.loads(self.request.body)
-        self.response.out.write(json.dumps(data))
+        user_id = data['user_id']
+        game_id = data['game_id']
+        team = data['team']
 
-'''
-# [START guestbook]
-class Guestbook(webapp2.RequestHandler):
+        # MAGIC
+        # validate:
+            #game has not started yet
+            #team is a valid choice
+            # etc.
 
-    def post(self):
-        # We set the same parent key on the 'Greeting' to ensure each
-        # Greeting is in the same entity group. Queries across the
-        # single entity group will be consistent. However, the write
-        # rate to a single entity group should be limited to
-        # ~1/second.
-        guestbook_name = self.request.get('guestbook_name',
-                                          DEFAULT_GUESTBOOK_NAME)
-        greeting = Greeting(parent=guestbook_key(guestbook_name))
+        responseData = { 'success' : True }
+        self.response.out.write(json.dumps(responseData))
 
-        if users.get_current_user():
-            greeting.author = Author(
-                    identity=users.get_current_user().user_id(),
-                    email=users.get_current_user().email())
 
-        greeting.content = self.request.get('content')
-        greeting.put()
+# --------------------- HANDLERS TO IMPLEMENT --------------------
+class GameHandler(webapp2.RequestHandler):
+    def get(self):
+        date = self.request.get('date')
+        sport = self.request.get('sport')
+        # MAGIC
 
-        query_params = {'guestbook_name': guestbook_name}
-        self.redirect('/?' + urllib.urlencode(query_params))
-# [END guestbook]
-'''
+        responseData = [
+            {
+                'time': "7:00pm",
+                'game_id': "1",
+                'home': "Patriots",
+                'away': "Falcons",
+                'current_pick' : "Patriots"
+            },
+            {
+                'time': "9:00pm",
+                'game_id': "2",
+                'home': "Saints",
+                'away': "Rams",
+                'current_pick' : "null"
+            },
+            {
+                'time': "10:00pm",
+                'game_id': "4",
+                'home': "Chargers",
+                'away': "Dolphins",
+                'current_pick' : "Chargers"
+            },
+        ]
+        self.response.out.write(json.dumps(responseData))
 
-# [START app]
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/make_pick', MakePickHandler),
-    ('/pick/', PickHandler)
+    ('/pick/', PickHandler),
+    ('/game/', GameHandler)
 ], debug=True)
-# [END app]
