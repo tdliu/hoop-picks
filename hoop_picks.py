@@ -185,10 +185,12 @@ class MakePickHandler(webapp2.RequestHandler):
 
 class PickHandler(webapp2.RequestHandler):
     def post(self):
-        logging.info(self.request.body)
         data = json.loads(self.request.body)
-        self.response.out.write(json.dumps(data))
+        user_id = data['user_id']
+        game_id = data['game_id']
+        team = data['team']
 
+<<<<<<< HEAD
 class CronDbUpdate(webapp2.RequestHandler):
     def post(self):
         # do stuff
@@ -198,12 +200,57 @@ class CronDbUpdate(webapp2.RequestHandler):
         curr_date = int(curr_date)        
         insert_curr_nba_games(curr_date)
         #update_nba_games(date)
+=======
+        # MAGIC
+        # validate:
+            #game has not started yet
+            #team is a valid choice
+            # etc.
 
-# [START app]
+        responseData = { 'success' : True }
+        self.response.out.write(json.dumps(responseData))
+
+
+# --------------------- HANDLERS TO IMPLEMENT --------------------
+class GameHandler(webapp2.RequestHandler):
+    def get(self):
+        date = self.request.get('date')
+        sport = self.request.get('sport')
+        # MAGIC
+
+        responseData = [
+            {
+                'time': "7:00pm",
+                'game_id': "1",
+                'home': "Patriots",
+                'away': "Falcons",
+                'current_pick' : "Patriots"
+            },
+            {
+                'time': "9:00pm",
+                'game_id': "2",
+                'home': "Saints",
+                'away': "Rams",
+                'current_pick' : "null"
+            },
+            {
+                'time': "10:00pm",
+                'game_id': "4",
+                'home': "Chargers",
+                'away': "Dolphins",
+                'current_pick' : "Chargers"
+            },
+        ]
+        self.response.out.write(json.dumps(responseData))
+>>>>>>> 8e4ef88fd101013f9c417894578dda4ffb6b937f
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/make_pick', MakePickHandler),
     ('/pick/', PickHandler),
+<<<<<<< HEAD
     ('/db_update', CronDbUpdate)
+=======
+    ('/game/', GameHandler)
+>>>>>>> 8e4ef88fd101013f9c417894578dda4ffb6b937f
 ], debug=True)
-# [END app]

@@ -1,3 +1,28 @@
+a {
+	color: orange;
+	text-decoration-color: yellow;
+}
+
+#date-row {
+	padding-top: 20px;
+}
+
+
+/* -------------- PICK SECTIONS ------------------*/
+.section-label {
+	padding-top: 20px;
+}
+
+
+#live-games-section {
+	border-style: solid;
+	border-width: 1px;
+	border-color: orange;
+	border-radius: 5px;
+}
+
+
+/* -------------- PICK CARDS ---------------------*/
 .pick-card {
 	text-align: center;
 	border-style: solid;
@@ -11,11 +36,15 @@
 
 }
 
-.pick-card-panel {
+.pick-card-option {
 	
 	transition: .25s;
 }
 
-.pick-card-panel:hover {
+.pick-card-option:hover {
 	background-color: #DDD;
+}
+
+.pick-card-header .time {
+	color: grey;
 }

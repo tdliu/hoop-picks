@@ -59,8 +59,22 @@
 
     <!-- original content goes in this container -->
     <div class="off-canvas-content" data-off-canvas-content>
+
+      <div id="date-row" class="row">
+        <ul class="pagination">
+          <li class="arrow"><a href="">&laquo;</a></li>
+          <li class="">Oct. 25th 2016</li>
+          <li class="arrow"><a href="">&raquo;</a></li>
+        </ul>
+      </div>
       
-      <div id="top-row" class="row column large"></div>
+      <div id="live-games-section" class="row column large">
+        
+      </div>
+
+      <div id="upcoming-games" class="row section-label">
+        Upcoming Games
+      </div>
 
     </div>
 
@@ -69,25 +83,31 @@
       <div class="pick-card-container small-12 medium-6 large-3 columns">
         <div class="pick-card large-12 columns">
           <div class="pick-card-header large-12 columns">
-            <h4> {{time}}</h4>
+            <div class="time"> {{time}}</div>
           </div>
           <div class="row">
-            <div class="pick-card-panel large-6 columns">
-              <h4>{{team1}}</h4>
+            <div class="pick-card-option large-6 columns">
+              <div class="team-name"> {{home}} </div>
+              <input name="game_id" type="hidden" value="{{game_id}}">
+              <input name="team_id" type="hidden" value="{{team_id}}">
             </div>
-            <div class="pick-card-panel large-6 columns">
-              <h4>{{team2}}</h4>
+            <div class="pick-card-option large-6 columns">
+              <div class="team-name"> {{away}}</div>
+              <input name="game_id" type="hidden" value="{{game_id}}">
+              <input name="team_id" type="hidden" value="{{team_id}}">
             </div>
           </div>    
         </div>
       </div>
     </script>
-
     {% endraw %}
+
+    
 
   <!-- close wrapper, no more content after this -->
   </div>
 </div>
+    <script src="js/apiconnector.js"></script>
     <script src="js/vendor/handlebars.js"></script>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
