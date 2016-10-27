@@ -195,9 +195,9 @@ class GameHandler(webapp2.RequestHandler):
                 if len(curr_pick) > 0:
                     responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id(), 'current_pick': curr_pick[0].pick.get().tri_code})
                 else:
-                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id())
+                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id()})
             else:
-                responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id())
+                responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id()})
         # MAGIC
         '''
         responseData = [
