@@ -134,6 +134,8 @@ class MakePickHandler(webapp2.RequestHandler):
 
 class PickHandler(webapp2.RequestHandler):
     def post(self):
+        user = users.get_current_user()
+        user_id = user.user_id()
         data = json.loads(self.request.body)
         game_id = data['game_id']
         team = data['team']
@@ -142,6 +144,18 @@ class PickHandler(webapp2.RequestHandler):
             #game has not started yet
             #team is a valid choice
             # etc.
+        # use get_or_insert instead
+        curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
+        curr_pick_qry = curr_pick_qry.filter(Pick.event == ndb.Key("Event", game_id))
+        curr_pick = curr_pick_qry.fetch()
+        if len(curr_pick) > 0:
+            # do this
+            curr_pick[0].pick = ndb.Key("Option", "nba{}".format(team))
+            curr_pick[0].last_updated = datetime.datetime.now()
+            curr_pick[0].put()
+        else:
+            pick = Pick(user_id = user_id, event = ndb.Key("Event", game_id), pick = ndb.Key("Option", "nba{}".format(team))) # use team_id as key in future
+            pick.put()
 
         responseData = { 'success' : True }
         logging.info(team);
@@ -162,10 +176,30 @@ class CronDbUpdate(webapp2.RequestHandler):
 # --------------------- HANDLERS TO IMPLEMENT --------------------
 class GameHandler(webapp2.RequestHandler):
     def get(self):
+        user = users.get_current_user()
         date = self.request.get('date')
         sport = self.request.get('sport')
+        curr_date = 20161007
+        curr_games_qry = Event.query().filter(Event.date == curr_date)
+        curr_games_raw = curr_games_qry.fetch()
+        responseData = []
+        for curr_game in curr_games_raw:
+            #curr_pick = Pick.query().filter(Pick.event.id() == curr_game.key.id())
+            start_time = curr_game.start_time.strftime("%H:%M:%S")
+            if user:
+                curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
+                curr_pick_qry = curr_pick_qry.filter(Pick.event == curr_game.key)
+                print curr_pick_qry
+                curr_pick = curr_pick_qry.fetch()
+                print curr_pick
+                if len(curr_pick) > 0:
+                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code, 'current_pick': curr_pick[0].pick.get().tri_code})
+                else:
+                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code})
+            else:
+                responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code})
         # MAGIC
-
+        '''
         responseData = [
             {
                 'time': "7:00pm",
@@ -189,6 +223,7 @@ class GameHandler(webapp2.RequestHandler):
                 'current_pick' : "Chargers"
             },
         ]
+        '''
         self.response.out.write(json.dumps(responseData))
 
 app = webapp2.WSGIApplication([

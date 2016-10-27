@@ -28,3 +28,4 @@ class Pick(ndb.Model):
     last_updated = ndb.DateTimeProperty(auto_now = True)
     prev_picks = ndb.KeyProperty(kind = Option, repeated = True)
     event = ndb.KeyProperty(kind = Event)
+    pick = ndb.KeyProperty(kind = Option)

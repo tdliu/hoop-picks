@@ -6,8 +6,6 @@ import json
 from data_classes import Option, Outcome, Event, Pick
 
 def insert_curr_nba_games(curr_date):
-    print json.loads
-
     url =  "http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json".format(curr_date)
     #import json
     r = urlfetch.fetch(url)
