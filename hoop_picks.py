@@ -51,6 +51,7 @@ class MainPage(webapp2.RequestHandler):
         #now = datetime.date.today()
         #curr_date = "{}{}{}".format(now.year, now.month, now.day)
         #curr_date = int(curr_date)
+        curr_date = datetime.date(2016,10,25)
         user = users.get_current_user()
         if user:
             url = users.create_logout_url(self.request.uri)
@@ -58,8 +59,8 @@ class MainPage(webapp2.RequestHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
-
-        curr_date = 20161007
+        '''
+        curr_date = datetime.date(2016,10,25)
         curr_games_qry = Event.query().filter(Event.date == curr_date)
         curr_games_raw = curr_games_qry.fetch()
         curr_games = []
@@ -87,21 +88,19 @@ class MainPage(webapp2.RequestHandler):
          #   for prev_game in prev_games_raw:
           #      prev_games.append({'game_id': prev_game.key.id(), 'home': prev_game.options[0].get().tri_code, 'away': prev_game.options[1].get().tri_code, 'home_score': prev_game.outcome.scores[0], 'away_score': prev_game.outcome.scores[1]})
 
-
+        '''
 
         template_values = {
             'user': user,
             'url': url,
             'url_linktext': url_linktext,
-            'curr_games': curr_games,
-            'prev_games': prev_games,
             'curr_date': curr_date,
         }
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         self.response.write(template.render(template_values))
 # [END main_page]
 
-
+'''
 class MakePickHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
@@ -131,6 +130,7 @@ class MakePickHandler(webapp2.RequestHandler):
         curr_pick = curr_pick_qry.fetch() 
         # print curr_pick       
         self.redirect('/')
+'''
 
 class PickHandler(webapp2.RequestHandler):
     def post(self):
@@ -150,11 +150,11 @@ class PickHandler(webapp2.RequestHandler):
         curr_pick = curr_pick_qry.fetch()
         if len(curr_pick) > 0:
             # do this
-            curr_pick[0].pick = ndb.Key("Option", "nba{}".format(team))
+            curr_pick[0].pick = ndb.Key("Option", team)
             curr_pick[0].last_updated = datetime.datetime.now()
             curr_pick[0].put()
         else:
-            pick = Pick(user_id = user_id, event = ndb.Key("Event", game_id), pick = ndb.Key("Option", "nba{}".format(team))) # use team_id as key in future
+            pick = Pick(user_id = user_id, event = ndb.Key("Event", game_id), pick = ndb.Key("Option", team)) # use team_id as key in future
             pick.put()
 
         responseData = { 'success' : True }
@@ -177,9 +177,9 @@ class CronDbUpdate(webapp2.RequestHandler):
 class GameHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        date = self.request.get('date')
+        curr_date = self.request.get('date')
+        curr_date = datetime.date(2016,10,30)
         sport = self.request.get('sport')
-        curr_date = 20161007
         curr_games_qry = Event.query().filter(Event.date == curr_date)
         curr_games_raw = curr_games_qry.fetch()
         responseData = []
@@ -193,11 +193,11 @@ class GameHandler(webapp2.RequestHandler):
                 curr_pick = curr_pick_qry.fetch()
                 print curr_pick
                 if len(curr_pick) > 0:
-                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code, 'current_pick': curr_pick[0].pick.get().tri_code})
+                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id(), 'current_pick': curr_pick[0].pick.get().tri_code})
                 else:
-                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code})
+                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id())
             else:
-                responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code})
+                responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id())
         # MAGIC
         '''
         responseData = [
@@ -228,7 +228,7 @@ class GameHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/make_pick', MakePickHandler),
+    #('/make_pick', MakePickHandler),
     ('/pick/', PickHandler),
     ('/db_update', CronDbUpdate),
     ('/game/', GameHandler)
