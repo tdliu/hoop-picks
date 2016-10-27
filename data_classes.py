@@ -13,7 +13,7 @@ class Outcome(ndb.Model):
 
 class Event(ndb.Model):
     event_type = ndb.StringProperty()
-    gameId = ndb.IntegerProperty()
+    #gameId = ndb.IntegerProperty()
     season = ndb.IntegerProperty()
     date = ndb.DateProperty()
     options = ndb.KeyProperty(kind = Option, repeated = True) # Use participant generated ID
