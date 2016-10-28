@@ -139,6 +139,7 @@ class PickHandler(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         game_id = data['game_id']
         team = data['team']
+        print "hi" + team
         # MAGIC
         # validate:
             #game has not started yet
@@ -189,15 +190,15 @@ class GameHandler(webapp2.RequestHandler):
             if user:
                 curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
                 curr_pick_qry = curr_pick_qry.filter(Pick.event == curr_game.key)
-                print curr_pick_qry
+                #print curr_pick_qry
                 curr_pick = curr_pick_qry.fetch()
                 print curr_pick
                 if len(curr_pick) > 0:
-                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id(), 'current_pick': curr_pick[0].pick.get().tri_code})
+                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].id(), 'current_pick': curr_pick[0].pick.get().tri_code})
                 else:
-                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id()})
+                    responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].id()})
             else:
-                responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].key.id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].key.id()})
+                responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].id()})
         # MAGIC
         '''
         responseData = [
