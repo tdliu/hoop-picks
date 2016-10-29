@@ -51,7 +51,7 @@ class MainPage(webapp2.RequestHandler):
         #now = datetime.date.today()
         #curr_date = "{}{}{}".format(now.year, now.month, now.day)
         #curr_date = int(curr_date)
-        curr_date = datetime.date(2016,10,25)
+        curr_date = datetime.date(2016,10,30)
         user = users.get_current_user()
         if user:
             url = users.create_logout_url(self.request.uri)
@@ -59,36 +59,6 @@ class MainPage(webapp2.RequestHandler):
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
-        '''
-        curr_date = datetime.date(2016,10,25)
-        curr_games_qry = Event.query().filter(Event.date == curr_date)
-        curr_games_raw = curr_games_qry.fetch()
-        curr_games = []
-        prev_games = []
-        # Get picks by user
-        #curr_picks_qry
-            
-        for curr_game in curr_games_raw:
-            #curr_pick = Pick.query().filter(Pick.event.id() == curr_game.key.id())
-            if user:
-                curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
-                curr_pick_qry = curr_pick_qry.filter(Pick.event == curr_game.key)
-                print curr_pick_qry
-                curr_pick = curr_pick_qry.fetch()
-                print curr_pick
-                if len(curr_pick) > 0:
-                    curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code, 'date': curr_game.date, 'pick': curr_pick[0].pick.get().tri_code})
-                else:
-                    curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code, 'date': curr_game.date})
-            else:
-                curr_games.append({'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'away': curr_game.options[1].get().tri_code, 'date': curr_game.date})
-        prev_games_qry = Event.query().filter(Event.date < curr_date)
-        prev_games_raw = prev_games_qry.fetch()
-        #if len(prev_games_raw) > 0:
-         #   for prev_game in prev_games_raw:
-          #      prev_games.append({'game_id': prev_game.key.id(), 'home': prev_game.options[0].get().tri_code, 'away': prev_game.options[1].get().tri_code, 'home_score': prev_game.outcome.scores[0], 'away_score': prev_game.outcome.scores[1]})
-
-        '''
 
         template_values = {
             'user': user,
@@ -100,37 +70,6 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 # [END main_page]
 
-'''
-class MakePickHandler(webapp2.RequestHandler):
-    def post(self):
-        user = users.get_current_user()
-        user_id = user.user_id()
-        game_id = self.request.get("game_id")
-        picked_team = self.request.get("picked_team")
-        curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
-        curr_pick_qry = curr_pick_qry.filter(Pick.event == ndb.Key("Event", str(game_id)))
-        curr_pick = curr_pick_qry.fetch()
-        if len(curr_pick) > 0:
-            # do this
-            curr_pick[0].pick = ndb.Key("Option", picked_team)
-            curr_pick[0].last_updated = datetime.datetime.now()
-            curr_pick[0].put()
-        else:
-            pick = Pick(user_id = user_id, event = ndb.Key("Event", str(game_id)), pick = ndb.Key("Option", picked_team)) # use team_id as key in future
-            pick.put()
-        #self.response.out.write("<p>{}</p>".format(user_id))
-        #db = MySQLdb.connect(db = "c9", user = "tdliu")
-
-        #db = get_db()
-        #c = db.cursor()
-        #c.execute("INSERT INTO raw_user_picks VALUES (NOW(), %s, %s, %s);", (user.user_id(), game_id, team_pick))
-        #db.commit()
-        curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
-        curr_pick_qry = curr_pick_qry.filter(Pick.event == ndb.Key("Event", str(game_id)))
-        curr_pick = curr_pick_qry.fetch() 
-        # print curr_pick       
-        self.redirect('/')
-'''
 
 class PickHandler(webapp2.RequestHandler):
     def post(self):
@@ -139,7 +78,8 @@ class PickHandler(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         game_id = data['game_id']
         team = data['team']
-        print "hi" + team
+        if (datetime.datetime.now() < ndb.Key("Event", game_id).get().start_time): # we don't want the user to see the change
+            return
         # MAGIC
         # validate:
             #game has not started yet
@@ -186,13 +126,14 @@ class GameHandler(webapp2.RequestHandler):
         responseData = []
         for curr_game in curr_games_raw:
             #curr_pick = Pick.query().filter(Pick.event.id() == curr_game.key.id())
-            start_time = curr_game.start_time.strftime("%H:%M:%S")
+            start_time = curr_game.start_time - datetime.timedelta(hours = 4) # to ET
+            start_time = start_time.strftime("%H:%M:%S")
+            #start_time = curr_game.start_time.strftime("%H:%M:%S") 
             if user:
                 curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
                 curr_pick_qry = curr_pick_qry.filter(Pick.event == curr_game.key)
                 #print curr_pick_qry
                 curr_pick = curr_pick_qry.fetch()
-                print curr_pick
                 if len(curr_pick) > 0:
                     responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].id(), 'current_pick': curr_pick[0].pick.get().tri_code})
                 else:
@@ -229,7 +170,6 @@ class GameHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    #('/make_pick', MakePickHandler),
     ('/pick/', PickHandler),
     ('/db_update', CronDbUpdate),
     ('/game/', GameHandler)
