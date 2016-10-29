@@ -51,7 +51,8 @@ class MainPage(webapp2.RequestHandler):
         #now = datetime.date.today()
         #curr_date = "{}{}{}".format(now.year, now.month, now.day)
         #curr_date = int(curr_date)
-        curr_date = datetime.date(2016,10,30)
+        now = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()
+        curr_date = "{}{}{}".format(now.year, now.month, now.day)
         user = users.get_current_user()
         if user:
             url = users.create_logout_url(self.request.uri)

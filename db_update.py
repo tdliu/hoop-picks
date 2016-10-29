@@ -5,31 +5,6 @@ import json
 
 from data_classes import Option, Outcome, Event, Pick
 
-#content['data']['dates'][0]['date']
-#content['data']['dates'][0]['fixtures'][0]
-# Takes date in YYYY-MM-DD string format
-# leagues: nhl, mlb, nba, nfl, ncaaf, ncaab, soccer
-'''
-def get_game_ids(start_date, sports):
-    url = "http://www.si.com/private/content-proxy/scoreboard?date={}".format(start_date)
-    #url = "http://www.si.com/private/content-proxy/scoreboard?date=2016-10-26"
-    response = requests.get(url)
-    content = response.json()
-    fixtures = []
-    if isinstance(sports, list):
-        for sport in sports:
-            fixtures.extend(content['data'][sport])
-    else:
-        fixtures.extend(content['data'][sports])
-    return fixtures
-
-def insert_fixtures(start_date, num_days, sports):
-    # do stuff
-    game_ids = get_game_ids(start_date, sports)
-    url = "http://www.si.com/private/stats-proxy/v1/all_sports/event_scoreboard?events%5B%5D=1677892&events%5B%5D=1673898"
-    for game_id in game_ids:
-
-'''
 
 def insert_nba_games(num_day, start_date):
     # e.g. datetime.date(2016,10,25)
@@ -60,9 +35,9 @@ def update_nba_games(date):
     	game_event = game_key.get()
     	game_event.outcome.scores = [int(game['hTeam']['score']), int(game['vTeam']['score'])]
         if int(game['hTeam']['score']) > int(game['vTeam']['score']):
-            game_event.outcome.correct = ndb.Key("Option", game['hTeam']['triCode'])
+            game_event.outcome.is_winner = ndb.Key("Option", "nba{}".format(game['hTeam']['teamId']))
         else:
-            game_event.outcome.correct = ndb.Key("Option", game['vTeam']['triCode'])
+            game_event.outcome.is_winner = ndb.Key("Option", "nba{}".format(game['vTeam']['teamId']))
     	game_event.put()
 
 
