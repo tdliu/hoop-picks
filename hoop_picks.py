@@ -82,7 +82,9 @@ class PickHandler(webapp2.RequestHandler):
         data = json.loads(self.request.body)
         game_id = data['game_id']
         team = data['team']
-        if (datetime.datetime.now() < ndb.Key("Event", game_id).get().start_time): # we don't want the user to see the change
+        if (datetime.datetime.utcnow() > ndb.Key("Event", game_id).get().start_time): # we don't want the user to see the change
+            responseData = { 'success' : False, 'message': "Pick submitted after start time." }
+            self.response.out.write(json.dumps(responseData))
             return
         # MAGIC
         # validate:
