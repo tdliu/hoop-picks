@@ -7,6 +7,7 @@
     <title>Peach Picks</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   </head>
   <body>
     <div class="off-canvas-wrapper">
@@ -20,6 +21,7 @@
       </div>
       <div class="title-bar-right">
         <span class="title-bar-title"><a href='{{ url|safe }}'> {{ url_linktext }}</a></span>
+        {% if logged_in %} <a href='#'> <i class="material-icons">account_circle</i> </a> {% endif %}
       </div>
     </div>
 
@@ -53,6 +55,7 @@
       <div class="top-bar-right">
         <ul class="menu">
           <li><a href='{{ url|safe }}'> {{ url_linktext }}</a></li>
+          {% if logged_in %} <li><a href='#'> <i class="material-icons">account_circle</i> </a> {% endif %}</li>
         </ul>
       </div>
     </div>

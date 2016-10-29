@@ -56,15 +56,18 @@ class MainPage(webapp2.RequestHandler):
         if user:
             url = users.create_logout_url(self.request.uri)
             url_linktext = 'Logout'
+            logged_in = True
         else:
             url = users.create_login_url(self.request.uri)
             url_linktext = 'Login'
+            logged_in = False
 
         template_values = {
             'user': user,
             'url': url,
             'url_linktext': url_linktext,
             'curr_date': curr_date,
+            'logged_in' : logged_in
         }
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         self.response.write(template.render(template_values))
