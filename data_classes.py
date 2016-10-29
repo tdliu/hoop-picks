@@ -30,6 +30,7 @@ class Pick(ndb.Model):
     prev_picks = ndb.KeyProperty(kind = Option, repeated = True)
     event = ndb.KeyProperty(kind = Event)
     pick = ndb.KeyProperty(kind = Option)
+    num_change = ndb.IntegerProperty(default = 0)
 
 '''
 
