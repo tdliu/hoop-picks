@@ -31,20 +31,20 @@ function addPickListeners(context, game) {
     console.log(".home!!")
     $(this).addClass("picked")
     $(this).parent().find(".away").removeClass("picked")
-    sendPick(context.game_id, context['home_id'])
+    apiConnector.pick(context.game_id, context['home_id'])
   })
   
   game.find(".away").click(function() {
     console.log(".away!!")
     $(this).addClass("picked")
     $(this).parent().find(".home").removeClass("picked")
-    sendPick(context.game_id, context['away_id'])
+    apiConnector.pick(context.game_id, context['away_id'])
   })
 }
 
 function init() {
   //load games
-  game("data", "nba", function(data) {
+  apiConnector.game("data", "nba", function(data) {
     addGames(data);
   })
 }

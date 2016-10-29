@@ -1,17 +1,5 @@
-function getGamesByDate(date, user, callback) {
-  $.ajax({
-  	type: "POST",
-  	url: "/game/",
-  	dataType: 'json',
-  	data: JSON.stringify({ "date" : date, "user": user})
-  })
-  .
-  done(function(data) {
-  	callback(data);
-  });
-}
-
-function sendPick(game_id, team, callback) {
+var apiConnector = {};
+apiConnector.pick = function(game_id, team, callback) {
 	$.ajax({
       type: "POST",
       url: "/pick/",
@@ -25,8 +13,7 @@ function sendPick(game_id, team, callback) {
     });
 }
 
-
-function game(date, sport, callback) {
+apiConnector.game = function(date, sport, callback) {
 	$.ajax({
       type: "GET",
       url: "/game/?date=sometimestamp",
