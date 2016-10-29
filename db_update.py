@@ -35,13 +35,10 @@ def update_nba_games(date):
     	game_event = game_key.get()
     	game_event.outcome.scores = [int(game['hTeam']['score']), int(game['vTeam']['score'])]
         if int(game['hTeam']['score']) > int(game['vTeam']['score']):
-            game_event.outcome.is_winner = ndb.Key("Option", "nba{}".format(game['hTeam']['teamId']))
+            game_event.outcome.winner = ndb.Key("Option", "nba{}".format(game['hTeam']['teamId']))
         else:
-            game_event.outcome.is_winner = ndb.Key("Option", "nba{}".format(game['vTeam']['teamId']))
+            game_event.outcome.winner = ndb.Key("Option", "nba{}".format(game['vTeam']['teamId']))
     	game_event.put()
 
 
 
-'''
-Event(id = "11600021", season = 2016, date = 20161006, options = [ndb.Key(Option, "PHI"), ndb.Key(Option, "WAS")], outcome = Outcome(scores = [119, 125], correct = ndb.Key(Option, "WAS")))
-'''
