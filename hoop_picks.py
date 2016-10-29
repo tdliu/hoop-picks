@@ -136,23 +136,23 @@ class GameHandler(webapp2.RequestHandler):
             #curr_pick = Pick.query().filter(Pick.event.id() == curr_game.key.id())
             start_time = curr_game.start_time - datetime.timedelta(hours = 4) # to ET
             start_time = start_time.strftime("%H:%M:%S")
+            winner = curr_game.outcome.winner
+            if winner is not None:
+                winner = winner.id()
+            game_data = {
+                            'time': start_time, 
+                            'game_id': curr_game.key.id(), 
+                            'home': curr_game.options[0].get().tri_code, 
+                            'home_id': curr_game.options[0].id(), 
+                            'away': curr_game.options[1].get().tri_code, 
+                            'away_id': curr_game.options[1].id(), 
+                            'winner': winner}
             #start_time = curr_game.start_time.strftime("%H:%M:%S") 
             if user:
                 curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
                 curr_pick_qry = curr_pick_qry.filter(Pick.event == curr_game.key)
                 #print curr_pick_qry
                 curr_pick = curr_pick_qry.fetch()
-                winner = curr_game.outcome.winner
-                if winner is not None:
-                    winner = winner.id()
-                game_data = {
-                                'time': start_time, 
-                                'game_id': curr_game.key.id(), 
-                                'home': curr_game.options[0].get().tri_code, 
-                                'home_id': curr_game.options[0].id(), 
-                                'away': curr_game.options[1].get().tri_code, 
-                                'away_id': curr_game.options[1].id(), 
-                                'winner': winner}
                 if len(curr_pick) > 0:
                     game_data['current_pick'] = curr_pick[0].pick.get().tri_code
                     responseData.append(game_data)
