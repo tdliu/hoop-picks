@@ -1,5 +1,1 @@
 cron:
-- description: "daily database refresh"
-  url: /tasks/db_update
-  schedule: every day 00:01
-  timezone: America/Los_Angeles
