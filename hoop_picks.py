@@ -124,10 +124,9 @@ class CronDbUpdate(webapp2.RequestHandler):
 class GameHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        curr_date = self.request.get('date')
-        #curr_date = datetime.date(2016,10,30)
+        curr_date = datetime.datetime.strptime(self.request.get('date'), "%Y%m%d")
         #if curr_date is None:
-        curr_date = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()
+        #curr_date = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()
         sport = self.request.get('sport')
         curr_games_qry = Event.query().filter(Event.date == curr_date)
         curr_games_raw = curr_games_qry.fetch()
