@@ -17,15 +17,22 @@ function getPrettyTime(time) {
 	return prettytime
 }
 
+function jsDatetoDatestring(date) {
+	return "" + date.getFullYear() + (date.getMonth() + 1) + date.getDate();
+}
+
 function GoatDate(datestring) {
 	this._datestring = datestring;
-	var year = datestring.substring(0,4);
-	var month = datestring.substring(4,6);
-	var date = datestring.substring(6,8);
 
-	this._month = parseInt(month);
-	this._date = parseInt(date);
-	this._year = parseInt(year);
+	this._year = parseInt(datestring.substring(0,4));
+	this._month = parseInt(datestring.substring(4,6));
+	this._date = parseInt(datestring.substring(6,8));
+	
+
+	var d = new Date();
+	d.setMonth(this._month - 1);
+	d.setDate(this._date);
+	this._jsDate = d;
 
 	this._month_abbrev = MONTHS[this._month];
 }
@@ -54,4 +61,13 @@ GoatDate.prototype.getMonthDateAbbrev = function() {
 
 GoatDate.prototype.getDateString = function() {
 	return this._datestring;
+}
+
+GoatDate.prototype.getTomorrow = function() {
+	var tomorrow_jsDate = new Date(this._jsDate);
+	tomorrow_jsDate.setDate(tomorrow_jsDate.getDate() + 1);
+	console.log("string: " + jsDatetoDatestring(tomorrow_jsDate));
+	var tomorrow = new GoatDate(jsDatetoDatestring(tomorrow_jsDate));
+
+	return tomorrow;
 }

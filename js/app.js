@@ -2,6 +2,7 @@ $(document).foundation()
 
 //-------------- GLOBALS ---------------------//
 var today;
+var tomorrow;
 
 //-------------- TEMPLATES -------------------//
 var pick_card_source = $("#pick-card-template").html();
@@ -9,7 +10,7 @@ var pick_card_template = Handlebars.compile(pick_card_source);
 
 //-------------- INITIAL REQUESTS ------------//
 
-function addGames(games) {
+function addGames(section, games) {
   console.log(games);
   for (var i = 0; i < games.length; i ++) {
     var context = games[i];
@@ -24,10 +25,10 @@ function addGames(games) {
     var game = $(pick_card_template(context));
     addPickListeners(context, game);
 
-    var added = $('#live-games-section').append(game);
+    var added = section.append(game);
   }
 
-  $('#live-games-section').animate(
+  section.animate(
     {'opacity': 1},
     1000)
 }
@@ -51,13 +52,20 @@ function addPickListeners(context, game) {
 
 function init(datestring) {
   today = new GoatDate(datestring);
-  console.log(today.getMonthDateAbbrev());
+  console.log(today._jsDate);
+  tomorrow = today.getTomorrow();
 
   $('#today-label').html("Today " + today.getMonthDateAbbrev());
 
   //load games
   apiConnector.game(today.getDateString(), "nba", function(data) {
     $('#games-loader').hide();
-    addGames(data);
+    addGames($('#live-games-section'), data);
   })
+
+  apiConnector.game(tomorrow.getDateString(), "nba", function(data) {
+    $('#games-loader').hide();
+    addGames($('#upcoming-games-section'), data);
+  })
+
 }
