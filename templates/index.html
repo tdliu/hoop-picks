@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peach Picks</title>
+    <title>Goad Index</title>
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -17,7 +17,7 @@
     <div class="title-bar" data-responsive-toggle="widemenu" data-hide-for="medium">
       <div class="title-bar-left">
         <button class="menu-icon" type="button" data-open="offCanvasLeft"></button>
-        <span class="title-bar-title">Peach Picks</span>
+        <span class="title-bar-title">GOAT Index</span>
       </div>
       <div class="title-bar-right">
         <span class="title-bar-title"><a href='{{ url|safe }}'> {{ url_linktext }}</a></span>
@@ -42,7 +42,7 @@
     <div id="widemenu" class="top-bar">
       <div class="top-bar-left">
         <ul class="dropdown menu" data-dropdown-menu>
-          <li class="menu-text">Peach Picks</li>
+          <li class="menu-text">Goat Index</li>
           <li class="has-submenu">
             <a href="#">Sport</a>
             <ul class="menu submenu vertical" data-submenu>
@@ -63,16 +63,21 @@
     <!-- original content goes in this container -->
     <div class="off-canvas-content" data-off-canvas-content>
 
+      <div id="today-label" class="section-label row">
+
+      </div>
+
+      <div id="games-loader" class="row loader"></div>
+      <div id="live-games-section" class="row column large">
+        
+      </div>
+
       <div id="date-row" class="row">
         <ul class="pagination">
           <li class="arrow"><a href="">&laquo;</a></li>
           <li class="">Oct. 25th 2016</li>
           <li class="arrow"><a href="">&raquo;</a></li>
         </ul>
-      </div>
-      {{ curr_date }}
-      <div id="live-games-section" class="row column large">
-        
       </div>
 
       <div id="upcoming-games" class="row section-label">
@@ -125,10 +130,15 @@
   </div>
 </div>
     <script src="js/apiconnector.js"></script>
+    <script src="js/goatdatetime.js"></script>
     <script src="js/vendor/handlebars.js"></script>
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
+    <script>
+    init("{{curr_date}}");
+
+    </script>
   </body>
 </html>

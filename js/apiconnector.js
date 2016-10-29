@@ -16,7 +16,7 @@ apiConnector.pick = function(game_id, team, callback) {
 apiConnector.game = function(date, sport, callback) {
 	$.ajax({
       type: "GET",
-      url: "/game/?date=sometimestamp",
+      url: "/game/?date=" + date,
       dataType: 'json'
     })
     .done(function( data ) {

@@ -1,5 +1,8 @@
 $(document).foundation()
 
+//-------------- GLOBALS ---------------------//
+var today;
+
 //-------------- TEMPLATES -------------------//
 var pick_card_source = $("#pick-card-template").html();
 var pick_card_template = Handlebars.compile(pick_card_source);
@@ -7,6 +10,7 @@ var pick_card_template = Handlebars.compile(pick_card_source);
 //-------------- INITIAL REQUESTS ------------//
 
 function addGames(games) {
+  console.log(games);
   for (var i = 0; i < games.length; i ++) {
     var context = games[i];
     if (i == games.length - 1) {
@@ -15,15 +19,18 @@ function addGames(games) {
 
     context.awayPicked = (context.current_pick == context.away);
     context.homePicked = (context.current_pick == context.home);
+    context.time = (getPrettyTime(context.time))
 
     var game = $(pick_card_template(context));
     addPickListeners(context, game);
 
     var added = $('#live-games-section').append(game);
-
   }
-}
 
+  $('#live-games-section').animate(
+    {'opacity': 1},
+    1000)
+}
 //-------------- LISTENERS -------------------//
 
 function addPickListeners(context, game) {
@@ -42,11 +49,15 @@ function addPickListeners(context, game) {
   })
 }
 
-function init() {
+function init(datestring) {
+  today = new GoatDate(datestring);
+  console.log(today.getMonthDateAbbrev());
+
+  $('#today-label').html("Today " + today.getMonthDateAbbrev());
+
   //load games
-  apiConnector.game("data", "nba", function(data) {
+  apiConnector.game(today.getDateString(), "nba", function(data) {
+    $('#games-loader').hide();
     addGames(data);
   })
 }
-
-init();
