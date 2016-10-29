@@ -99,6 +99,7 @@ class PickHandler(webapp2.RequestHandler):
             # do this
             curr_pick[0].pick = ndb.Key("Option", team)
             curr_pick[0].last_updated = datetime.datetime.now()
+            curr_pick[0].num_change = curr_pick[0].num_change + 1
             curr_pick[0].put()
         else:
             pick = Pick(user_id = user_id, event = ndb.Key("Event", game_id), pick = ndb.Key("Option", team)) # use team_id as key in future
