@@ -8,7 +8,7 @@ class Outcome(ndb.Model):
     scores = ndb.IntegerProperty(repeated = True)
     #home_score = ndb.IntegerProperty()
     #away_score = ndb.IntegerProperty()
-    is_winner = ndb.KeyProperty(kind = Option)
+    winner = ndb.KeyProperty(kind = Option)
     
 
 class Event(ndb.Model):
