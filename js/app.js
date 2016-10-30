@@ -63,6 +63,6 @@ function init(datestring, logged) {
   setInterval(function() {
     console.log("interval");
     liveGameManager.poll();
-  }, 5000)
+  }, 10000)
 
 }

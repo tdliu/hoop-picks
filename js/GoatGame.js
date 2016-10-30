@@ -82,7 +82,10 @@ GoatGame.prototype.addPickListeners = function() {
 GoatGame.prototype.liveUpdate = function(the_live_data) {
 	this.live_data = the_live_data;
 	this.live_data.live_clock = this.formatLiveClock();
-	this.elem.replaceWith(live_pick_card_template(this))
+
+	var newelem = $(live_pick_card_template(this))
+	this.elem.replaceWith(newelem);
+	this.elem = newelem;
 }
 
 GoatGame.prototype.getAwayElem = function() {

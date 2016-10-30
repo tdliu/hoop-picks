@@ -5,7 +5,6 @@ function LiveGameManager(apiConnector) {
 
 LiveGameManager.prototype.registerGame = function(game) {
 	this._games[game.game_id] = game;
-	console.log(this._games)
 }
 
 LiveGameManager.prototype.poll = function(callback) {
