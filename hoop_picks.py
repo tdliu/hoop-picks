@@ -21,6 +21,8 @@ import urllib
 from google.appengine.api import users
 from google.appengine.ext import ndb
 import datetime
+from google.appengine.api import urlfetch
+
 #import data_classes as dc
 from data_classes import Option, Outcome, Event, Pick
 import db_update as db
@@ -163,36 +165,38 @@ class GameHandler(webapp2.RequestHandler):
             else:
                 responseData.append(game_data)
         # MAGIC
-        '''
-        responseData = [
-            {
-                'time': "7:00pm",
-                'game_id': "1",
-                'home': "Patriots",
-                'away': "Falcons",
-                'current_pick' : "Patriots"
-            },
-            {
-                'time': "9:00pm",
-                'game_id': "2",
-                'home': "Saints",
-                'away': "Rams",
-                'current_pick' : "null"
-            },
-            {
-                'time': "10:00pm",
-                'game_id': "4",
-                'home': "Chargers",
-                'away': "Dolphins",
-                'current_pick' : "Chargers"
-            },
-        ]
-        '''
         self.response.out.write(json.dumps(responseData))
+
+current_live_data = None
+last_polled_ts = datetime.datetime.utcnow()
+
+
+
+class LiveGameHandler(webapp2.RequestHandler):
+    def get(self):
+        global current_live_data
+        global last_polled_ts
+        logging.info("HELLO")
+        curr_ts = datetime.datetime.utcnow()
+        if (curr_ts - last_polled_ts).total_seconds() > 10 or current_live_data is None:
+            # poll new
+            curr_date_str = datetime.datetime.strftime((curr_ts - datetime.timedelta(hours = 4)), "%Y%m%d")
+            url =  "http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json".format(curr_date_str)
+            #import json
+            r = urlfetch.fetch(url)
+            current_live_data = json.loads(r.content)['games']
+            self.response.out.write(json.dumps(current_live_data))
+            last_polled_ts = curr_ts
+        else:
+            logging.info(current_live_data)
+            self.response.out.write(json.dumps(current_live_data))
+
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/pick/', PickHandler),
     ('/db_update', CronDbUpdate),
+    ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler)
 ], debug=True)
