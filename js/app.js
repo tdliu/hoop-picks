@@ -34,6 +34,38 @@ function updateDateSelector() {
   $('#next-btn').html("" + next.getMonthDateAbbrev() + " >>");
 }
 
+function loadUpcomingGames() {
+  $('#upcoming-games-section').html("")
+  $('#upcoming-loader').show();
+
+  apiConnector.game(tomorrow.getDateString(), "nba", function(data) {
+    $('#upcoming-loader').hide();
+    gameInjector.upcomingGameData(data);//addGamesToSection($('#upcoming-games-section'), data, false);
+  })
+}
+
+function selectPrev() {
+  next = tomorrow;
+  tomorrow = tomorrow.getYesterday();
+  if (tomorrow._date == today._date) {
+    tomorrow = tomorrow.getYesterday();
+
+  }
+  updateDateSelector();
+  loadUpcomingGames();
+}
+
+function selectNext() {
+  tomorrow = next;
+  next = next.getTomorrow();
+  if (next._date == today._date) {
+    next = next.getTomorrow();
+  }
+
+  updateDateSelector();
+  loadUpcomingGames();
+}
+
 function init(datestring, logged) {
   logged_in = logged;
 
@@ -64,18 +96,10 @@ function init(datestring, logged) {
   });
 
   $('#next-btn').click(function() {
-    tomorrow = next;
-    next = next.getTomorrow();
-
-    updateDateSelector();
-    $('#upcoming-games-section').html("")
-    $('#upcoming-loader').show();
-
-    apiConnector.game(tomorrow.getDateString(), "nba", function(data) {
-      $('#upcoming-loader').hide();
-      gameInjector.upcomingGameData(data);//addGamesToSection($('#upcoming-games-section'), data, false);
-    })
-
+    selectNext();
+  })
+  $('#upcoming-label').click(function() {
+    selectPrev();
   })
 
   setInterval(function() {

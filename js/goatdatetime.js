@@ -93,6 +93,14 @@ GoatDate.prototype.getDateString = function() {
 	return this._datestring;
 }
 
+GoatDate.prototype.getYesterday = function() {
+	var tomorrow_jsDate = new Date(this._jsDate);
+	tomorrow_jsDate.setDate(tomorrow_jsDate.getDate() -1 );
+	var tomorrow = new GoatDate(jsDatetoDatestring(tomorrow_jsDate));
+
+	return tomorrow;
+}
+
 GoatDate.prototype.getTomorrow = function() {
 	var tomorrow_jsDate = new Date(this._jsDate);
 	tomorrow_jsDate.setDate(tomorrow_jsDate.getDate() + 1);
