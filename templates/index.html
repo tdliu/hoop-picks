@@ -64,84 +64,54 @@
     <div class="off-canvas-content" data-off-canvas-content>
 
       <div id="today-label" class="section-label row">
-
       </div>
 
       <div id="games-loader" class="row loader"></div>
-      <div id="live-games-section" class="row column large">
+      <div id="started-games-section" class="section row column large">
         
       </div>
-
-      <div id="date-row" class="row">
-        <ul class="pagination">
-          <li class="arrow"><a href="">&laquo;</a></li>
-          <li class="">Oct. 25th 2016</li>
-          <li class="arrow"><a href="">&raquo;</a></li>
-        </ul>
+      <div id="today-upcoming-label" class="section-label row">
+      Today's Upcoming Games
+      </div>
+      <div id="today-upcoming-games-section" class="section row column large">
+        
       </div>
 
       <div id="upcoming-label" class="row section-label">
         Upcoming Games
       </div>
-      <div id="upcoming-games-section" class="row column large">
+      <div id="upcoming-games-section" class="section row column large">
 
       </div>
 
     </div>
 
-    {% raw %}
-    <script id="pick-card-template" type="text/x-handlebars-template">
-
-      {{#if isLast}}
-        <div class="pick-card-container small-12 medium-6 large-3 columns end">
-      {{else }}
-        <div class="pick-card-container small-12 medium-6 large-3 columns">
-      {{/if}}
-      
-        <div class="pick-card large-12 columns">
-          <div class="pick-card-header large-12 columns">
-            <div class="time"> {{time}}</div>
-          </div>
-          <div class="row">
-            {{#if homePicked}}
-            <div class="pick-card-option home large-6 columns picked">{{else}}
-            <div class="pick-card-option home large-6 columns">
-            {{/if}}
-              <div class="team-name"> {{home}} </div>
-              <input name="team" type="hidden" value="home">
-              <input name="game_id" type="hidden" value="{{game_id}}">
-              <input name="team" type="hidden" value="{{home}}">
-            </div>
-            {{#if awayPicked}}
-            <div class="pick-card-option away large-6 columns picked"> {{else}}
-            <div class="pick-card-option away large-6 columns">
-            {{/if}}
-              <div class="team-name"> {{away}}</div>
-              <input name="team" type="hidden" value="away">
-              <input name="game_id" type="hidden" value="{{game_id}}">
-              <input name="team" type="hidden" value="{{away}}">
-            </div>
-          </div>    
-        </div>
-      </div>
-    </script>
-    {% endraw %}
+    {% include 'templates/pick-card-template.html' %}
 
     
 
   <!-- close wrapper, no more content after this -->
   </div>
 </div>
+    <script src="js/vendor/jquery.js"></script>
+    <script src="js/vendor/handlebars.js"></script>
+    
     <script src="js/apiconnector.js"></script>
     <script src="js/goatdatetime.js"></script>
-    <script src="js/vendor/handlebars.js"></script>
-    <script src="js/vendor/jquery.js"></script>
+    <script src="js/GoatGame.js"></script>
+    <script src="js/LiveGameManager.js"></script>
+    <script src="js/GoatGameInjector.js"></script>
+
+    
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
     <script>
-    init("{{curr_date}}");
-
+    {% if logged_in %}
+    init("{{curr_date}}", true);
+    {% else %}
+    init("{{curr_date}}", false);
+    {% endif %}
     </script>
   </body>
 </html>

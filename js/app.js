@@ -1,31 +1,25 @@
 $(document).foundation()
 
 //-------------- GLOBALS ---------------------//
+
 var today;
 var tomorrow;
-
-//-------------- TEMPLATES -------------------//
-var pick_card_source = $("#pick-card-template").html();
-var pick_card_template = Handlebars.compile(pick_card_source);
+var liveGameManager;
+var logged_in;
+var gameInjector;
 
 //-------------- INITIAL REQUESTS ------------//
 
-function addGames(section, games) {
-  console.log(games);
+function addGamesToSection(section, games, is_today) {
   for (var i = 0; i < games.length; i ++) {
-    var context = games[i];
+    games[i].is_today = is_today;
     if (i == games.length - 1) {
-      context.isLast = true;
+      games[i].isLast = true;
     }
 
-    context.awayPicked = (context.current_pick == context.away);
-    context.homePicked = (context.current_pick == context.home);
-    context.time = (getPrettyTime(context.time))
+    var game = new GoatGame(games[i]);
 
-    var game = $(pick_card_template(context));
-    addPickListeners(context, game);
-
-    var added = section.append(game);
+    section.append(game.elem);
   }
 
   section.animate(
@@ -35,37 +29,40 @@ function addGames(section, games) {
 //-------------- LISTENERS -------------------//
 
 function addPickListeners(context, game) {
-  game.find(".home").click(function() {
-    console.log(".home!!")
-    $(this).addClass("picked")
-    $(this).parent().find(".away").removeClass("picked")
-    apiConnector.pick(context.game_id, context['home_id'])
-  })
-  
-  game.find(".away").click(function() {
-    console.log(".away!!")
-    $(this).addClass("picked")
-    $(this).parent().find(".home").removeClass("picked")
-    apiConnector.pick(context.game_id, context['away_id'])
-  })
+ 
 }
 
-function init(datestring) {
+function init(datestring, logged) {
+  logged_in = logged;
   today = new GoatDate(datestring);
   console.log(today._jsDate);
   tomorrow = today.getTomorrow();
+
+  liveGameManager = new LiveGameManager(apiConnector);
+  gameInjector = new GoatGameInjector($('#started-games-section'), $('#today-upcoming-games-section'));
 
   $('#today-label').html("Today " + today.getMonthDateAbbrev());
 
   //load games
   apiConnector.game(today.getDateString(), "nba", function(data) {
     $('#games-loader').hide();
-    addGames($('#live-games-section'), data);
+    gameInjector.todayGameInfo(data);
+
+    //addGamesToSection($('#started-games-section'), data, true);
   })
 
   apiConnector.game(tomorrow.getDateString(), "nba", function(data) {
     $('#games-loader').hide();
-    addGames($('#upcoming-games-section'), data);
+    addGamesToSection($('#upcoming-games-section'), data, false);
   })
+
+  liveGameManager.poll(function(data) {
+    gameInjector.todayLiveGameData(data);
+  });
+
+  setInterval(function() {
+    console.log("interval");
+    liveGameManager.poll();
+  }, 10000)
 
 }

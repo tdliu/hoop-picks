@@ -1,26 +1,56 @@
 var MONTHS = ['Null', 'Jan.', 'Feb.', 'Mar.', 'Apr.', 'May', 'June', 'July', 'Aug.', 'Sept.', 'Oct.', 'Nov.', 'Dec'];
 
-function getPrettyTime(time) {
-	var prettytime = "";
-	var hour = parseInt(time.substring(0,2));
-	if (hour > 12)
-		prettytime += (hour - 12);
-	else 
-		prettytime += hour;
-
-	prettytime += time.substring(2, 5);
-	if (hour > 11)
-		prettytime += "pm"
-	else 
-		prettytime += "am"
-
-	return prettytime
-}
+// ------------------ UTILS -------------------//
 
 function jsDatetoDatestring(date) {
 	return "" + date.getFullYear() + (date.getMonth() + 1) + date.getDate();
 }
 
+function getCurrentTimeEastern() {
+	var offset = -4;
+	var d = new Date();
+    var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    var nd = new Date(utc + (3600000*offset));
+    var timestring12 = nd.toLocaleTimeString();
+    var timestring24 = timestring12;
+    if (timestring12.indexOf('PM') != -1) {
+    	var firstColon = timestring12.indexOf(":");
+    	var hour = parseInt(timestring12.substring(0, firstColon)) + 12;
+    	timestring24 = "" + hour + ":" + timestring12.substring(firstColon + 1, firstColon + 3);
+    }
+	return new GoatTime(timestring24);
+}
+
+// ----------------- CLASS GOAT TIME --------------//
+function GoatTime(timestring) {
+	var firstColon = timestring.indexOf(':');
+	this.timestring = timestring;
+	this.hour = parseInt(timestring.substring(0, firstColon));
+	this.minutes = parseInt(timestring.substring(firstColon + 1 , firstColon + 3));
+}
+
+GoatTime.prototype.getDifferenceHours = function(other) {
+	return other.hour - this.hour + ((other.minutes - this.minutes) / 60);
+}
+
+GoatTime.prototype.getPrettyTime = function() {
+	var prettytime = "";
+	if (this.hour > 12)
+		prettytime += (this.hour - 12);
+	else 
+		prettytime += this.hour;
+
+	prettytime += ":" + this.timestring.substring(3,5);
+	if (this.hour > 11)
+		prettytime += "pm"
+	else 
+		prettytime += "am"
+
+	return prettytime;
+}
+
+
+// ----------------- CLASS GOAT DATE --------------//
 function GoatDate(datestring) {
 	this._datestring = datestring;
 
@@ -66,7 +96,6 @@ GoatDate.prototype.getDateString = function() {
 GoatDate.prototype.getTomorrow = function() {
 	var tomorrow_jsDate = new Date(this._jsDate);
 	tomorrow_jsDate.setDate(tomorrow_jsDate.getDate() + 1);
-	console.log("string: " + jsDatetoDatestring(tomorrow_jsDate));
 	var tomorrow = new GoatDate(jsDatetoDatestring(tomorrow_jsDate));
 
 	return tomorrow;

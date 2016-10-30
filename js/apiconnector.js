@@ -1,5 +1,6 @@
 var apiConnector = {};
 apiConnector.pick = function(game_id, team, callback) {
+  console.log("sending pick: ", game_id, team)
 	$.ajax({
       type: "POST",
       url: "/pick/",
@@ -20,6 +21,19 @@ apiConnector.game = function(date, sport, callback) {
       dataType: 'json'
     })
     .done(function( data ) {
-    	callback(data);
+    	if (callback)
+        callback(data);
+    });
+}
+
+apiConnector.livegame = function(callback) {
+  $.ajax({
+      type: "GET",
+      url: "/live_game/",
+      dataType: 'json'
+    })
+    .done(function( data ) {
+      if (callback)
+        callback(data);
     });
 }

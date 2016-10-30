@@ -188,7 +188,6 @@ class LiveGameHandler(webapp2.RequestHandler):
             self.response.out.write(json.dumps(current_live_data))
             last_polled_ts = curr_ts
         else:
-            logging.info(current_live_data)
             self.response.out.write(json.dumps(current_live_data))
 
 

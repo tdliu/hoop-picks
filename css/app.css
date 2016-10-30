@@ -32,18 +32,15 @@ a {
 }
 
 
-#live-games-section {
-	border-style: solid;
-	border-width: 1px;
-	border-color: orange;
-	border-radius: 5px;
+#started-games-section {
+}
+
+.section {
 	opacity: 0;
 }
 
-
 /* -------------- PICK CARDS ---------------------*/
 .pick-card {
-	text-align: center;
 	border-style: solid;
 	border-width: 1px;
 	border-color: black;
@@ -52,23 +49,42 @@ a {
 	box-shadow: 1px 1px 1px #888888;
 }
 
+.pick-card.live {
+	border-color: orange;
+}
+
+.pick-card.past {
+	border-color: grey;
+}
+
 .pick-card-header {
 
 }
 
 .pick-card-option {
 	transition: .25s;
-	cursor: pointer;
+	text-align: left;
+}
+
+.pick-card-option.pickable {
+	cursor: pointer
 }
 
 .pick-card-option.picked {	
 	background-color: orange;
 }
 
-.pick-card-option:hover {
+.pick-card-header .time {
+	color: grey;
+	font-size: 12px;
+}
+
+.pick-card-option.pickable:hover {
 	background-color: orange;
 }
 
-.pick-card-header .time {
+.pick-card-option .win-loss {
 	color: grey;
+	font-size: 14px;
+
 }

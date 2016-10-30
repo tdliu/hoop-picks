@@ -1,0 +1,32 @@
+{% raw %}
+  <script id="pick-card-template" type="text/x-handlebars-template">
+
+    {{#if isLast}}
+      <div class="pick-card-container small-12 medium-6 large-3 columns end">
+    {{else }}
+      <div class="pick-card-container small-12 medium-6 large-3 columns">
+    {{/if}}
+    
+      <div class="pick-card large-12 columns" id='{{game_id}}'>
+        <div class="pick-card-header row">
+          <div class="time large-6 columns"> {{pretty_start_time}}</div>
+        </div>
+
+        <div class="row pick-card-option home">
+          <div class="team-name small-2 large-2 columns"> {{home}}</div>
+           {{#if has_live_data}}
+            <div class="win-loss small-10 large-10 columns"> ({{live_data.hTeam.win}}-{{live_data.hTeam.loss}})</div>
+            {{/if}}
+        </div>
+
+        <div class="row pick-card-option away">
+          <div class="team-name small-2 large-2 columns"> {{away}}</div>
+          {{#if has_live_data}}
+            <div class="win-loss small-10 large-10 columns"> ({{live_data.vTeam.win}}-{{live_data.vTeam.loss}})</div>
+            {{/if}}
+        </div>        
+
+      </div>
+    </div>
+  </script>
+{% endraw %}
