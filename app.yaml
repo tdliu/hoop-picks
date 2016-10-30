@@ -19,6 +19,10 @@ handlers:
 
 - url: /.*
   script: hoop_picks.app
+
+- url: /admin/.*
+  script: IGNORED
+  login: admin
 # [END handlers]
 
 # [START libraries]

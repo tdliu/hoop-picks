@@ -31,6 +31,9 @@ import json
 
 import jinja2
 import webapp2
+from db_update import insert_nba_games
+from db_update import update_nba_games
+
 
 JINJA_ENVIRONMENT = jinja2.Environment(
     loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
@@ -53,6 +56,7 @@ class MainPage(webapp2.RequestHandler):
         #now = datetime.date.today()
         #curr_date = "{}{}{}".format(now.year, now.month, now.day)
         #curr_date = int(curr_date)
+        throwaway = datetime.datetime.strptime('20110101','%Y%m%d')
         now = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()
         curr_date = "{}{}{}".format(now.year, now.month, now.day)
         user = users.get_current_user()
@@ -111,6 +115,7 @@ class PickHandler(webapp2.RequestHandler):
         logging.info(team);
         self.response.out.write(json.dumps(responseData))
 
+'''
 class CronDbUpdate(webapp2.RequestHandler):
     def post(self):
         # do stuff
@@ -120,7 +125,7 @@ class CronDbUpdate(webapp2.RequestHandler):
         curr_date = int(curr_date)        
         insert_curr_nba_games(curr_date)
         #update_nba_games(date)
-
+'''
 
 
 # --------------------- HANDLERS TO IMPLEMENT --------------------
@@ -176,7 +181,7 @@ class LiveGameHandler(webapp2.RequestHandler):
     def get(self):
         global current_live_data
         global last_polled_ts
-        logging.info("HELLO")
+        #logging.info("HELLO")
         curr_ts = datetime.datetime.utcnow()
         if (curr_ts - last_polled_ts).total_seconds() > 10 or current_live_data is None:
             # poll new
@@ -191,11 +196,57 @@ class LiveGameHandler(webapp2.RequestHandler):
             self.response.out.write(json.dumps(current_live_data))
 
 
+class InsertNBAGames(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        if user:
+            if users.is_current_user_admin():
+                self.response.write('You are an administrator.')
+                insert_nba_games(datetime.date(2016,10,29))
+                #insert_nba_games(datetime.date.today())
+                logging.info("Inserting NBA games.")
+            else:
+                self.response.write('You are not an administrator.')
+        else:
+            self.response.write('You are not logged in.')
+        
+        
+        
+'''
+class UpdateNBAGames(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        if user:
+            if users.is_current_user_admin():
+                self.response.write('You are an administrator.')
+                curr_date = datetime.date.today()
+                #curr_date = datetime.date(2016,10,29)
+                update_nba_games(curr_date)
+                logging.info("Updating NBA games for {}".format(curr_date))
+            else:
+                self.response.write('You are not an administrator.')
+        else:
+            self.response.write('You are not logged in.') 
+'''       
+
+class UpdateNBAGames(webapp2.RequestHandler):
+    def get(self):
+        date = datetime.date.today() - datetime.timedelta(days=1)
+        logging.info("HELLO")
+        logging.info(date)
+        #curr_date = datetime.date(2016,10,29)
+        update_nba_games(date)
+        logging.info("Updating NBA games for {}".format(date))
+   
+
+
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/pick/', PickHandler),
-    ('/db_update', CronDbUpdate),
+    #('/db_update', CronDbUpdate),
     ('/live_game/', LiveGameHandler),
-    ('/game/', GameHandler)
+    ('/game/', GameHandler),
+    ('/insert_nba_games/', InsertNBAGames),
+    ('/update_nba_games/', UpdateNBAGames)
 ], debug=True)
