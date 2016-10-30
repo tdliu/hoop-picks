@@ -61,7 +61,7 @@ GoatGameInjector.prototype.goatGameFactory = function(games, is_today) {
 
 		var game = new GoatGame(games[i]);
 		if (game.hasStarted()) {
-			goatGames['started'].push(game);	
+			goatGames['started'].push(game);
 		}
 		else {
 			goatGames['upcoming'].push(game);	

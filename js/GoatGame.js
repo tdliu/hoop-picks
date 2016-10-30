@@ -1,5 +1,8 @@
 var pick_card_source = $("#pick-card-template").html();
+var live_pick_card_source = $("#live-pick-card-template").html();
+
 var pick_card_template = Handlebars.compile(pick_card_source);
+var live_pick_card_template = Handlebars.compile(live_pick_card_source);
 
 // ------------------ UTILS ------------------------//
 function hasStarted(start_time) {
@@ -27,20 +30,14 @@ function GoatGame(game) {
     	this.started = false;
     }
 
-    this.elem = $(pick_card_template(this));
-
-    if (this.started === false) {
+    if (this.started === true) {
+		this.live_data.live_clock = this.formatLiveClock();
+		this.elem = $(live_pick_card_template(this));
+		liveGameManager.registerGame(this);  	
+    }
+    else {
+    	this.elem = $(pick_card_template(this));	
     	this.setPickable(logged_in);
-    }
-    else if (this.started === true) {
-    	this.getPickElem().addClass("live")
-    }
-
-    if (this.awayPicked) {
-    	this.getAwayElem().addClass("picked");
-    }
-    else if (this.homePicked) {
-    	this.getHomeElem().addClass("picked");	
     }
 }
 
@@ -62,7 +59,6 @@ GoatGame.prototype.addLoginListeners = function() {
 	this.getHomeElem().click(function() {
 		alert("Login!")
 	})
-  
 	this.getAwayElem().click(function() {
 		alert("Login!")
 	})
@@ -83,6 +79,12 @@ GoatGame.prototype.addPickListeners = function() {
 	})
 }
 
+GoatGame.prototype.liveUpdate = function(the_live_data) {
+	this.live_data = the_live_data;
+	this.live_data.live_clock = this.formatLiveClock();
+	this.elem.replaceWith(live_pick_card_template(this))
+}
+
 GoatGame.prototype.getAwayElem = function() {
 	return this.elem.find('.away');
 }
@@ -93,4 +95,19 @@ GoatGame.prototype.getHomeElem = function() {
 
 GoatGame.prototype.getPickElem = function() {
 	return this.elem.find("#" + this.game_id );
+}
+
+GoatGame.prototype.formatLiveClock = function() {
+	var live_clock = this.live_data.clock;
+	live_clock += " - ";
+	if (this.live_data.period.current == 1)
+		live_clock += "1st";
+	else if (this.live_data.period.current == 2)
+		live_clock += "2nd";
+	else if (this.live_data.period.current == 3)
+		live_clock += "3rd";
+	else if (this.live_data.period.current == 4)
+		live_clock += "4th";
+
+	return live_clock;
 }
