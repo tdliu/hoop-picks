@@ -20,7 +20,6 @@ GoatGameInjector.prototype.todayGameInfo = function(today_games) {
 	if (this._today_live_game_data_received) {
 		this.joinTodayGamesAndInject();
 	}
-
 }
 
 GoatGameInjector.prototype.todayLiveGameData = function(live_game_data) {
@@ -31,8 +30,12 @@ GoatGameInjector.prototype.todayLiveGameData = function(live_game_data) {
 	}
 }
 
+GoatGameInjector.prototype.upcomingGameData = function(future_games_data) {
+	var goatGames = this.goatGameFactory(future_games_data, false);
+	this.addGamesToSection(this._upcoming_section, goatGames['upcoming']);
+}
+
 GoatGameInjector.prototype.joinTodayGamesAndInject = function() {
-	console.log("JOINING")
 	var joined = this._today_games; // TODO
 	for (var i = 0; i < this._today_live_game_data.length; i++) {
 		live_datum = this._today_live_game_data[i];
@@ -66,8 +69,9 @@ GoatGameInjector.prototype.goatGameFactory = function(games, is_today) {
 		else {
 			goatGames['upcoming'].push(game);	
 		}
-		
 	}
+	if (goatGames['started'].length > 0) goatGames['started'][goatGames['started'].length - 1].setLast();
+	if (goatGames['upcoming'].length > 0) goatGames['upcoming'][goatGames['upcoming'].length - 1].setLast();
 	return goatGames;
 }
 
@@ -78,6 +82,6 @@ GoatGameInjector.prototype.addGamesToSection = function(section, goatGames) {
 	}
 
 	section.animate(
-	{'opacity': 1},
-	1000)
+		{'opacity': 1},
+		1000)
 }

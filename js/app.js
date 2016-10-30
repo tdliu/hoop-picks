@@ -4,6 +4,7 @@ $(document).foundation()
 
 var today;
 var tomorrow;
+var next;
 var liveGameManager;
 var logged_in;
 var gameInjector;
@@ -28,37 +29,54 @@ function addGamesToSection(section, games, is_today) {
 }
 //-------------- LISTENERS -------------------//
 
-function addPickListeners(context, game) {
- 
+function updateDateSelector() {
+  $('#upcoming-label').html("" + tomorrow.getMonthDateAbbrev());
+  $('#next-btn').html("" + next.getMonthDateAbbrev() + " >>");
 }
 
 function init(datestring, logged) {
   logged_in = logged;
+
   today = new GoatDate(datestring);
-  console.log(today._jsDate);
   tomorrow = today.getTomorrow();
+  next = tomorrow.getTomorrow();
+  updateDateSelector();
 
   liveGameManager = new LiveGameManager(apiConnector);
-  gameInjector = new GoatGameInjector($('#started-games-section'), $('#today-upcoming-games-section'));
+  gameInjector = new GoatGameInjector($('#started-games-section'), $('#today-upcoming-games-section'), $('#upcoming-games-section'));
 
   $('#today-label').html("Today " + today.getMonthDateAbbrev());
+  
 
   //load games
   apiConnector.game(today.getDateString(), "nba", function(data) {
     $('#games-loader').hide();
     gameInjector.todayGameInfo(data);
-
-    //addGamesToSection($('#started-games-section'), data, true);
   })
 
   apiConnector.game(tomorrow.getDateString(), "nba", function(data) {
-    $('#games-loader').hide();
-    addGamesToSection($('#upcoming-games-section'), data, false);
+    $('#upcoming-loader').hide();
+    gameInjector.upcomingGameData(data);//addGamesToSection($('#upcoming-games-section'), data, false);
   })
 
   liveGameManager.poll(function(data) {
     gameInjector.todayLiveGameData(data);
   });
+
+  $('#next-btn').click(function() {
+    tomorrow = next;
+    next = next.getTomorrow();
+
+    updateDateSelector();
+    $('#upcoming-games-section').html("")
+    $('#upcoming-loader').show();
+
+    apiConnector.game(tomorrow.getDateString(), "nba", function(data) {
+      $('#upcoming-loader').hide();
+      gameInjector.upcomingGameData(data);//addGamesToSection($('#upcoming-games-section'), data, false);
+    })
+
+  })
 
   setInterval(function() {
     console.log("interval");

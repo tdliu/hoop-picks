@@ -1,11 +1,8 @@
 {% raw %}
   <script id="live-pick-card-template" type="text/x-handlebars-template">
 
-    {{#if isLast}}
-      <div class="pick-card-container small-12 medium-6 large-3 columns end">
-    {{else }}
-      <div class="pick-card-container small-12 medium-6 large-3 columns">
-    {{/if}}
+    
+      <div class="pick-card-container small-12 medium-6 large-3 columns {{#if isLast}} end {{/if}}">
     
       <div class="pick-card live large-12 columns" id='{{game_id}}'>
         <div class="pick-card-header row">

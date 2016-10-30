@@ -88,6 +88,11 @@ GoatGame.prototype.liveUpdate = function(the_live_data) {
 	this.elem = newelem;
 }
 
+GoatGame.prototype.setLast = function() {
+	this.isLast = true;
+	this.elem.addClass("end");
+}
+
 GoatGame.prototype.getAwayElem = function() {
 	return this.elem.find('.away');
 }
@@ -101,7 +106,17 @@ GoatGame.prototype.getPickElem = function() {
 }
 
 GoatGame.prototype.formatLiveClock = function() {
+	if (!this.live_data.isGameActivated) {
+		return "final";
+	}
+	else if (this.live_data.period.isHalftime) {
+		return "halftime";
+	}
 	var live_clock = this.live_data.clock;
+
+	if (!live_clock) {
+		return this.pretty_start_time;
+	}
 	live_clock += " - ";
 	if (this.live_data.period.current == 1)
 		live_clock += "1st";
