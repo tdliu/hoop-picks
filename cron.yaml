@@ -1,1 +1,5 @@
 cron:
+- description: update yesterday's NBA games
+  url: /update_nba_games/
+  schedule: every day 01:00
+  timezone: America/Los_Angeles
