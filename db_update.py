@@ -6,6 +6,7 @@ import datetime
 import json
 
 from data_classes import Option, Outcome, Event, Pick
+import logging
 
 '''
 def insert_nba_games(num_day, start_date):
@@ -56,7 +57,7 @@ def insert_nba_games(start_date):
             ndb.put_multi(events)
             curr_date = curr_date + datetime.timedelta(days=1)
     except DeadlineExceededError:
-        logging.info("DeadlineExceededError")
+        logging.exception("DeadlineExceededError")
 
 
 def update_nba_games(date):
