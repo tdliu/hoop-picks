@@ -26,6 +26,13 @@ def insert_nba_games(num_day, start_date):
         ndb.put_multi(events)
 '''
 
+class DeadlineExceededError(DownloadError):
+  """Raised when we could not fetch the URL because the deadline was exceeded.
+
+  This can occur with either the client-supplied 'deadline' or the system
+  default, if the client does not supply a 'deadline' parameter.
+  """
+
 def insert_nba_games(start_date):
     try:
         curr_date = start_date
