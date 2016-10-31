@@ -12,7 +12,7 @@ class Outcome(ndb.Model):
     
 
 class Event(ndb.Model):
-    event_type = ndb.StringProperty()
+    sport = ndb.StringProperty()
     #gameId = ndb.IntegerProperty()
     season = ndb.IntegerProperty()
     date = ndb.DateProperty()

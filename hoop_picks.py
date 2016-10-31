@@ -132,6 +132,7 @@ class CronDbUpdate(webapp2.RequestHandler):
 class GameHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
+        throwaway = datetime.datetime.strptime('20110101','%Y%m%d')
         curr_date = datetime.datetime.strptime(self.request.get('date'), "%Y%m%d")
         #if curr_date is None:
         #curr_date = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()

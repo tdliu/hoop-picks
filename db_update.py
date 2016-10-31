@@ -40,7 +40,7 @@ def insert_nba_games(start_date):
             hteam = Option.get_or_insert("nba{}".format(game['hTeam']['teamId']), tri_code = game['hTeam']['triCode'])
             vteam = Option.get_or_insert("nba{}".format(game['vTeam']['teamId']), tri_code = game['vTeam']['triCode'])
             #events.append(Event(id = "nba{}".format(game['gameId']), season = int(game['seasonYear']), options = [ndb.Key(Option, game['hTeam']['triCode']), ndb.Key(Option, game['vTeam']['triCode'])]))
-            events.append(Event(id = "nba{}".format(game['gameId']), season = int(game['seasonYear']), date = curr_date, options = [hteam.key, vteam.key], start_time = datetime.datetime.strptime( game['startTimeUTC'], "%Y-%m-%dT%H:%M:%S.000Z")))
+            events.append(Event(id = "nba{}".format(game['gameId']), sport = "nba", season = int(game['seasonYear']), date = curr_date, options = [hteam.key, vteam.key], start_time = datetime.datetime.strptime( game['startTimeUTC'], "%Y-%m-%dT%H:%M:%S.000Z")))
         ndb.put_multi(events)
         curr_date = curr_date + datetime.timedelta(days=1)
 
