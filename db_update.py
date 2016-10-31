@@ -1,5 +1,6 @@
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
+from google.appengine.runtime import DeadlineExceededError
 
 import datetime
 import json
@@ -26,12 +27,14 @@ def insert_nba_games(num_day, start_date):
         ndb.put_multi(events)
 '''
 
+'''
 class DeadlineExceededError(DownloadError):
   """Raised when we could not fetch the URL because the deadline was exceeded.
 
   This can occur with either the client-supplied 'deadline' or the system
   default, if the client does not supply a 'deadline' parameter.
   """
+'''
 
 def insert_nba_games(start_date):
     try:
