@@ -1,10 +1,12 @@
 from google.appengine.ext import ndb
 from google.appengine.api import urlfetch
+
 import datetime
 import json
 
 from data_classes import Option, Outcome, Event, Pick
 
+urlfetch.set_default_fetch_deadline(45)
 '''
 def insert_nba_games(num_day, start_date):
     # e.g. datetime.date(2016,10,25)
