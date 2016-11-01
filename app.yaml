@@ -17,8 +17,8 @@ handlers:
   static_dir: bootstrap
 
 
-#- url: /.*
-#  script: hoop_picks.app
+- url: /.*
+  script: hoop_picks.app
 
 
 - url: /cron/.*
