@@ -49,6 +49,7 @@ def update_nba_games(date):
 
 def update_goat_index(sport):
     # do stuff
+    return
 
 
 

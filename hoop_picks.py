@@ -25,7 +25,7 @@ from google.appengine.api import urlfetch
 
 #import data_classes as dc
 from data_classes import Option, Outcome, Event, Pick
-import db_update as db
+#import db_update as db
 import logging
 import json
 
