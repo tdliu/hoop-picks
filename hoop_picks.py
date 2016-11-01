@@ -25,7 +25,7 @@ from google.appengine.api import urlfetch
 
 #import data_classes as dc
 from data_classes import Option, Outcome, Event, Pick
-import db_update as db
+#import db_update as db
 import logging
 import json
 
@@ -155,6 +155,8 @@ class GameHandler(webapp2.RequestHandler):
                             'away': curr_game.options[1].get().tri_code, 
                             'away_id': curr_game.options[1].id(), 
                             'winner': winner}
+            if len(curr_game.outcome.scores) > 0:
+                game_data['scores'] = curr_game.outcome.scores
             #start_time = curr_game.start_time.strftime("%H:%M:%S") 
             if user:
                 curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
