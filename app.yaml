@@ -16,9 +16,14 @@ handlers:
 - url: /bootstrap
   static_dir: bootstrap
 
-
+'''
 - url: /.*
   script: hoop_picks.app
+'''
+
+- url: /cron/.*
+  script: hoop_picks.app
+  login: admin
 
 - url: /admin/.*
   script: IGNORED
