@@ -1,4 +1,5 @@
 from google.appengine.ext import ndb
+import math
 
 
 class Option(ndb.Model):
@@ -31,6 +32,23 @@ class Pick(ndb.Model):
     event = ndb.KeyProperty(kind = Event)
     pick = ndb.KeyProperty(kind = Option)
     num_change = ndb.IntegerProperty(default = 0)
+
+class UserGoatIndex(ndb.Model):
+    user_id = ndb.StringProperty()
+    sport = ndb.StringProperty()
+    num_picks = ndb.IntegerProperty()
+    num_points = ndb.IntegerProperty()
+    goat_index = ndb.ComputedProperty(lambda self: self._goat_index())
+
+    @property
+    def _goat_index(self):
+        P = .5
+        Q = 20
+        if self.num_pick = 0:
+            return 0
+        return P*(self.num_points/self.num_picks)*10 + 10*(1-P)*(1-math.exp(-self.num_picks/Q))
+
+
 
 '''
 
