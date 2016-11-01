@@ -252,5 +252,5 @@ app = webapp2.WSGIApplication([
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
     ('/insert_nba_games/', InsertNBAGames),
-    ('/update_nba_games/', UpdateNBAGames)
+    ('/cron/update_nba_games/', UpdateNBAGames)
 ], debug=True)
