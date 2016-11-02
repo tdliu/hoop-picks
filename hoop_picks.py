@@ -24,7 +24,7 @@ import datetime
 from google.appengine.api import urlfetch
 
 #import data_classes as dc
-from data_classes import Option, Outcome, Event, Pick
+from data_classes import Option, Outcome, Event, Pick, UserGoatIndex
 #import db_update as db
 import logging
 import json
@@ -122,6 +122,20 @@ class UserHistory(webapp2.RequestHandler):
         user = users.get_current_user()
         sport = self.request.get('sport')
 
+class UserGoatIndexHandler(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        sport = self.request.get('sport')
+        q = UserGoatIndex.query().filter(UserGoatIndex.sport == sport)
+        results = q.fetch()
+        user_goat_index = results[0]
+        responseData = {
+                            'num_pick': num_pick,
+                            'num_correct': num_correct,
+                            'accuracy': accuracy
+
+        }
+        self.response.out.write(json.dumps(responseData))
 
 
 # --------------------- HANDLERS TO IMPLEMENT --------------------
@@ -257,8 +271,9 @@ app = webapp2.WSGIApplication([
     #('/db_update', CronDbUpdate),
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
-    ('/insert_nba_games/', InsertNBAGames),
+    ('/admin/insert_nba_games/', InsertNBAGames),
     ('/admin/recalculate_goat_index/', RecalculateGoatIndex),
+    ('/user_goat_index/', UserGoatIndexHandler),
     #('/update_schema/', UpdateSchemaHandler),
     ('/cron/update_nba_games/', UpdateNBAGames)
 ], debug=True)
