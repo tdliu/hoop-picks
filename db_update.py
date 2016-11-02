@@ -54,13 +54,14 @@ def recalculate_goat_index(sport):
     for pick in picks:
         #get_or_insert user goat index
         user_id = pick.user_id
-        goat_index = UserGoatIndex.get_or_insert("{}{}".format(sport, user_id), user_id = user_id, sport = sport, num_pick = 0, num_point = 0, num_correct = 0)
         event = pick.event.get()
-        outcome = event.outcome
-        goat_index.num_pick = goat_index.num_pick + 1
-        if outcome.winner == pick.pick:
-            goat_index.num_correct = goat_index.num_correct + 1
-        goat_indexes.append(goat_index)
+        if event.start_time < datetime.datetime.utcnow():
+            goat_index = UserGoatIndex.get_or_insert("{}{}".format(sport, user_id), user_id = user_id, sport = sport, num_pick = 0, num_point = 0, num_correct = 0)
+            outcome = event.outcome
+            goat_index.num_pick = goat_index.num_pick + 1
+            if outcome.winner == pick.pick:
+                goat_index.num_correct = goat_index.num_correct + 1
+            goat_indexes.append(goat_index)
     ndb.put_multi(goat_indexes)
 
 
