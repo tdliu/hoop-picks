@@ -33,7 +33,8 @@ import jinja2
 import webapp2
 from db_update import insert_nba_games
 from db_update import update_nba_games
-from db_update import update_schema_task
+from db_update import recalculate_goat_index
+
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -246,6 +247,10 @@ class UpdateSchemaHandler(webapp2.RequestHandler):
         self.response.write('Updating pick entities.') 
 '''
 
+class RecalculateGoatIndex(webapp2.RequestHandler):
+    def get(self):
+        recalculate_goat_index("nba")
+
 app = webapp2.WSGIApplication([
     ('/', MainPage),
     ('/pick/', NBAPickHandler),
@@ -253,6 +258,7 @@ app = webapp2.WSGIApplication([
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
     ('/insert_nba_games/', InsertNBAGames),
+    ('/admin/recalculate_goat_index/', RecalculateGoatIndex),
     #('/update_schema/', UpdateSchemaHandler),
     ('/cron/update_nba_games/', UpdateNBAGames)
 ], debug=True)

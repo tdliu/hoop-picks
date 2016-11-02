@@ -5,7 +5,7 @@ from google.appengine.runtime import DeadlineExceededError
 import datetime
 import json
 
-from data_classes import Option, Outcome, Event, Pick
+from data_classes import Option, Outcome, Event, Pick, UserGoatIndex
 import logging
 
 
@@ -48,13 +48,22 @@ def update_nba_games(date):
     	game_event.put()
 
 def recalculate_goat_index(sport):
-    q = Picks.query().filter(sport == "nba")
+    q = Pick.query().filter(Pick.sport == sport) # sport == "nba"
     picks = q.fetch()
+    goat_indexes = []
     for pick in picks:
+        #get_or_insert user goat index
         user_id = pick.user_id
-        
+        goat_index = UserGoatIndex.get_or_insert("{}{}".format(sport, user_id), user_id = user_id, sport = sport, num_pick = 0, num_point = 0, num_correct = 0)
+        event = pick.event.get()
+        outcome = event.outcome
+        goat_index.num_pick = goat_index.num_pick + 1
+        if outcome.winner == pick.pick:
+            goat_index.num_correct = goat_index.num_correct + 1
+        goat_indexes.append(goat_index)
+    ndb.put_multi(goat_indexes)
 
-    return
+
 
 def update_goat_index(sport):
     # do stuff
