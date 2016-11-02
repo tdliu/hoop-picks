@@ -47,9 +47,22 @@ def update_nba_games(date):
             game_event.outcome.winner = ndb.Key("Option", "nba{}".format(game['vTeam']['teamId']))
     	game_event.put()
 
+def recalculate_goat_index(sport):
+    q = Picks.query().filter()
+    return
+
 def update_goat_index(sport):
     # do stuff
+
     return
+
+def update_schema_task():
+    q = Pick.query()
+    picks = q.fetch()
+    for pick in picks:
+        pick.sport = "nba"
+        pick.put()
+
 
 
 

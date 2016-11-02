@@ -27,6 +27,7 @@ class Event(ndb.Model):
     
 class Pick(ndb.Model):
     user_id = ndb.StringProperty()
+    sport = ndb.StringProperty()
     last_updated = ndb.DateTimeProperty(auto_now = True)
     prev_picks = ndb.KeyProperty(kind = Option, repeated = True)
     event = ndb.KeyProperty(kind = Event)
@@ -36,18 +37,28 @@ class Pick(ndb.Model):
 class UserGoatIndex(ndb.Model):
     user_id = ndb.StringProperty()
     sport = ndb.StringProperty()
-    num_picks = ndb.IntegerProperty()
-    num_points = ndb.IntegerProperty()
-    goat_index = ndb.ComputedProperty(lambda self: self._goat_index())
+    num_pick = ndb.IntegerProperty()
+    num_point = ndb.IntegerProperty()
+    num_correct = ndb.IntegerProperty()
+    accuracy = ndb.ComputedProperty(lambda self: self.__accuracy())
+    #goat_index = ndb.ComputedProperty(lambda self: self._goat_index())
 
+    @property
+    def __accuracy(self):
+        if self.num_picks > 0:
+            return self.num_correct/self.num_pick
+        else:
+            return 0
+
+'''
     @property
     def _goat_index(self):
         P = .5
         Q = 20
-        if self.num_picks == 0:
+        if self.num_pick == 0:
             return 0
-        return P*(self.num_points/self.num_picks)*10 + 10*(1-P)*(1-math.exp(-self.num_picks/Q))
-
+        return P*(self.num_point/self.num_pick)*10 + 10*(1-P)*(1-math.exp(-self.num_pick/Q))
+'''
 
 
 '''
