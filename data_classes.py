@@ -45,7 +45,7 @@ class UserGoatIndex(ndb.Model):
 
     def _accuracy(self):
         if self.num_pick > 0:
-            return self.num_correct/self.num_pick
+            return float(self.num_correct)/float(self.num_pick)
         else:
             return 0
 
