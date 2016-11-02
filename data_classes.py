@@ -42,7 +42,6 @@ class UserGoatIndex(ndb.Model):
     num_correct = ndb.IntegerProperty()
     accuracy = ndb.ComputedProperty(lambda self: self._accuracy())
     #goat_index = ndb.ComputedProperty(lambda self: self._goat_index())
-
     def _accuracy(self):
         if self.num_pick > 0:
             return float(self.num_correct)/float(self.num_pick)
