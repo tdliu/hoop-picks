@@ -48,6 +48,9 @@ def update_nba_games(date):
     	game_event.put()
 
 def recalculate_goat_index(sport):
+    ndb.delete_multi(
+        UserGoatIndex.query().fetch(keys_only = True)
+    )
     q = Pick.query().filter(Pick.sport == sport) # sport == "nba"
     picks = q.fetch()
     goat_indexes = []
