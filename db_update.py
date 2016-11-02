@@ -48,7 +48,12 @@ def update_nba_games(date):
     	game_event.put()
 
 def recalculate_goat_index(sport):
-    q = Picks.query().filter()
+    q = Picks.query().filter(sport == "nba")
+    picks = q.fetch()
+    for pick in picks:
+        user_id = pick.user_id
+        
+
     return
 
 def update_goat_index(sport):
@@ -56,12 +61,14 @@ def update_goat_index(sport):
 
     return
 
+'''
 def update_schema_task():
     q = Pick.query()
     picks = q.fetch()
     for pick in picks:
         pick.sport = "nba"
         pick.put()
+'''
 
 
 

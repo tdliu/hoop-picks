@@ -238,12 +238,13 @@ class UpdateNBAGames(webapp2.RequestHandler):
         #curr_date = datetime.date(2016,10,29)
         update_nba_games(date)
         logging.info("Updating NBA games for {}".format(date))
-   
+  
+''' 
 class UpdateSchemaHandler(webapp2.RequestHandler):
     def get(self):
         update_schema_task()
-        logging.info("Updating pick entities.")
-
+        self.response.write('Updating pick entities.') 
+'''
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
@@ -252,6 +253,6 @@ app = webapp2.WSGIApplication([
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
     ('/insert_nba_games/', InsertNBAGames),
-    ('/update_schema/', UpdateSchemaHandler),
+    #('/update_schema/', UpdateSchemaHandler),
     ('/cron/update_nba_games/', UpdateNBAGames)
 ], debug=True)
