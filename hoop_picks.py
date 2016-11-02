@@ -33,6 +33,7 @@ import jinja2
 import webapp2
 from db_update import insert_nba_games
 from db_update import update_nba_games
+from db_update import update_schema_task
 
 
 JINJA_ENVIRONMENT = jinja2.Environment(
@@ -81,7 +82,7 @@ class MainPage(webapp2.RequestHandler):
 # [END main_page]
 
 
-class PickHandler(webapp2.RequestHandler):
+class NBAPickHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
         user_id = user.user_id()
@@ -108,24 +109,18 @@ class PickHandler(webapp2.RequestHandler):
             curr_pick[0].num_change = curr_pick[0].num_change + 1
             curr_pick[0].put()
         else:
-            pick = Pick(user_id = user_id, event = ndb.Key("Event", game_id), pick = ndb.Key("Option", team)) # use team_id as key in future
+            pick = Pick(user_id = user_id, sport = "nba", event = ndb.Key("Event", game_id), pick = ndb.Key("Option", team)) # use team_id as key in future
             pick.put()
 
         responseData = { 'success' : True }
         logging.info(team);
         self.response.out.write(json.dumps(responseData))
 
-'''
-class CronDbUpdate(webapp2.RequestHandler):
-    def post(self):
-        # do stuff
-        #now = datetime.datetime.now()
-        now = datetime.date.today()
-        curr_date = "{}{}{}".format(now.year, now.month, now.day)
-        curr_date = int(curr_date)        
-        insert_curr_nba_games(curr_date)
-        #update_nba_games(date)
-'''
+class UserHistory(webapp2.RequestHandler):
+    def get(self):
+        user = users.get_current_user()
+        sport = self.request.get('sport')
+
 
 
 # --------------------- HANDLERS TO IMPLEMENT --------------------
@@ -244,15 +239,19 @@ class UpdateNBAGames(webapp2.RequestHandler):
         update_nba_games(date)
         logging.info("Updating NBA games for {}".format(date))
    
-
+class UpdateSchemaHandler(webapp2.RequestHandler):
+    def get(self):
+        update_schema_task()
+        logging.info("Updating pick entities.")
 
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/pick/', PickHandler),
+    ('/pick/', NBAPickHandler),
     #('/db_update', CronDbUpdate),
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
     ('/insert_nba_games/', InsertNBAGames),
+    ('/update_schema/', UpdateSchemaHandler),
     ('/cron/update_nba_games/', UpdateNBAGames)
 ], debug=True)
