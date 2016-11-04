@@ -272,7 +272,7 @@ app = webapp2.WSGIApplication([
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
     ('/admin/insert_nba_games/', InsertNBAGames),
-    ('/admin/recalculate_goat_index/', RecalculateGoatIndex),
+    ('/cron/recalculate_goat_index/', RecalculateGoatIndex),
     ('/user_goat_index/', UserGoatIndexHandler),
     #('/update_schema/', UpdateSchemaHandler),
     ('/cron/update_nba_games/', UpdateNBAGames)
