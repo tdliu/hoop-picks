@@ -4,6 +4,9 @@ import math
 
 class Option(ndb.Model):
     tri_code = ndb.StringProperty()
+    #abbrev = ndb.StringProperty()
+    city = ndb.StringProperty()
+    nickname = ndb.StringProperty()
 
 class Outcome(ndb.Model):
     scores = ndb.IntegerProperty(repeated = True)
@@ -16,7 +19,9 @@ class Event(ndb.Model):
     sport = ndb.StringProperty()
     #gameId = ndb.IntegerProperty()
     season = ndb.IntegerProperty()
+    event_type = ndb.StringProperty()
     date = ndb.DateProperty()
+    week = ndb.IntegerProperty() # NFL
     options = ndb.KeyProperty(kind = Option, repeated = True) # Use participant generated ID
     #away = ndb.KeyProperty(kind = Option)
     outcome = ndb.StructuredProperty(Outcome, default = Outcome())
