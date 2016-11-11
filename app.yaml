@@ -18,11 +18,11 @@ handlers:
 
 
 - url: /.*
-  script: hoop_picks.app
+  script: main.app
 
 
 - url: /cron/.*
-  script: hoop_picks.app
+  script: main.app
   login: admin
 
 - url: /admin/.*
