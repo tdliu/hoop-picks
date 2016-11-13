@@ -67,14 +67,14 @@ GoatGame.prototype.addLoginListeners = function() {
 GoatGame.prototype.addPickListeners = function() {
 	var that = this;
 	this.getHomeElem().click(function() {
-	    $(this).addClass("picked")
-	    $(this).parent().find(".away").removeClass("picked")
+	    $(this).find(".pick-checkbox").addClass("picked")
+	    $(this).parent().find(".away").find(".pick-checkbox").removeClass("picked")
 	    apiConnector.pick(that.game_id, that.home_id)
 	})
   
 	this.getAwayElem().click(function() {
-		$(this).addClass("picked")
-		$(this).parent().find(".home").removeClass("picked")
+		$(this).find(".pick-checkbox").addClass("picked")
+		$(this).parent().find(".home").find(".pick-checkbox").removeClass("picked")
 		apiConnector.pick(that.game_id, that.away_id)
 	})
 }

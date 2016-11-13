@@ -8,16 +8,18 @@
     <link rel="stylesheet" href="css/foundation.css">
     <link rel="stylesheet" href="css/app.css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Shrikhand" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,700" rel="stylesheet">
   </head>
   <body>
     <div class="off-canvas-wrapper">
   <div class="off-canvas-wrapper-inner" data-off-canvas-wrapper>
-
+    <img id="goat" src="img/goat.jpg" class="float-left"/>
     <!-- off-canvas title bar for 'small' screen -->
     <div class="title-bar" data-responsive-toggle="widemenu" data-hide-for="medium">
       <div class="title-bar-left">
         <button class="menu-icon" type="button" data-open="offCanvasLeft"></button>
-        <span class="title-bar-title">GOAT Index</span>
+        <span class="title-bar-title logo-text">GOAT Index</span>
       </div>
       <div class="title-bar-right">
         <span class="title-bar-title"><a href='{{ url|safe }}'> {{ url_linktext }}</a></span>
@@ -32,28 +34,35 @@
           <a href="#">Sport</a>
           <ul class="menu vertical nested">
             <li><a href="#">NBA</a></li>
+            <li><a href="#">NFL</a></li>
           </ul>
         </li>
         <li><a href="#">Leaderboard</a></li>
       </ul>
     </div>
 
+    <div id="started-games-section" class=" extended row small-up-3 large-up-7">
+      
+      
+    </div>
     <!-- "wider" top-bar menu for 'medium' and up -->
     <div id="widemenu" class="top-bar">
       <div class="top-bar-left">
-        <ul class="dropdown menu" data-dropdown-menu>
-          <li class="menu-text">Goat Index</li>
+        <ul class="dropdown menu main-menu-text" data-dropdown-menu>
+          <li class="menu-text logo-text">GOAT Index</li>
+
           <li class="has-submenu">
             <a href="#">Sport</a>
             <ul class="menu submenu vertical" data-submenu>
               <li><a href="nba">NBA</a></li>
+              <li><a href="nba">NFL</a></li>
             </ul>
           </li>
           <li><a href="left_wide_21">Leaderboard</a></li>
         </ul>
       </div>
       <div class="top-bar-right">
-        <ul class="menu">
+        <ul class="menu main-menu-text">
           <li><a href='{{ url|safe }}'> {{ url_linktext }}</a></li>
           {% if logged_in %} <li><a href='#'> <i class="material-icons">account_circle</i> </a> {% endif %}</li>
         </ul>
@@ -62,31 +71,37 @@
 
     <!-- original content goes in this container -->
     <div class="off-canvas-content" data-off-canvas-content>
+      
+      <div id="date-nav" class="section-label row">
 
-      <div id="today-label" class="section-label row">
-      </div>
+        <div class="large-2 columns">
+          <div id="prev-date" class="date-button float-left">
+            <i class="material-icons">chevron_left</i> 
+          </div>
 
-      <div id="games-loader" class="row loader"></div>
-      <div id="started-games-section" class="section row column large">
-        
-      </div>
-      <div id="today-upcoming-label" class="section-label row">
-      </div>
-      <div id="today-upcoming-games-section" class="section row column large">
-        
-      </div>
-
-      <div class="row section-label">
-        <a id="upcoming-label" class="small-3 large-1 columns"></a>
-        <a id="next-btn" class="small-6 large-2 columns end"> Next </a>
-
-      </div>
-      <div id="upcoming-loader" class="row loader"></div>
-      <div id="upcoming-games-section" class="section row column large">
+          <div id="next-date" class="date-button float-right">
+            <i class="material-icons">chevron_right</i> 
+          </div>
+          
+          <div id="date">Nov 11th </div>
+          
+        </div>
 
       </div>
 
-    </div>
+      <div id="game-loader" class="row"> 
+        <div class="spinner">
+          <div class="bounce1"></div>
+          <div class="bounce2"></div>
+          <div class="bounce3"></div>
+        </div>
+      </div>
+
+      
+    
+      <div id="date-games-section" class="section row small-up-2 medium-up-4 large-up-6"></div>
+
+
 
     {% include 'templates/pick-card-template.html' %}
     {% include 'templates/live-pick-card-template.html' %}

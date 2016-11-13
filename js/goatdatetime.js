@@ -73,7 +73,10 @@ GoatDate.prototype.getMonthAbbrev = function() {
 
 GoatDate.prototype.getDateSuffix = function() {
 	var suffix = "th";
-	if (this._date % 10 == 1) {
+	if (this._date == 11 || this._date == 12 || this._date == 13) {
+		return "th";
+	}
+	else if (this._date % 10 == 1) {
 		suffix = 'st';
 	}
 	else if (this._date % 10 == 2) {
