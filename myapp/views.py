@@ -8,6 +8,20 @@ import webapp2
 from google.appengine.api import urlfetch
 import logging
 from models import Option, Outcome, Event, Pick, UserGoatIndex
+from google.appengine.api import memcache
+#import urllib2
+#from xml.etree import ElementTree
+
+'''
+nfl_url = "http://www.nfl.com/liveupdate/scorestrip/ss.xml"
+result = urllib2.urlopen(nfl_url).read()
+root = ElementTree.fromstring(result)
+week = root.find('gms').attrib['w']
+'''
+
+#def get_nfl_week():
+#curr_date = datetime.date.today()
+#qry = Event.query().filter(Event.date > curr_date).order(Event.date)
 
 
 
@@ -21,7 +35,12 @@ class GameHandler(webapp2.RequestHandler):
         #if curr_date is None:
         #curr_date = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()
         sport = self.request.get('sport')
-        curr_games_qry = Event.query().filter(Event.date == curr_date)
+        if sport == "nfl":
+            qry = Event.query().filter(Event.sport == "nfl", Event.date > curr_date).order(Event.date)
+            week = qry.fetch(1)[0].week
+            curr_games_qry = Event.query().filter(Event.week == week)
+        else:
+            curr_games_qry = Event.query().filter(Event.date == curr_date)
         curr_games_raw = curr_games_qry.fetch()
         responseData = []
         for curr_game in curr_games_raw:
