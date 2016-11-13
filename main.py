@@ -28,6 +28,7 @@ from myapp.models import Option, Outcome, Event, Pick, UserGoatIndex
 #import db_update as db
 import logging
 import json
+from google.appengine.api import memcache
 
 import jinja2
 import webapp2
