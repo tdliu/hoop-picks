@@ -113,6 +113,8 @@ def insert_nfl_games():
         events = []
         games = [g.attrib for g in root.find('gms').findall('g')]
         for game in games:
+            #logging.info("HELLO")
+            #logging.info(game['eid'])
             matchup_info = get_nfl_matchup_info(game['eid'])
             hteam = Option.get_or_insert(
                         "nfl{}".format(matchup_info["home_team"]["team_id"]), 
@@ -168,7 +170,9 @@ def recalculate_goat_index(sport):
             goat_indexes.append(goat_index)
     ndb.put_multi(goat_indexes)
 
-
+#def insert_nfl_date_to_week():
+#qry = Event.query().filter(Event.sport == "nfl")
+#for game in 
 
 
 
