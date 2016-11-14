@@ -49,6 +49,9 @@ def update_nba_games(date):
     for game in games:
     	game_key = ndb.Key("Event", "nba{}".format(game['gameId']))
     	game_event = game_key.get()
+        if not game['hTeam']['score'].isdigit():
+            logging.info("Don't have score data for {}".format(game_key.id()))
+            break
     	game_event.outcome.scores = [int(game['hTeam']['score']), int(game['vTeam']['score'])]
         if int(game['hTeam']['score']) > int(game['vTeam']['score']):
             game_event.outcome.winner = ndb.Key("Option", "nba{}".format(game['hTeam']['teamId']))
