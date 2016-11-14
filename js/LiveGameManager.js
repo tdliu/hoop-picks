@@ -17,7 +17,6 @@ LiveGameManager.prototype.poll = function(callback) {
 				that._games[id].liveUpdate(data[i])
 			}
 		}
-		
 
 		if (callback) {
 			callback(data);

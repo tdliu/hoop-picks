@@ -71,8 +71,19 @@ a:hover {
 
 }
 
+/* -------------- USER WIDGET --------------------*/
+.user-info {
+	border-style: solid;
+	border-width: 1px;
+	border-radius: 5px;
+	border-color: grey;
+}
+
+
 /* -------------- DATE NAV -----------------------*/
-#date-nav {
+
+
+.date-nav {
 
 	text-align: center;
 }
@@ -85,7 +96,12 @@ a:hover {
 	cursor: pointer;
 }
 
-#date {
+.date-nav {
+	padding-top: 20px;
+	padding-bottom: 10px;
+}
+
+.date {
 	padding-top: 5px;
 }
 
@@ -99,16 +115,7 @@ a:hover {
 }
 
 
-/* -------------- PICK SECTIONS ------------------*/
-
-.section-label {
-	padding-top: 20px;
-	padding-bottom: 10px;
-}
-
-
-#started-games-section {
-}
+/* -------------- GAME SECTIONS ------------------*/
 
 #upcoming-label {
 	text-decoration: underline;
@@ -116,17 +123,17 @@ a:hover {
 
 .section {
 	opacity: 0;
+	padding-bottom: 20px;
 }
+
+/* -------------- LIVE CARDS ---------------------*/
+
+
+
 
 /* -------------- PICK CARDS ---------------------*/
 
 .pick-card {
-	/*border-style: solid;
-	border-width: 1px;
-	border-color: black;
-	border-radius: 3px;
-	box-shadow: 1px 1px 1px #888888;*/
-
 	background-color: #FFF;
 	border-width: 1px;
 	border-style: solid;
@@ -136,9 +143,22 @@ a:hover {
 	margin: 10px;
 }
 
-.pick-card:hover {
-
+.pick-card.correct {
+	border-color: #BCC747;
 }
+
+.pick-card-header.correct {
+	background-color: #BCC747;
+}
+
+.pick-card.incorrect {
+	border-color: #ff8080;
+}
+
+.pick-card-header.incorrect {
+	background-color:  #ff8080;
+}
+
 
 .pick-checkbox-container {
 }
@@ -165,10 +185,11 @@ a:hover {
 .pick-card.live {
 	border-color: #AA2159;
 	border-radius: 0;
-	margin-bottom: 0;
-	margin-top: 0;
+	margin: 0;
+	padding: 0;
 	border-top-width: 0px;
 	border-bottom-width: 0px;
+	border-left-width: 0px;
 
 	font-size: .8rem;
 }

@@ -7,7 +7,7 @@ function jsDatetoDatestring(date) {
 }
 
 function getCurrentTimeEastern() {
-	var offset = -4;
+	var offset = -5;
 	var d = new Date();
     var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
     var nd = new Date(utc + (3600000*offset));
@@ -67,6 +67,27 @@ function GoatDate(datestring) {
 	this._month_abbrev = MONTHS[this._month];
 }
 
+// THIS MINUS THAT
+GoatDate.prototype.compare = function(other) {
+	if (this._year > other._year )
+		return 1;
+	else if (this._year < other._year)
+		return -1;
+
+	else if (this._month > other._month)
+		return 1;
+	else if (this._month < other._month)
+		return -1;
+
+	else if (this._date > other._date)
+		return 1;
+	else if (this._date < other._date)
+		return -1;
+
+	return 0;
+
+}
+
 GoatDate.prototype.getMonthAbbrev = function() {
 	return this._month_abbrev;
 }
@@ -94,6 +115,13 @@ GoatDate.prototype.getMonthDateAbbrev = function() {
 
 GoatDate.prototype.getDateString = function() {
 	return this._datestring;
+}
+
+GoatDate.prototype.getOffset = function(offset_days) {
+	var offset_jsDate = new Date(this._jsDate);
+	offset_jsDate.setDate(offset_jsDate.getDate() + offset_days);
+	var offset = new GoatDate(jsDatetoDatestring(offset_jsDate));
+	return offset;
 }
 
 GoatDate.prototype.getYesterday = function() {

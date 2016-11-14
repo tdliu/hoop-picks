@@ -11,9 +11,7 @@
         <div class="row pick-card-option home ">
           <div class="team-name small-9 large-9 columns"> 
             {{home}}
-            {{#if has_live_data}}
-            <span class="win-loss"> ({{live_data.hTeam.win}}-{{live_data.hTeam.loss}})</span>
-            {{/if}}
+            <span class="win-loss"> ({{homeRecord.[0]}}-{{homeRecord.[1]}})</span>
           </div>
           <div class="pick-checkbox-container small-2 large-2 columns end"><div class="pick-checkbox {{#if homePicked }} picked {{/if}}" ></div></div>
         </div>
@@ -21,9 +19,7 @@
         <div class="row pick-card-option away ">
           <div class="team-name small-9 large-9 columns"> 
             {{away}}
-            {{#if has_live_data}}
-            <span class="win-loss"> ({{live_data.vTeam.win}}-{{live_data.vTeam.loss}})</span>
-            {{/if}}
+            <span class="win-loss"> ({{awayRecord.[0]}}-{{awayRecord.[1]}})</span>
           </div>  
           <div class="pick-checkbox-container small-2 large-2 columns end"><div class="pick-checkbox {{#if awayPicked }} picked {{/if}}"></div> </div>
         </div>        

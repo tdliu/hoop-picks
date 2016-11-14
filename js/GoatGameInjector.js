@@ -69,8 +69,8 @@ GoatGameInjector.prototype.goatGameFactory = function(games, is_today) {
 			goatGames['upcoming'].push(game);	
 		}
 	}
-	if (goatGames['started'].length > 0) goatGames['started'][goatGames['started'].length - 1].setLast();
-	if (goatGames['upcoming'].length > 0) goatGames['upcoming'][goatGames['upcoming'].length - 1].setLast();
+	//if (goatGames['started'].length > 0) goatGames['started'][goatGames['started'].length - 1].setLast();
+	//if (goatGames['upcoming'].length > 0) goatGames['upcoming'][goatGames['upcoming'].length - 1].setLast();
 	return goatGames;
 }
 

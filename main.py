@@ -86,9 +86,10 @@ class MainPage(webapp2.RequestHandler):
             'url': url,
             'url_linktext': url_linktext,
             'curr_date': curr_date,
-            'nba_team_records': nba_team_records,
+            'nba_team_records': json.dumps(nba_team_records),
             'logged_in' : logged_in
         }
+        logging.info(nba_team_records)
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         self.response.write(template.render(template_values))
 # [END main_page]

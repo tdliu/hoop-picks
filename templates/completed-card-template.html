@@ -1,0 +1,37 @@
+{% raw %}
+  <script id="completed-card-template" type="text/x-handlebars-template">
+
+    <div class="pick-card-container column">
+    
+      <div class="pick-card large-12 columns {{correctness}}" id='{{game_id}}'>
+        <div class="pick-card-header row {{correctness}}">
+          <div class="time large-6 columns"> final  </div>
+        </div>
+
+        <div class="row pick-card-option home ">
+
+          <div class="small-2 large-1 columns">
+            <div class="pick-indicator {{#if homePicked }} picked {{/if}}"></div> 
+          </div>
+
+          <div class="team-name small-9 large-6 columns"> {{home}}</div>
+          
+          <div class="score small-2 large-2 columns end"> {{scores.[0] }}</div>
+        </div>
+
+        <div class="row pick-card-option away ">
+          
+
+          <div class="small-2 large-1 columns">
+            <div class="pick-indicator {{#if awayPicked }} picked {{/if}}"></div> 
+          </div>
+
+          <div class="team-name small-9 large-6 columns"> {{away}}</div>  
+
+          <div class="score small-2 large-2 columns end"> {{scores.[1] }}</div>
+        </div>        
+
+      </div>
+    </div>
+  </script>
+{% endraw %}

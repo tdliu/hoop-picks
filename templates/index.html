@@ -41,10 +41,8 @@
       </ul>
     </div>
 
-    <div id="started-games-section" class=" extended row small-up-3 large-up-7">
-      
-      
-    </div>
+    <div id="started-games-section" class=" extended row small-up-3 large-up-7 large-collapse"></div>
+
     <!-- "wider" top-bar menu for 'medium' and up -->
     <div id="widemenu" class="top-bar">
       <div class="top-bar-left">
@@ -72,41 +70,75 @@
     <!-- original content goes in this container -->
     <div class="off-canvas-content" data-off-canvas-content>
       
-      <div id="date-nav" class="section-label row">
+      <div class="row">
+        <div class="large-9 columns">
+        
+          <div id="nba-date-nav" class="date-nav row">
+            <div class="large-1 columns">
+              <h5> NBA </h5>
+            </div>
+            
+            <div class="large-2 columns end">
+              <div id="nba-prev-date" class="date-button float-left">
+                <i class="material-icons">chevron_left</i> 
+              </div>
 
-        <div class="large-2 columns">
-          <div id="prev-date" class="date-button float-left">
-            <i class="material-icons">chevron_left</i> 
+              <div id="nba-next-date" class="date-button float-right">
+                <i class="material-icons">chevron_right</i> 
+              </div>
+              
+              <div id="nba-date" class="date">Nov 11th </div>
+              
+            </div>
           </div>
 
-          <div id="next-date" class="date-button float-right">
-            <i class="material-icons">chevron_right</i> 
+          <div id="nba-games-section" class="section row small-up-2 medium-up-4 large-up-5"></div>
+
+          <div id="nfl-date-nav" class="date-nav section-label row">
+            <div class="large-1 columns">
+            <h5> NFL </h5>
+            </div>
+            <div class="large-2 columns end">
+              <div id="nfl-prev-date" class="date-button float-left">
+                <i class="material-icons">chevron_left</i> 
+              </div>
+
+              <div id="nfl-next-date" class="date-button float-right">
+                <i class="material-icons">chevron_right</i> 
+              </div>
+              
+              <div id="nfl-date" class="date">Nov 11th </div>
+              
+            </div>
           </div>
-          
-          <div id="date">Nov 11th </div>
-          
-        </div>
 
+          <div id="nfl-games-section" class="section row small-up-2 medium-up-4 large-up-5"></div>
+
+          <div id="game-loader" class="row"> 
+            <div class="spinner">
+              <div class="bounce1"></div>
+              <div class="bounce2"></div>
+              <div class="bounce3"></div>
+            </div>
+          </div>
+
+
+
+
+        </div>
+        <div class="large-3 columns">
+          <div class="user-info">
+            <h4> Your GOAT Index: 57%</h4>
+
+          </div>
+        </div>
       </div>
 
-      <div id="game-loader" class="row"> 
-        <div class="spinner">
-          <div class="bounce1"></div>
-          <div class="bounce2"></div>
-          <div class="bounce3"></div>
-        </div>
-      </div>
-
-      
-    
-      <div id="date-games-section" class="section row small-up-2 medium-up-4 large-up-6"></div>
 
 
-
-    {% include 'templates/pick-card-template.html' %}
-    {% include 'templates/live-pick-card-template.html' %}
-
-    
+      {% include 'templates/pick-card-template.html' %}
+      {% include 'templates/live-pick-card-template.html' %}
+      {% include 'templates/completed-card-template.html' %}
 
   <!-- close wrapper, no more content after this -->
   </div>
@@ -114,21 +146,24 @@
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/handlebars.js"></script>
     
-    <script src="js/apiconnector.js"></script>
+    <script src="js/ApiConnector.js"></script>
     <script src="js/goatdatetime.js"></script>
     <script src="js/GoatGame.js"></script>
     <script src="js/LiveGameManager.js"></script>
-    <script src="js/GoatGameInjector.js"></script>
 
+    <script src="js/GoatGameInjector.js"></script>
+    <script src="js/CardInjector.js"></script>
+
+    <script src="js/GoatDateNavigator.js"></script>
     
     <script src="js/vendor/what-input.js"></script>
     <script src="js/vendor/foundation.js"></script>
     <script src="js/app.js"></script>
     <script>
     {% if logged_in %}
-    init("{{curr_date}}", true);
+    init("{{curr_date}}", true, {{nba_team_records | safe }});
     {% else %}
-    init("{{curr_date}}", false);
+    init("{{curr_date}}", false, {{nba_team_records | safe }});
     {% endif %}
     </script>
   </body>

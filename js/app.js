@@ -1,89 +1,67 @@
 $(document).foundation()
 
 //-------------- GLOBALS ---------------------//
-
 var today;
 
 var liveGameManager;
 var logged_in;
 var gameInjector;
 var dateNav;
+var apiConnector;
 
-//-------------- INITIAL REQUESTS ------------//
 
-function addGamesToSection(section, games, is_today) {
-  for (var i = 0; i < games.length; i ++) {
-    games[i].is_today = is_today;
-    if (i == games.length - 1) {
-      games[i].isLast = true;
-    }
+//-------------- SEMAPHORE -------------------//
 
-    var game = new GoatGame(games[i]);
+var num_finished = 0
+var TOTAL = 2;
+var nba_games;
+var nfl_games;
 
-    section.append(game.elem);
+
+function work_finished() {
+  num_finished += 1;
+  if (num_finished >= TOTAL) {
+    finished();
   }
-
-  section.animate(
-    {'opacity': 1},
-    1000)
-}
-//-------------- LISTENERS -------------------//
-
-function updateDateSelector() {
-  $('#date').html("" + today.getMonthDateAbbrev());
-  //$('#next-btn').html("" + next.getMonthDateAbbrev() + " >>");
 }
 
-function loadUpcomingGames() {
-  $('#date-games-section').html("")
-  $('#game-loader').show();
-
-  apiConnector.game(today.getDateString(), "nba", function(data) {
-    $('#game-loader').hide();
-    $('#date-games-section').html("")
-    gameInjector.upcomingGameData(data);//addGamesToSection($('#upcoming-games-section'), data, false);
-  })
+function finished() {
+  console.log("FINISHED!");
+  $('#game-loader').hide();
+  console.log("nba: ", nba_games);
+  console.log("nfl: ", nfl_games);
+  nbaDateNav.initialGames(nba_games);
+  nflDateNav.initialGames(nfl_games);
 }
 
-function selectPrev() {
-  today = today.getYesterday();
-  updateDateSelector();
-  loadUpcomingGames();
-}
+//-------------- INITIALIZE -------------------//
 
-function selectNext() {
-  today = today.getTomorrow();
-  updateDateSelector();
-  loadUpcomingGames();
-}
-
-function init(datestring, logged) {
+function init(datestring, logged, team_records) {
   logged_in = logged;
 
   today = new GoatDate(datestring);
-  updateDateSelector();
+  //TODO: rewind if it is early morning
 
+  apiConnector = new ApiConnector(today, team_records);
   liveGameManager = new LiveGameManager(apiConnector);
-  gameInjector = new GoatGameInjector($('#started-games-section'), $('#date-games-section'));
+  nbaDateNav = new GoatDateNavigator("nba", $('#nba-games-section'), $('#nba-date'), $('#nba-prev-date'), $('#nba-next-date'), today, apiConnector, 1);
+  nflDateNav = new GoatDateNavigator("nfl", $('#nfl-games-section'), $('#nfl-date'), $('#nfl-prev-date'), $('#nfl-next-date'), today, apiConnector, 7);
 
-  //load games
-  apiConnector.game(today.getDateString(), "nba", function(data) {
-    $('#game-loader').hide();
-    gameInjector.todayGameInfo(data);
+  //initial loader: load games
+  apiConnector.getNBAGames(today, function(data) {
+    nba_games = data;
+    work_finished();
   })
+
+  apiConnector.getNFLGames(today, function(data) {
+    nfl_games = data;
+    work_finished();
+  })
+
 
   liveGameManager.poll(function(data) {
-    gameInjector.todayLiveGameData(data);
-  });
-
-  $('#prev-date').click(function() {
-    selectPrev();
-  })
-
-  $('#next-date').click(function() {
-    selectNext();
-  })
-  
+    //gameInjector.todayLiveGameData(data);
+  }); 
 
   setInterval(function() {
     console.log("interval");

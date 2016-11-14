@@ -28,7 +28,7 @@ class GameHandler(webapp2.RequestHandler):
             week = qry.fetch(1)[0].week
             curr_games_qry = Event.query().filter(Event.week == week)
         else:
-            curr_games_qry = Event.query().filter(Event.date == curr_date)
+            curr_games_qry = Event.query().filter(Event.date == curr_date, Event.sport == 'nba')
         curr_games_raw = curr_games_qry.fetch()
         responseData = []
         for curr_game in curr_games_raw:
