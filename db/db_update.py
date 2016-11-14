@@ -164,6 +164,7 @@ def insert_nfl_games():
                 start_time = datetime.time(h, m)
             else:
                 start_time = datetime.time(h + 12, m)
+            start_time = start_time + datetime.timedelta(hours = 5)
             events.append(Event(
                 id = "nfl{}".format(game['eid']),
                 sport = "nfl", 

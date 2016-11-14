@@ -67,7 +67,7 @@ class MainPage(webapp2.RequestHandler):
         nba_teams = nba_team_query.fetch()
         nba_team_records = {}
         for team in nba_teams:
-            nba_team_records[team.tri_code] = [team.num_win, team.num_loss]
+            nba_team_records[team.key.id()] = [team.num_win, team.num_loss]
         throwaway = datetime.datetime.strptime('20110101','%Y%m%d')
         now = (datetime.datetime.utcnow() - datetime.timedelta(hours = 5)).date()
         curr_date = "{}{}{}".format(now.year, now.month, now.day)
@@ -94,12 +94,13 @@ class MainPage(webapp2.RequestHandler):
 # [END main_page]
 
 
-class NBAPickHandler(webapp2.RequestHandler):
+class PickHandler(webapp2.RequestHandler):
     def post(self):
         user = users.get_current_user()
         user_id = user.user_id()
         data = json.loads(self.request.body)
         game_id = data['game_id']
+        sport = data['sport']
         team = data['team']
         if (datetime.datetime.utcnow() > ndb.Key("Event", game_id).get().start_time): # we don't want the user to see the change
             responseData = { 'success' : False, 'message': "Pick submitted after start time." }
@@ -121,7 +122,7 @@ class NBAPickHandler(webapp2.RequestHandler):
             curr_pick[0].num_change = curr_pick[0].num_change + 1
             curr_pick[0].put()
         else:
-            pick = Pick(user_id = user_id, sport = "nba", event = ndb.Key("Event", game_id), pick = ndb.Key("Option", team)) # use team_id as key in future
+            pick = Pick(user_id = user_id, sport = sport, event = ndb.Key("Event", game_id), pick = ndb.Key("Option", team)) # use team_id as key in future
             pick.put()
 
         responseData = { 'success' : True }
@@ -129,137 +130,9 @@ class NBAPickHandler(webapp2.RequestHandler):
         self.response.out.write(json.dumps(responseData))
 
 
-
-
-# --------------------- HANDLERS TO IMPLEMENT --------------------
-'''
-class GameHandler(webapp2.RequestHandler):
-    def get(self):
-        user = users.get_current_user()
-        throwaway = datetime.datetime.strptime('20110101','%Y%m%d')
-        curr_date = datetime.datetime.strptime(self.request.get('date'), "%Y%m%d")
-        #logging.info("HELLO")
-        #logging.info(curr_date)
-        #if curr_date is None:
-        #curr_date = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()
-        sport = self.request.get('sport')
-        curr_games_qry = Event.query().filter(Event.date == curr_date)
-        curr_games_raw = curr_games_qry.fetch()
-        responseData = []
-        for curr_game in curr_games_raw:
-            #curr_pick = Pick.query().filter(Pick.event.id() == curr_game.key.id())
-            start_time = curr_game.start_time - datetime.timedelta(hours = 5) # to ET
-            start_time = start_time.strftime("%H:%M:%S")
-            winner = curr_game.outcome.winner
-            if winner is not None:
-                winner = winner.id()
-            game_data = {
-                            'time': start_time, 
-                            'game_id': curr_game.key.id(), 
-                            'home': curr_game.options[0].get().tri_code, 
-                            'home_id': curr_game.options[0].id(), 
-                            'away': curr_game.options[1].get().tri_code, 
-                            'away_id': curr_game.options[1].id(), 
-                            'winner': winner}
-            if len(curr_game.outcome.scores) > 0:
-                game_data['scores'] = curr_game.outcome.scores
-            #start_time = curr_game.start_time.strftime("%H:%M:%S") 
-            if user:
-                curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
-                curr_pick_qry = curr_pick_qry.filter(Pick.event == curr_game.key)
-                #print curr_pick_qry
-                curr_pick = curr_pick_qry.fetch()
-                if len(curr_pick) > 0:
-                    game_data['current_pick'] = curr_pick[0].pick.get().tri_code
-                    responseData.append(game_data)
-                    #responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].id(), 'current_pick': curr_pick[0].pick.get().tri_code, 'winner': curr_game.outcome.winner.id()})
-                else:
-                    responseData.append(game_data)
-                    #responseData.append({'time': start_time, 'game_id': curr_game.key.id(), 'home': curr_game.options[0].get().tri_code, 'home_id': curr_game.options[0].id(), 'away': curr_game.options[1].get().tri_code, 'away_id': curr_game.options[1].id(), 'winner': curr_game.outcome.winner.id()})
-            else:
-                responseData.append(game_data)
-        # MAGIC
-        self.response.out.write(json.dumps(responseData))
-
-current_live_data = None
-last_polled_ts = datetime.datetime.utcnow()
-
-
-
-class LiveGameHandler(webapp2.RequestHandler):
-    def get(self):
-        global current_live_data
-        global last_polled_ts
-        #logging.info("HELLO")
-        curr_ts = datetime.datetime.utcnow()
-        if (curr_ts - last_polled_ts).total_seconds() > 10 or current_live_data is None:
-            # poll new
-            curr_date_str = datetime.datetime.strftime((curr_ts - datetime.timedelta(hours = 4)), "%Y%m%d")
-            url =  "http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json".format(curr_date_str)
-            #import json
-            r = urlfetch.fetch(url)
-            current_live_data = json.loads(r.content)['games']
-            last_polled_ts = curr_ts
-            logging.info("new nba poll")
-            self.response.out.write(json.dumps(current_live_data))
-
-        else:
-            logging.info("using cached nba poll")
-            self.response.out.write(json.dumps(current_live_data))
-'''
-'''
-class InsertNBAGames(webapp2.RequestHandler):
-    def get(self):
-        user = users.get_current_user()
-        if user:
-            if users.is_current_user_admin():
-                self.response.write('You are an administrator.')
-                insert_nba_games(datetime.date(2016,10,29))
-                #insert_nba_games(datetime.date.today())
-                logging.info("Inserting NBA games.")
-            else:
-                self.response.write('You are not an administrator.')
-        else:
-            self.response.write('You are not logged in.')
-        
-        
-class InsertNFLGames(webapp2.RequestHandler):
-	def get(self):
-		user = users.get_current_user()
-		if user:
-			if users.is_current_user_admin():
-				self.response.write('You are an administrator.\nInserting NFL games.')
-				insert_nfl_games()
-			else:
-				self.response.write('You are not an administrator.')
-		else:
-			self.response.write('You are not logged in.')
-
-class UpdateNBAGames(webapp2.RequestHandler):
-    def get(self):
-        date = datetime.date.today() - datetime.timedelta(days=1)
-        logging.info("HELLO")
-        logging.info(date)
-        #curr_date = datetime.date(2016,10,29)
-        update_nba_games(date)
-        logging.info("Updating NBA games for {}".format(date))
-  
-''' 
-'''
-class UpdateSchemaHandler(webapp2.RequestHandler):
-    def get(self):
-        update_schema_task()
-        self.response.write('Updating pick entities.') 
-
-class RecalculateGoatIndex(webapp2.RequestHandler):
-    def get(self):
-        recalculate_goat_index("nba")
-
-'''
-
 app = webapp2.WSGIApplication([
     ('/', MainPage),
-    ('/pick/', NBAPickHandler),
+    ('/pick/', PickHandler),
     #('/db_update', CronDbUpdate),
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
