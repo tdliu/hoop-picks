@@ -164,7 +164,7 @@ def insert_nfl_games():
                 start_time = datetime.time(h, m)
             else:
                 start_time = datetime.time(h + 12, m)
-            start_time = start_time + datetime.timedelta(hours = 5)
+            #delta = datetime.timedelta(hours = 5)
             events.append(Event(
                 id = "nfl{}".format(game['eid']),
                 sport = "nfl", 
@@ -173,7 +173,7 @@ def insert_nfl_games():
                 date = game_date,
                 week = week,
                 options = [hteam.key, vteam.key],
-                start_time = datetime.datetime.combine(game_date, start_time)
+                start_time = datetime.datetime.combine(game_date, start_time) + datetime.timedelta(hours = 5)
                 ))
         ndb.put_multi(events)
     return
