@@ -148,6 +148,26 @@ def insert_nfl_games():
         ndb.put_multi(events)
     return
 
+def update_nfl_games(date):
+    qry = Event.query().filter(Event.sport == "nfl", Event.date <= date).order(-Event.date)
+    week = qry.fetch(1)[0].week
+    season = qry.fetch(1)[0].season
+    url = "http://www.nfl.com/ajax/scorestrip?season={}&seasonType=REG&week={}".format(season, week)
+    # Insert all games. And then update
+    result = urllib2.urlopen(url).read()
+    root = ElementTree.fromstring(result)
+    games = [g.attrib for g in root.find('gms').findall('g')]
+    for game in games:
+        if game['hs'].isdigit():
+            print game['eid']
+            game_key = ndb.Key("Event", "nfl{}".format(game['eid']))
+            game_event = game_key.get()
+            game_event.outcome.scores = [int(game['hs']), int(game['vs'])]
+            if int(game['hs']) > int(game['vs']):
+                game_event.outcome.winner = game_event.options[0]
+            else:
+                game_event.outcome.winner = game_event.options[1]
+            game_event.put()
 
 
 def recalculate_goat_index(sport):

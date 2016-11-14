@@ -36,11 +36,17 @@ class InsertNFLGames(webapp2.RequestHandler):
 class UpdateNBAGames(webapp2.RequestHandler):
     def get(self):
         date = datetime.date.today() - datetime.timedelta(days=1)
-        logging.info("HELLO")
-        logging.info(date)
+        #logging.info("HELLO")
+        #logging.info(date)
         #curr_date = datetime.date(2016,10,29)
         update_nba_games(date)
         logging.info("Updating NBA games for {}".format(date))
+
+class UpdateNFLGames(webapp2.RequestHandler):
+    def get(self):
+        date = datetime.date.today() - datetime.timedelta(days=1)
+        update_nfl_games(date)
+        logging.info("Updating NFL games for {}".format(date))
 
 class RecalculateGoatIndex(webapp2.RequestHandler):
     def get(self):
