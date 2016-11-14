@@ -63,6 +63,11 @@ class MainPage(webapp2.RequestHandler):
         #now = datetime.date.today()
         #curr_date = "{}{}{}".format(now.year, now.month, now.day)
         #curr_date = int(curr_date)
+        nba_team_query = Option.query().filter(Option.sport == "nba")
+        nba_teams = nba_team_query.fetch()
+        nba_team_records = {}
+        for team in nba_teams:
+            nba_team_records[team.tri_code] = [team.num_win, team.num_loss]
         throwaway = datetime.datetime.strptime('20110101','%Y%m%d')
         now = (datetime.datetime.utcnow() - datetime.timedelta(hours = 5)).date()
         curr_date = "{}{}{}".format(now.year, now.month, now.day)
@@ -81,6 +86,7 @@ class MainPage(webapp2.RequestHandler):
             'url': url,
             'url_linktext': url_linktext,
             'curr_date': curr_date,
+            'nba_team_records': nba_team_records,
             'logged_in' : logged_in
         }
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
