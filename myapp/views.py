@@ -39,7 +39,8 @@ class GameHandler(webapp2.RequestHandler):
             if winner is not None:
                 winner = winner.id()
             game_data = {
-                            'time': start_time, 
+                            'time': start_time,
+                            'sport': sport,
                             'game_id': curr_game.key.id(), 
                             'home': curr_game.options[0].get().tri_code, 
                             'home_id': curr_game.options[0].id(), 
