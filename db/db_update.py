@@ -40,6 +40,8 @@ def insert_nba_games(start_date):
 
 
 def update_nba_games(date):
+    logging.info("HELLO")
+    logging.info(date)
     date_str = date.strftime("%Y%m%d")
     url = 'http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json'.format(date_str)
     r = urlfetch.fetch(url)

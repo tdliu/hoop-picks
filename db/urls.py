@@ -40,7 +40,17 @@ class UpdateNBAGames(webapp2.RequestHandler):
         #logging.info(date)
         #curr_date = datetime.date(2016,10,29)
         update_nba_games(date)
-        logging.info("Updating NBA games for {}".format(date))
+        logging.info("Updating NBA games for {}.".format(date))
+
+class UpdateAllNBAGames(webapp2.RequestHandler):
+    def get(self):
+        start_date = datetime.date(2016,11,04)
+        curr_date = start_date
+        end_date = datetime.date.today() - datetime.timedelta(days=1)
+        while curr_date <= end_date:
+            update_nba_games(curr_date)
+            curr_date = curr_date + datetime.timedelta(days=1)
+        logging.info("Updating NBA games from {} to {}.".format(start_date, end_date))
 
 class UpdateNFLGames(webapp2.RequestHandler):
     def get(self):
