@@ -8,20 +8,9 @@ import webapp2
 from google.appengine.api import urlfetch
 import logging
 from models import Option, Outcome, Event, Pick, UserGoatIndex
-from google.appengine.api import memcache
+#from google.appengine.api import memcache
 #import urllib2
 #from xml.etree import ElementTree
-
-'''
-nfl_url = "http://www.nfl.com/liveupdate/scorestrip/ss.xml"
-result = urllib2.urlopen(nfl_url).read()
-root = ElementTree.fromstring(result)
-week = root.find('gms').attrib['w']
-'''
-
-#def get_nfl_week():
-#curr_date = datetime.date.today()
-#qry = Event.query().filter(Event.date > curr_date).order(Event.date)
 
 
 
@@ -33,7 +22,6 @@ class GameHandler(webapp2.RequestHandler):
         #logging.info("HELLO")
         #logging.info(curr_date)
         #if curr_date is None:
-        #curr_date = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()
         sport = self.request.get('sport')
         if sport == "nfl":
             qry = Event.query().filter(Event.sport == "nfl", Event.date > curr_date).order(Event.date)
@@ -58,6 +46,8 @@ class GameHandler(webapp2.RequestHandler):
                             'away': curr_game.options[1].get().tri_code, 
                             'away_id': curr_game.options[1].id(), 
                             'winner': winner}
+            if sport == "nfl":
+                game_data['week'] = week
             if len(curr_game.outcome.scores) > 0:
                 game_data['scores'] = curr_game.outcome.scores
             #start_time = curr_game.start_time.strftime("%H:%M:%S") 
@@ -89,7 +79,7 @@ class LiveGameHandler(webapp2.RequestHandler):
         curr_ts = datetime.datetime.utcnow()
         if (curr_ts - last_polled_ts).total_seconds() > 10 or current_live_data is None:
             # poll new
-            curr_date_str = datetime.datetime.strftime((curr_ts - datetime.timedelta(hours = 4)), "%Y%m%d")
+            curr_date_str = datetime.datetime.strftime((curr_ts - datetime.timedelta(hours = 5)), "%Y%m%d")
             url =  "http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json".format(curr_date_str)
             #import json
             r = urlfetch.fetch(url)

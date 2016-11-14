@@ -3,6 +3,10 @@ cron:
   url: /cron/update_nba_games/
   schedule: every day 00:00
   timezone: America/Los_Angeles
+- description: update yesterday's NFL games
+  url: /cron/update_nfl_games/
+  schedule: every day 00:00
+  timezone: America/Los_Angeles
 - description: update goat index
   url: /cron/recalculate_goat_index/
   schedule: every day 00:05

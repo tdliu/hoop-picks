@@ -28,7 +28,7 @@ from myapp.models import Option, Outcome, Event, Pick, UserGoatIndex
 #import db_update as db
 import logging
 import json
-from google.appengine.api import memcache
+#from google.appengine.api import memcache
 
 import jinja2
 import webapp2
@@ -64,7 +64,7 @@ class MainPage(webapp2.RequestHandler):
         #curr_date = "{}{}{}".format(now.year, now.month, now.day)
         #curr_date = int(curr_date)
         throwaway = datetime.datetime.strptime('20110101','%Y%m%d')
-        now = (datetime.datetime.utcnow() - datetime.timedelta(hours = 4)).date()
+        now = (datetime.datetime.utcnow() - datetime.timedelta(hours = 5)).date()
         curr_date = "{}{}{}".format(now.year, now.month, now.day)
         user = users.get_current_user()
         if user:
@@ -262,5 +262,6 @@ app = webapp2.WSGIApplication([
     ('/cron/recalculate_goat_index/', RecalculateGoatIndex),
     ('/user_goat_index/', UserGoatIndexHandler),
     #('/update_schema/', UpdateSchemaHandler),
+    ('/cron/update_nfl_games/', UpdateNFLGames),
     ('/cron/update_nba_games/', UpdateNBAGames)
 ], debug=True)
