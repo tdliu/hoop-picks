@@ -61,4 +61,13 @@ class UpdateNFLGames(webapp2.RequestHandler):
 class RecalculateGoatIndex(webapp2.RequestHandler):
     def get(self):
         recalculate_goat_index("nba")
+
+class UpdateNBATeamRecords(webapp2.RequestHandler):
+    def get(self):
+        update_nba_team_records()
+        logging.info("Updating NBA team records.")
+
+class TempUpdateOptionSport(webapp2.RequestHandler):
+    def get(self):
+        update_option_sport_attrib()
   
