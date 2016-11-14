@@ -23,8 +23,8 @@ def insert_nba_games(start_date):
             games = json.loads(r.content)['games']
             events = []
             for game in games:
-                hteam = Option.get_or_insert("nba{}".format(game['hTeam']['teamId']), tri_code = game['hTeam']['triCode'])
-                vteam = Option.get_or_insert("nba{}".format(game['vTeam']['teamId']), tri_code = game['vTeam']['triCode'])
+                hteam = Option.get_or_insert("nba{}".format(game['hTeam']['teamId']), sport = 'nba', tri_code = game['hTeam']['triCode'])
+                vteam = Option.get_or_insert("nba{}".format(game['vTeam']['teamId']), sport = 'nba', tri_code = game['vTeam']['triCode'])
                 #events.append(Event(id = "nba{}".format(game['gameId']), season = int(game['seasonYear']), options = [ndb.Key(Option, game['hTeam']['triCode']), ndb.Key(Option, game['vTeam']['triCode'])]))
                 events.append(Event(
                     id = "nba{}".format(game['gameId']), 
@@ -38,10 +38,8 @@ def insert_nba_games(start_date):
     except DeadlineExceededError:
         logging.exception("DeadlineExceededError")
 
-
+#http://stats.nba.com/stats/boxscoresummaryv2?GameID=0021600065
 def update_nba_games(date):
-    logging.info("HELLO")
-    logging.info(date)
     date_str = date.strftime("%Y%m%d")
     url = 'http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json'.format(date_str)
     r = urlfetch.fetch(url)
@@ -49,12 +47,39 @@ def update_nba_games(date):
     for game in games:
     	game_key = ndb.Key("Event", "nba{}".format(game['gameId']))
     	game_event = game_key.get()
+        if not game['hTeam']['score'].isdigit():
+            logging.info("Don't have score data for {}".format(game_key.id()))
+            break
     	game_event.outcome.scores = [int(game['hTeam']['score']), int(game['vTeam']['score'])]
         if int(game['hTeam']['score']) > int(game['vTeam']['score']):
             game_event.outcome.winner = ndb.Key("Option", "nba{}".format(game['hTeam']['teamId']))
         else:
             game_event.outcome.winner = ndb.Key("Option", "nba{}".format(game['vTeam']['teamId']))
     	game_event.put()
+
+def update_nba_team_records():
+    #qry = Option.query().filter(Option.sport == 'nba')
+    url = "http://data.nba.net/data/10s/prod/v1/current/standings_conference.json"
+    r = urlfetch.fetch(url)
+    content = json.loads(r.content)
+    conferences = ['east', 'west']
+    for conference in conferences:
+        for team in content['league']['standard']['conference'][conference]:
+            team_id = team['teamId']
+            num_win = team['win']
+            num_loss = team['loss']
+            option = ndb.Key("Option", "nba{}".format(team_id)).get()
+            option.num_win = int(num_win)
+            option.num_loss = int(num_loss)
+            option.put()
+
+def update_option_sport_attrib():
+    keys = Option.query().fetch(keys_only = True)
+    for key in keys:
+        sport = key.id()[:3]
+        option = key.get()
+        option.sport = sport
+        option.put()
 
 
 def insert_nfl_games():
@@ -121,12 +146,14 @@ def insert_nfl_games():
             hteam = Option.get_or_insert(
                         "nfl{}".format(matchup_info["home_team"]["team_id"]), 
                         tri_code = matchup_info["home_team"]["abbr"],
+                        sport = 'nfl',
                         nickname = matchup_info["home_team"]["nickname"],
                         city = matchup_info["home_team"]["city"]
                         )
             vteam = Option.get_or_insert(
                         "nfl{}".format(matchup_info["visitor_team"]["team_id"]), 
                         tri_code = matchup_info["visitor_team"]["abbr"],
+                        sport = 'nfl',
                         nickname = matchup_info["visitor_team"]["nickname"],
                         city = matchup_info["visitor_team"]["city"])
             game_date = datetime.date(int(game['eid'][0:4]), int(game['eid'][4:6]), int(game['eid'][6:8]))
@@ -149,6 +176,7 @@ def insert_nfl_games():
                 ))
         ndb.put_multi(events)
     return
+
 
 def update_nfl_games(date):
     qry = Event.query().filter(Event.sport == "nfl", Event.date <= date).order(-Event.date)

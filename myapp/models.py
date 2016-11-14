@@ -4,9 +4,12 @@ import math
 
 class Option(ndb.Model):
     tri_code = ndb.StringProperty()
+    sport = ndb.StringProperty()
     #abbrev = ndb.StringProperty()
     city = ndb.StringProperty()
     nickname = ndb.StringProperty()
+    num_win = ndb.IntegerProperty()
+    num_loss = ndb.IntegerProperty()
 
 class Outcome(ndb.Model):
     scores = ndb.IntegerProperty(repeated = True)
