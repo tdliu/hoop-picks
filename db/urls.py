@@ -44,7 +44,7 @@ class UpdateNBAGames(webapp2.RequestHandler):
 
 class UpdateAllNBAGames(webapp2.RequestHandler):
     def get(self):
-        start_date = datetime.date(2016,11,04)
+        start_date = datetime.date(2016,11,03)
         curr_date = start_date
         end_date = datetime.date.today() - datetime.timedelta(days=1)
         while curr_date <= end_date:
@@ -61,4 +61,13 @@ class UpdateNFLGames(webapp2.RequestHandler):
 class RecalculateGoatIndex(webapp2.RequestHandler):
     def get(self):
         recalculate_goat_index("nba")
+
+class UpdateNBATeamRecords(webapp2.RequestHandler):
+    def get(self):
+        update_nba_team_records()
+        logging.info("Updating NBA team records.")
+
+class TempUpdateOptionSport(webapp2.RequestHandler):
+    def get(self):
+        update_option_sport_attrib()
   

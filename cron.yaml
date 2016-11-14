@@ -11,3 +11,7 @@ cron:
   url: /cron/recalculate_goat_index/
   schedule: every day 00:05
   timezone: America/Los_Angeles
+- description: update NBA team records
+  url: /cron/update_nba_team_records/
+  schedule: every day 00:00
+  timezone: America/Los_Angeles
