@@ -262,6 +262,7 @@ app = webapp2.WSGIApplication([
     ('/cron/recalculate_goat_index/', RecalculateGoatIndex),
     ('/user_goat_index/', UserGoatIndexHandler),
     #('/update_schema/', UpdateSchemaHandler),
+    ('/admin/update_all_nba_games/', UpdateAllNBAGames),
     ('/cron/update_nfl_games/', UpdateNFLGames),
     ('/cron/update_nba_games/', UpdateNBAGames)
 ], debug=True)
