@@ -1,6 +1,6 @@
 indexes:
-- kind: Greeting
-  ancestor: yes
+- kind: Event
   properties:
+  - name: sport
   - name: date
     direction: desc
