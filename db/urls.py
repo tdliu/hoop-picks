@@ -73,6 +73,11 @@ class UpdateNBATeamRecords(webapp2.RequestHandler):
         update_nba_team_records()
         logging.info("Updating NBA team records.")
 
+class UpdateNFLTeamRecords(webapp2.RequestHandler):
+    def get(self):
+        update_nfl_team_records()
+        logging.info("Updating NFL team records.")
+
 class TempUpdateOptionSport(webapp2.RequestHandler):
     def get(self):
         update_option_sport_attrib()

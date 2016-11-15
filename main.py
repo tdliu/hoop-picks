@@ -146,6 +146,7 @@ app = webapp2.WSGIApplication([
     ('/cron/update_nfl_games/', UpdateNFLGames),
     ('/cron/update_nba_games/', UpdateNBAGames),
     ('/cron/update_nba_team_records/', UpdateNBATeamRecords),
+    ('/cron/update_nfl_team_records/', UpdateNFLTeamRecords),
     ('/admin/update_all_nfl_games/', UpdateAllNFLGames)
     #('/admin/temp_update_option_sport/', TempUpdateOptionSport)
 ], debug=True)
