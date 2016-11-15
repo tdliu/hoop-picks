@@ -88,7 +88,11 @@ class LiveGameHandler(webapp2.RequestHandler):
         curr_ts = datetime.datetime.utcnow()
         if (curr_ts - last_polled_ts).total_seconds() > 10 or current_live_data is None:
             # poll new
-            curr_date_str = datetime.datetime.strftime((curr_ts - datetime.timedelta(hours = 5)), "%Y%m%d")
+            curr_ts_et = curr_ts - datetime.timedelta(hours = 5)
+            if curr_ts_et.time() > datetime.time(0) and curr_ts_et.time() < datetime.time(6):
+                curr_date_str = datetime.datetime.strftime(curr_ts_et - datetime.timedelta(hours = 6), "%Y%m%d")
+            else:
+                curr_date_str = datetime.datetime.strftime(curr_ts_et, "%Y%m%d")
             url =  "http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json".format(curr_date_str)
             #import json
             r = urlfetch.fetch(url)

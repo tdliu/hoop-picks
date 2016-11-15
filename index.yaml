@@ -4,3 +4,8 @@ indexes:
   - name: sport
   - name: date
     direction: desc
+- kind: Event
+  properties:
+  - name: sport
+  - name: date
+    direction: asc
