@@ -8,8 +8,9 @@ class Option(ndb.Model):
     #abbrev = ndb.StringProperty()
     city = ndb.StringProperty()
     nickname = ndb.StringProperty()
-    num_win = ndb.IntegerProperty()
-    num_loss = ndb.IntegerProperty()
+    num_win = ndb.IntegerProperty(default = 0)
+    num_loss = ndb.IntegerProperty(default = 0)
+    num_draw = ndb.IntegerProperty(default = 0)
 
 class Outcome(ndb.Model):
     scores = ndb.IntegerProperty(repeated = True)

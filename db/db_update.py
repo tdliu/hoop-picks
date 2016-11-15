@@ -73,6 +73,34 @@ def update_nba_team_records():
             option.num_loss = int(num_loss)
             option.put()
 
+def update_nfl_team_records():
+    curr_date = datetime.date.today()
+    teams_query = Option.query().filter(Option.sport == 'nfl')
+    teams = teams_query.fetch()
+    for team in teams:
+        team.num_win = 0
+        team.num_loss = 0
+        team.num_draw = 0
+    games_query = Event.query().filter(Event.sport == "nfl").filter(Event.date <= curr_date).order(-Event.date)
+    games = games_query.fetch()
+    for game in games:
+        team_keys = game.options
+        hteam = team_keys[0].get()
+        vteam = team_keys[1].get()
+        winner_key = game.outcome.winner
+        if winner_key is None:
+            hteam.num_draw = hteam.num_draw + 1
+            vteam.num_draw = vteam.num_draw + 1
+        elif team_keys[0] == winner_key:
+            hteam.num_win = hteam.num_win + 1
+            vteam.num_loss = vteam.num_loss + 1
+        else:
+            vteam.num_win = vteam.num_win + 1
+            hteam.num_loss = hteam.num_loss + 1
+        hteam.put()
+        vteam.put()
+
+
 def update_option_sport_attrib():
     keys = Option.query().fetch(keys_only = True)
     for key in keys:
@@ -218,11 +246,15 @@ def update_all_nfl_games(date):
                 game_key = ndb.Key("Event", "nfl{}".format(game['eid']))
                 game_event = game_key.get()
                 game_event.outcome.scores = [int(game['hs']), int(game['vs'])]
-                if int(game['hs']) > int(game['vs']):
+                if int(game['hs']) == int(game['vs']):
+                    game_event.outcome.winner = None
+                elif int(game['hs']) > int(game['vs']):
                     game_event.outcome.winner = game_event.options[0]
                 else:
                     game_event.outcome.winner = game_event.options[1]
                 game_event.put()
+
+
 
 
 def recalculate_goat_index(sport):

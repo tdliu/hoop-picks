@@ -15,3 +15,7 @@ cron:
   url: /cron/update_nba_team_records/
   schedule: every day 00:00
   timezone: America/Los_Angeles
+- description: update NFL team records
+  url: /cron/update_nfl_team_records/
+  schedule: every day 00:05
+  timezone: America/Los_Angeles
