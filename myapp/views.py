@@ -19,19 +19,24 @@ class GameHandler(webapp2.RequestHandler):
         user = users.get_current_user()
         throwaway = datetime.datetime.strptime('20110101','%Y%m%d')
         curr_date = datetime.datetime.strptime(self.request.get('date'), "%Y%m%d")
-        #logging.info("HELLO")
-        #logging.info(curr_date)
+
         #if curr_date is None:
         sport = self.request.get('sport')
+        #sport = 'nfl'
+        logging.info(sport)
         if sport == "nfl":
             qry = Event.query().filter(Event.sport == "nfl", Event.date > curr_date).order(Event.date)
             week = qry.fetch(1)[0].week
+            #logging.info(week)
             curr_games_qry = Event.query().filter(Event.week == week)
         else:
             curr_games_qry = Event.query().filter(Event.date == curr_date, Event.sport == 'nba')
         curr_games_raw = curr_games_qry.fetch()
+        #logging.info(curr_games_raw)
+        #logging.info(curr_games_raw)
         responseData = []
         for curr_game in curr_games_raw:
+            logging.info(curr_game)
             #curr_pick = Pick.query().filter(Pick.event.id() == curr_game.key.id())
             start_time = curr_game.start_time - datetime.timedelta(hours = 5) # to ET
             start_time = start_time.strftime("%H:%M:%S")
@@ -49,6 +54,8 @@ class GameHandler(webapp2.RequestHandler):
                             'winner': winner}
             if sport == "nfl":
                 game_data['week'] = week
+                #logging.info("HELLO")
+                logging.info(curr_game.date)
                 game_data['date'] = curr_game.date.strftime("%Y%m%d")
             if len(curr_game.outcome.scores) > 0:
                 game_data['scores'] = curr_game.outcome.scores

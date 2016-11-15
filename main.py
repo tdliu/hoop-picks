@@ -101,7 +101,8 @@ class PickHandler(webapp2.RequestHandler):
         user_id = user.user_id()
         data = json.loads(self.request.body)
         game_id = data['game_id']
-        sport = data['sport']
+        #sport = data['sport']
+        sport = game_id[:3] # temporary solution
         team = data['team']
         if (datetime.datetime.utcnow() > ndb.Key("Event", game_id).get().start_time): # we don't want the user to see the change
             responseData = { 'success' : False, 'message': "Pick submitted after start time." }
