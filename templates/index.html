@@ -41,7 +41,7 @@
       </ul>
     </div>
 
-    <div id="started-games-section" class=" extended row small-up-3 large-up-7 large-collapse"></div>
+    <div id="live-games-section" class=" extended row small-up-3 large-up-7 large-collapse"></div>
 
     <!-- "wider" top-bar menu for 'medium' and up -->
     <div id="widemenu" class="top-bar">
@@ -52,11 +52,11 @@
           <li class="has-submenu">
             <a href="#">Sport</a>
             <ul class="menu submenu vertical" data-submenu>
-              <li><a href="nba">NBA</a></li>
-              <li><a href="nba">NFL</a></li>
+              <li><a href="#">NBA</a></li>
+              <li><a href="#">NFL</a></li>
             </ul>
           </li>
-          <li><a href="left_wide_21">Leaderboard</a></li>
+          <li><a href="#">Leaderboard</a></li>
         </ul>
       </div>
       <div class="top-bar-right">
@@ -114,27 +114,26 @@
 
           <div id="nfl-games-section" class="section row small-up-2 medium-up-4 large-up-5"></div>
 
-          <div id="game-loader" class="row"> 
-            <div class="spinner">
-              <div class="bounce1"></div>
-              <div class="bounce2"></div>
-              <div class="bounce3"></div>
-            </div>
-          </div>
-
-
-
-
         </div>
         <div class="large-3 columns">
-          <div class="user-info">
-            <h4> Your GOAT Index: 57%</h4>
+          <div class="user-info row">
+            <h4> Your GOAT Index</h4>
+          </div>
+          <div id="user-goat-index" class="goat-index row">
 
           </div>
         </div>
       </div>
 
-
+      <script id="loader-template" type="text/x-handlebars-template">
+        <div class="row"> 
+          <div class="spinner">
+            <div class="bounce1"></div>
+            <div class="bounce2"></div>
+            <div class="bounce3"></div>
+          </div>
+        </div>
+      </script>
 
       {% include 'templates/pick-card-template.html' %}
       {% include 'templates/live-pick-card-template.html' %}
@@ -146,6 +145,7 @@
     <script src="js/vendor/jquery.js"></script>
     <script src="js/vendor/handlebars.js"></script>
     
+    <script src="js/Loader.js"></script>
     <script src="js/ApiConnector.js"></script>
     <script src="js/goatdatetime.js"></script>
     <script src="js/GoatGame.js"></script>

@@ -10,7 +10,7 @@ function GoatDateNavigator(sport, section, date, prev, next, today, apiConnector
 
 	this._date_interval = date_interval;
 
-	this._cardInjector = new CardInjector(this._section_elem, sport, apiConnector);
+	this._cardInjector = new CardInjector(this._section_elem, sport, apiConnector, true);
 
 	var that = this;
 	this._prev_button_elem.click(function() { that.previous(); })
@@ -36,20 +36,19 @@ GoatDateNavigator.prototype.updateDateText = function(games) {
 	
 }
 
-GoatDateNavigator.prototype.next = function() {
-	this._current_date = this._current_date.getOffset(this._date_interval);
+// -1 for back, +1 for forward
+GoatDateNavigator.prototype.move = function(direction) {
+	this._current_date = this._current_date.getOffset(this._date_interval * direction);
 	var that = this;
 	this._cardInjector.getGamesAndInjectCards(this._current_date, function(games) {
 		that.updateDateText(games);	
 	});
-	
+}
+
+GoatDateNavigator.prototype.next = function() {
+	this.move(1);
 }
 
 GoatDateNavigator.prototype.previous = function() {
-	this._current_date = this._current_date.getOffset(-1 * this._date_interval);
-	var that = this;
-	this._cardInjector.getGamesAndInjectCards(this._current_date, function(games) {
-		that.updateDateText(games);
-	});
-	
+	this.move(-1);
 }

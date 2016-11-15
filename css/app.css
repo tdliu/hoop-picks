@@ -44,7 +44,7 @@ body {
 .logo-text {
 	font-family: 'Shrikhand', sans-serif;
 	letter-spacing: 2px;
-	font-size: 2.5rem;
+	font-size: 2.3rem;
 	color: #EEE;
 	background-color: transparent;
 }
@@ -61,12 +61,6 @@ a:hover {
 	color: #DDD;
 }
 
-
-#date-row {
-	padding-top: 20px;
-}
-
-
 .top-space {
 
 }
@@ -81,7 +75,6 @@ a:hover {
 
 
 /* -------------- DATE NAV -----------------------*/
-
 
 .date-nav {
 

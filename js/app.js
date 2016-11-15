@@ -27,7 +27,6 @@ function work_finished() {
 
 function finished() {
   console.log("FINISHED!");
-  $('#game-loader').hide();
   console.log("nba: ", nba_games);
   console.log("nfl: ", nfl_games);
   nbaDateNav.initialGames(nba_games);
@@ -43,21 +42,28 @@ function init(datestring, logged, team_records) {
   //TODO: rewind if it is early morning
 
   apiConnector = new ApiConnector(today, team_records);
-  liveGameManager = new LiveGameManager(apiConnector);
+  liveGameManager = new LiveGameManager(apiConnector, $('#live-games-section'), ['nba', ,'nfl']);
   nbaDateNav = new GoatDateNavigator("nba", $('#nba-games-section'), $('#nba-date'), $('#nba-prev-date'), $('#nba-next-date'), today, apiConnector, 1);
   nflDateNav = new GoatDateNavigator("nfl", $('#nfl-games-section'), $('#nfl-date'), $('#nfl-prev-date'), $('#nfl-next-date'), today, apiConnector, 7);
 
   //initial loader: load games
   apiConnector.getNBAGames(today, function(data) {
     nba_games = data;
+    liveGameManager.maybeRegisterGames(nba_games);
     work_finished();
   })
 
   apiConnector.getNFLGames(today, function(data) {
     nfl_games = data;
+    liveGameManager.maybeRegisterGames(nfl_games);
     work_finished();
   })
 
+  apiConnector.user_goat_index('nba', function(data) {
+    console.log(data);
+    //$('#user-goat-index').
+
+  })
 
   liveGameManager.poll(function(data) {
     //gameInjector.todayLiveGameData(data);

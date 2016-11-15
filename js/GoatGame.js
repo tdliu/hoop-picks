@@ -19,7 +19,6 @@ function GoatGame(today, game_date, game, team_records) {
 	for (var attr in game) {
         if (game.hasOwnProperty(attr)) this[attr] = game[attr];
     }
-
     this.date = game_date;
 	this.start_time = new GoatTime(game.time);
 	this.pretty_start_time = this.start_time.getPrettyTime();
@@ -28,8 +27,8 @@ function GoatGame(today, game_date, game, team_records) {
     this.homePicked = (game.current_pick == game.home);
 
     if (team_records) {
-    	this.homeRecord = team_records[this.home];
-    	this.awayRecord = team_records[this.away];
+    	this.homeRecord = team_records[this.home_id];
+    	this.awayRecord = team_records[this.away_id];
     }
 
     var date_compare = this.date.compare(today);
@@ -52,9 +51,12 @@ function GoatGame(today, game_date, game, team_records) {
 
 GoatGame.prototype.constructCompletedGame = function() {
 	this.status = 'completed';
-	this.homeWon = (this.scores[0] - this.scores[1] > 0);
-	this.awayWon = !this.homeWon;
-	this.correct = (this.homeWon && this.homePicked) || (this.awayWon && this.awayPicked);
+	if (this.scores) {
+		this.homeWon = (this.scores[0] - this.scores[1] > 0);
+		this.awayWon = !this.homeWon;
+		this.correct = (this.homeWon && this.homePicked) || (this.awayWon && this.awayPicked);	
+	}
+	
 	if (!this.current_pick) {
 		this.correctness = ""
 	}
@@ -71,9 +73,6 @@ GoatGame.prototype.constructCompletedGame = function() {
 GoatGame.prototype.constructLiveGame = function() {
 	this.status = 'live';
 	this.elem = $(live_pick_card_template(this));
-	/*this.live_data.live_clock = this.formatLiveClock();
-	this.elem = $(live_pick_card_template(this));
-	liveGameManager.registerGame(this); */
 }
 
 GoatGame.prototype.constructUpcomingGame = function() {
@@ -110,13 +109,13 @@ GoatGame.prototype.addPickListeners = function() {
 	this.getHomeElem().click(function() {
 	    $(this).find(".pick-checkbox").addClass("picked")
 	    $(this).parent().find(".away").find(".pick-checkbox").removeClass("picked")
-	    apiConnector.pick(that.game_id, that.home_id)
+	    apiConnector.pick(that.game_id, that.home_id, that.sport);
 	})
   
 	this.getAwayElem().click(function() {
 		$(this).find(".pick-checkbox").addClass("picked")
 		$(this).parent().find(".home").find(".pick-checkbox").removeClass("picked")
-		apiConnector.pick(that.game_id, that.away_id)
+		apiConnector.pick(that.game_id, that.away_id, that.sport);
 	})
 }
 

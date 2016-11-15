@@ -49,7 +49,7 @@ class GameHandler(webapp2.RequestHandler):
                             'winner': winner}
             if sport == "nfl":
                 game_data['week'] = week
-                game_data['date'] = cur_game.date.strftime("%Y%m%d")
+                game_data['date'] = curr_game.date.strftime("%Y%m%d")
             if len(curr_game.outcome.scores) > 0:
                 game_data['scores'] = curr_game.outcome.scores
             #start_time = curr_game.start_time.strftime("%H:%M:%S") 
@@ -102,9 +102,9 @@ class UserGoatIndexHandler(webapp2.RequestHandler):
         results = q.fetch()
         user_goat_index = results[0]
         responseData = {
-                            'num_pick': num_pick,
-                            'num_correct': num_correct,
-                            'accuracy': accuracy
+                            'num_pick': user_goat_index.num_pick,
+                            'num_correct': user_goat_index.num_correct,
+                            'accuracy': user_goat_index.accuracy
 
         }
         self.response.out.write(json.dumps(responseData))

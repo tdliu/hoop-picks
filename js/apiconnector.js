@@ -3,13 +3,26 @@ function ApiConnector(today, team_records) {
   this.team_records = team_records;
 }
 
-ApiConnector.prototype.pick = function(game_id, team, callback) {
+ApiConnector.prototype.user_goat_index = function(sport, callback) {
+  $.ajax({
+      type: "GET",
+      url: "/user_goat_index/" + "?sport=" + sport,
+      dataType: 'json',
+    })
+    .done(function( data ) {
+        if (callback) {
+          callback(data);
+        }
+    });
+}
+
+ApiConnector.prototype.pick = function(game_id, team, sport, callback) {
   console.log("sending pick: ", game_id, team)
 	$.ajax({
       type: "POST",
       url: "/pick/",
       dataType: 'json',
-      data: JSON.stringify({ game_id: game_id, team: team})
+      data: JSON.stringify({ game_id: game_id, team: team, sport: sport})
     })
     .done(function( data ) {
         if (callback) {
