@@ -180,14 +180,14 @@ def insert_nfl_games():
 
 
 def update_nfl_games(date):
-    qry = Event.query().filter(Event.sport == "nfl", Event.date <= date).order(-Event.date)
+    qry = Event.query().filter(Event.sport == "nfl").filter(Event.date <= date).order(-Event.date)
     week = qry.fetch(1)[0].week
     season = qry.fetch(1)[0].season
     url = "http://www.nfl.com/ajax/scorestrip?season={}&seasonType=REG&week={}".format(season, week)
     # Insert all games. And then update
     result = urllib2.urlopen(url).read()
     root = ElementTree.fromstring(result)
-    games = [g.attrib for g in root.find('gms').findall('g')]
+    games = [g.attrib for g in root.find('gms').findall('g')] 
     for game in games:
         if game['hs'].isdigit():
             print game['eid']
