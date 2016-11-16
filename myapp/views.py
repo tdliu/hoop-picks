@@ -108,15 +108,21 @@ class LiveGameHandler(webapp2.RequestHandler):
 class UserGoatIndexHandler(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
-        sport = self.request.get('sport')
-        q = UserGoatIndex.query().filter(UserGoatIndex.sport == sport)
-        results = q.fetch()
-        user_goat_index = results[0]
-        responseData = {
-                            'num_pick': user_goat_index.num_pick,
-                            'num_correct': user_goat_index.num_correct,
-                            'accuracy': user_goat_index.accuracy
+        if user:
+            sport = self.request.get('sport')
+            q = UserGoatIndex.query().filter(UserGoatIndex.sport == sport)
+            results = q.fetch()
+            if len(results) == 0:
+                responseData = None
+            else:
+                user_goat_index = results[0]
+                responseData = {
+                                    'num_pick': user_goat_index.num_pick,
+                                    'num_correct': user_goat_index.num_correct,
+                                    'accuracy': user_goat_index.accuracy
 
-        }
+                }
+        else:
+            responseData = None
         self.response.out.write(json.dumps(responseData))
 
