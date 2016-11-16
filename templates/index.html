@@ -41,7 +41,7 @@
       </ul>
     </div>
 
-    <div id="live-games-section" class=" extended row small-up-3 large-up-7 large-collapse"></div>
+    <div id="live-games-section" class=" extended row small-up-3 large-up-8 small-collapse large-collapse"></div>
 
     <!-- "wider" top-bar menu for 'medium' and up -->
     <div id="widemenu" class="top-bar">
@@ -71,57 +71,44 @@
     <div class="off-canvas-content" data-off-canvas-content>
       
       <div class="row">
-        <div class="large-9 columns">
-        
-          <div id="nba-date-nav" class="date-nav row">
-            <div class="large-1 columns">
-              <h5> NBA </h5>
-            </div>
-            
-            <div class="large-2 columns end">
-              <div id="nba-prev-date" class="date-button float-left">
-                <i class="material-icons">chevron_left</i> 
-              </div>
 
-              <div id="nba-next-date" class="date-button float-right">
-                <i class="material-icons">chevron_right</i> 
-              </div>
-              
+        <div id="game-content" class="large-10 columns panel">
+
+          <div id="nba-date-nav" class="date-nav row">
+            <div class="large-1 columns"><h5> NBA </h5></div>
+            <div class="large-2 columns end">
+              <div id="nba-prev-date" class="date-button float-left"><i class="material-icons">chevron_left</i> </div>
+              <div id="nba-next-date" class="date-button float-right"><i class="material-icons">chevron_right</i> </div>
               <div id="nba-date" class="date">Nov 11th </div>
-              
             </div>
           </div>
-
           <div id="nba-games-section" class="section row small-up-2 medium-up-4 large-up-5"></div>
 
           <div id="nfl-date-nav" class="date-nav section-label row">
-            <div class="large-1 columns">
-            <h5> NFL </h5>
-            </div>
+            <div class="large-1 columns"><h5> NFL </h5></div>
             <div class="large-2 columns end">
-              <div id="nfl-prev-date" class="date-button float-left">
-                <i class="material-icons">chevron_left</i> 
-              </div>
-
-              <div id="nfl-next-date" class="date-button float-right">
-                <i class="material-icons">chevron_right</i> 
-              </div>
-              
+              <div id="nfl-prev-date" class="date-button float-left"><i class="material-icons">chevron_left</i></div>
+              <div id="nfl-next-date" class="date-button float-right"><i class="material-icons">chevron_right</i></div>
               <div id="nfl-date" class="date">Nov 11th </div>
-              
             </div>
           </div>
-
           <div id="nfl-games-section" class="section row small-up-2 medium-up-4 large-up-5"></div>
 
+            
         </div>
-        <div class="large-3 columns">
-          <div class="user-info row">
-            <h4> Your GOAT Index</h4>
-          </div>
-          <div id="user-goat-index" class="goat-index row">
 
+
+        <div id="right-content" class="large-2 columns panel">
+          <div id="user-goat-index" class="your-goat-index row">
+            <div class="large-12 columns"> Your GOAT Index </div>
           </div>
+          <div class="row stats-1">
+            <div class="large-12 columns">
+              <span id="percentage" class="percentage"> </span>
+              <span id="correct" class="record"></span> / <span id="total" class="record"></span>
+            </div>
+          </div>
+
         </div>
       </div>
 

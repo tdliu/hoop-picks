@@ -33,7 +33,6 @@ GoatDateNavigator.prototype.updateDateText = function(games) {
 			this._date_elem.html("Week " + games[0].week);
 		else this._date_elem.html("" + this._current_date.getMonthDateAbbrev());	
 	}
-	
 }
 
 // -1 for back, +1 for forward

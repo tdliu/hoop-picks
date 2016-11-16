@@ -26,11 +26,9 @@ function work_finished() {
 }
 
 function finished() {
-  console.log("FINISHED!");
-  console.log("nba: ", nba_games);
-  console.log("nfl: ", nfl_games);
   nbaDateNav.initialGames(nba_games);
   nflDateNav.initialGames(nfl_games);
+  liveGameManager.poll();
 }
 
 //-------------- INITIALIZE -------------------//
@@ -39,21 +37,27 @@ function init(datestring, logged, team_records) {
   logged_in = logged;
 
   today = new GoatDate(datestring);
-  //TODO: rewind if it is early morning
+  var starting_date;
+  if (isEarlyMorning()) {
+    starting_date = today.getYesterday();
+  }
+  else {
+    starting_date = today;
+  }
 
   apiConnector = new ApiConnector(today, team_records);
   liveGameManager = new LiveGameManager(apiConnector, $('#live-games-section'), ['nba', ,'nfl']);
-  nbaDateNav = new GoatDateNavigator("nba", $('#nba-games-section'), $('#nba-date'), $('#nba-prev-date'), $('#nba-next-date'), today, apiConnector, 1);
-  nflDateNav = new GoatDateNavigator("nfl", $('#nfl-games-section'), $('#nfl-date'), $('#nfl-prev-date'), $('#nfl-next-date'), today, apiConnector, 7);
+  nbaDateNav = new GoatDateNavigator("nba", $('#nba-games-section'), $('#nba-date'), $('#nba-prev-date'), $('#nba-next-date'), starting_date, apiConnector, 1);
+  nflDateNav = new GoatDateNavigator("nfl", $('#nfl-games-section'), $('#nfl-date'), $('#nfl-prev-date'), $('#nfl-next-date'), starting_date, apiConnector, 7);
 
   //initial loader: load games
-  apiConnector.getNBAGames(today, function(data) {
+  apiConnector.getNBAGames(starting_date, function(data) {
     nba_games = data;
     liveGameManager.maybeRegisterGames(nba_games);
     work_finished();
   })
 
-  apiConnector.getNFLGames(today, function(data) {
+  apiConnector.getNFLGames(starting_date, function(data) {
     nfl_games = data;
     liveGameManager.maybeRegisterGames(nfl_games);
     work_finished();
@@ -61,16 +65,14 @@ function init(datestring, logged, team_records) {
 
   apiConnector.user_goat_index('nba', function(data) {
     console.log(data);
+    $('#percentage').html(Math.round(data.accuracy * 100) + "%");
+    $('#correct').html(data.num_correct);
+    $('#total').html(data.num_pick);
     //$('#user-goat-index').
 
   })
 
-  liveGameManager.poll(function(data) {
-    //gameInjector.todayLiveGameData(data);
-  }); 
-
   setInterval(function() {
-    console.log("interval");
     liveGameManager.poll();
   }, 10000)
 

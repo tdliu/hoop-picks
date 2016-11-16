@@ -1,3 +1,5 @@
+//THIS ALSO SERVES AS THE GOAT FACTORY
+
 function ApiConnector(today, team_records) {
   this.today = today;
   this.team_records = team_records;
@@ -32,7 +34,6 @@ ApiConnector.prototype.pick = function(game_id, team, sport, callback) {
 }
 
 ApiConnector.prototype.game = function(date, sport, callback) {
-  console.log("sport", sport)
 	$.ajax({
       type: "GET",
       url: "/game/?date=" + date + "&sport=" + sport,
@@ -51,6 +52,7 @@ ApiConnector.prototype.livegame = function(callback) {
       dataType: 'json'
     })
     .done(function( data ) {
+      console.log("livegame", data);
       if (callback)
         callback(data);
     });
@@ -59,7 +61,6 @@ ApiConnector.prototype.livegame = function(callback) {
 ApiConnector.prototype.getNBAGames = function(game_date, callback) {
   var that = this;
   this.game(game_date.getDateString(), "nba", function(data) {
-    console.log(data);
     var games = that.createNBAGames(game_date, data);
     
     if (callback) {

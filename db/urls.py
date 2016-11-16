@@ -58,6 +58,12 @@ class UpdateNFLGames(webapp2.RequestHandler):
         update_nfl_games(date)
         logging.info("Updating NFL games for {}".format(date))
 
+class UpdateAllNFLGames(webapp2.RequestHandler):
+    def get(self):
+        date = datetime.date.today() - datetime.timedelta(days=1)
+        update_all_nfl_games(date)
+        logging.info("Updating all NFL games up to {}".format(date))
+
 class RecalculateGoatIndex(webapp2.RequestHandler):
     def get(self):
         recalculate_goat_index("nba")
@@ -66,6 +72,11 @@ class UpdateNBATeamRecords(webapp2.RequestHandler):
     def get(self):
         update_nba_team_records()
         logging.info("Updating NBA team records.")
+
+class UpdateNFLTeamRecords(webapp2.RequestHandler):
+    def get(self):
+        update_nfl_team_records()
+        logging.info("Updating NFL team records.")
 
 class TempUpdateOptionSport(webapp2.RequestHandler):
     def get(self):

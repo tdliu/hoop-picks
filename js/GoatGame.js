@@ -10,7 +10,7 @@ var completed_card_template = Handlebars.compile(completed_card_source);
 // ------------------ UTILS ------------------------//
 function hasStarted(start_time) {
 	var current_time_eastern = getCurrentTimeEastern();
-	return start_time.getDifferenceHours(current_time_eastern) > 0;
+	return start_time.isAfter(current_time_eastern);
 }
 
 // ------------------ CLASS GOAT GAME --------------//
@@ -19,7 +19,14 @@ function GoatGame(today, game_date, game, team_records) {
 	for (var attr in game) {
         if (game.hasOwnProperty(attr)) this[attr] = game[attr];
     }
-    this.date = game_date;
+
+    if (game.date) {
+    	this.date = new GoatDate(game.date);
+    }
+    else {
+    	this.date = game_date;
+    }
+
 	this.start_time = new GoatTime(game.time);
 	this.pretty_start_time = this.start_time.getPrettyTime();
 
@@ -31,8 +38,9 @@ function GoatGame(today, game_date, game, team_records) {
     	this.awayRecord = team_records[this.away_id];
     }
 
-    var date_compare = this.date.compare(today);
-    if (date_compare === 0) { // this game is today
+    var difference_days = this.date.differenceInDays(today);
+
+    if (difference_days === 0) { // this game is today
     	this.started = hasStarted(this.start_time);
     	if (this.started) {
     		this.constructLiveGame();
@@ -41,12 +49,17 @@ function GoatGame(today, game_date, game, team_records) {
 			this.constructUpcomingGame();
     	}
     }
-    else if (date_compare == -1) { //this game is in the past
+    else if (difference_days == -1 && isEarlyMorning()) {
+    	this.constructLiveGame();
+    }
+    else if (difference_days < 0) { //this game is in the past
     	this.constructCompletedGame();
     }
-    else if (date_compare == 1) { //this game is in the future
+    else if (difference_days > 0) { //this game is in the future
     	this.constructUpcomingGame();
     }
+
+    console.log("status: ", this.status)
 }
 
 GoatGame.prototype.constructCompletedGame = function() {
@@ -141,7 +154,6 @@ GoatGame.prototype.getPickElem = function() {
 }
 
 GoatGame.prototype.formatLiveClock = function() {
-	return ""
 	if (!this.live_data.isGameActivated) {
 		return "final";
 	}
