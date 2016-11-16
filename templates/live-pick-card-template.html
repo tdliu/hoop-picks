@@ -1,27 +1,40 @@
 {% raw %}
   <script id="live-pick-card-template" type="text/x-handlebars-template">
-
     
-      <div class="pick-card-container small-12 medium-6 large-3 columns {{#if isLast}} end {{/if}}">
-    
-      <div class="pick-card live large-12 columns" id='{{game_id}}'>
-        <div class="pick-card-header row">
-          <div class="time large-6 columns"> {{live_data.live_clock}}</div>
+    <div class="pick-card-container column">
+      <div class="row">
+        <div class="pick-card live small-12 large-12 columns end" id='{{game_id}}'>
+          
+          <div class="pick-card-header row">
+            <div class="time small-10 large-10 small-offset-1 large-offset-1 columns end"> {{live_data.live_clock}}</div>
+          </div>
+
+          <div class="row pick-card-option large-collapse home">
+            <div class="small-2 large-2 columns">
+              <div class="pick-indicator {{#if homePicked }} picked {{/if}}"></div> 
+            </div>
+
+            <div class="team-name small-6 large-8 columns"> 
+              {{home}}
+            </div>
+            <div class="score small-2 large-2 columns end"> {{live_data.hTeam.score}}</div>
+          </div>
+
+          <div class="row pick-card-option large-collapse away">
+            <div class="small-2 large-2 columns">
+              <div class="pick-indicator {{#if awayPicked }} picked {{/if}}"></div> 
+            </div>
+
+            <div class="team-name small-6 large-8 columns"> 
+              {{away}}
+            </div>
+
+            <div class="score small-2 large-2 columns end"> {{live_data.vTeam.score}}</div>
+          </div>        
+
         </div>
-
-        <div class="row pick-card-option home {{#if homePicked }} picked {{/if}}">
-          <div class="team-name small-2 large-2 columns"> {{home}}</div>
-          <div class="win-loss small-8 large-8 columns"> ({{live_data.hTeam.win}}-{{live_data.hTeam.loss}})</div>
-          <div class="score small-2 large-2 columns"> {{live_data.hTeam.score}}</div>
-        </div>
-
-        <div class="row pick-card-option away {{#if awayPicked }} picked {{/if}}">
-          <div class="team-name small-2 large-2 columns"> {{away}}</div>
-          <div class="win-loss small-8 large-8 columns"> ({{live_data.vTeam.win}}-{{live_data.vTeam.loss}})</div>
-          <div class="score small-2 large-2 columns"> {{live_data.vTeam.score}}</div>
-        </div>        
-
       </div>
     </div>
+
   </script>
 {% endraw %}

@@ -1,109 +1,78 @@
 $(document).foundation()
 
 //-------------- GLOBALS ---------------------//
-
 var today;
-var tomorrow;
-var next;
+
 var liveGameManager;
 var logged_in;
 var gameInjector;
+var dateNav;
+var apiConnector;
 
-//-------------- INITIAL REQUESTS ------------//
 
-function addGamesToSection(section, games, is_today) {
-  for (var i = 0; i < games.length; i ++) {
-    games[i].is_today = is_today;
-    if (i == games.length - 1) {
-      games[i].isLast = true;
-    }
+//-------------- SEMAPHORE -------------------//
 
-    var game = new GoatGame(games[i]);
+var num_finished = 0
+var TOTAL = 2;
+var nba_games;
+var nfl_games;
 
-    section.append(game.elem);
+
+function work_finished() {
+  num_finished += 1;
+  if (num_finished >= TOTAL) {
+    finished();
   }
-
-  section.animate(
-    {'opacity': 1},
-    1000)
-}
-//-------------- LISTENERS -------------------//
-
-function updateDateSelector() {
-  $('#upcoming-label').html("" + tomorrow.getMonthDateAbbrev());
-  $('#next-btn').html("" + next.getMonthDateAbbrev() + " >>");
 }
 
-function loadUpcomingGames() {
-  $('#upcoming-games-section').html("")
-  $('#upcoming-loader').show();
-
-  apiConnector.game(tomorrow.getDateString(), "nba", function(data) {
-    $('#upcoming-loader').hide();
-    gameInjector.upcomingGameData(data);//addGamesToSection($('#upcoming-games-section'), data, false);
-  })
+function finished() {
+  nbaDateNav.initialGames(nba_games);
+  nflDateNav.initialGames(nfl_games);
+  liveGameManager.poll();
 }
 
-function selectPrev() {
-  next = tomorrow;
-  tomorrow = tomorrow.getYesterday();
-  if (tomorrow._date == today._date) {
-    tomorrow = tomorrow.getYesterday();
+//-------------- INITIALIZE -------------------//
 
-  }
-  updateDateSelector();
-  loadUpcomingGames();
-}
-
-function selectNext() {
-  tomorrow = next;
-  next = next.getTomorrow();
-  if (next._date == today._date) {
-    next = next.getTomorrow();
-  }
-
-  updateDateSelector();
-  loadUpcomingGames();
-}
-
-function init(datestring, logged) {
+function init(datestring, logged, team_records) {
   logged_in = logged;
 
   today = new GoatDate(datestring);
-  tomorrow = today.getTomorrow();
-  next = tomorrow.getTomorrow();
-  updateDateSelector();
+  var starting_date;
+  if (isEarlyMorning()) {
+    starting_date = today.getYesterday();
+  }
+  else {
+    starting_date = today;
+  }
 
-  liveGameManager = new LiveGameManager(apiConnector);
-  gameInjector = new GoatGameInjector($('#started-games-section'), $('#today-upcoming-games-section'), $('#upcoming-games-section'));
+  apiConnector = new ApiConnector(today, team_records);
+  liveGameManager = new LiveGameManager(apiConnector, $('#live-games-section'), ['nba', ,'nfl']);
+  nbaDateNav = new GoatDateNavigator("nba", $('#nba-games-section'), $('#nba-date'), $('#nba-prev-date'), $('#nba-next-date'), starting_date, apiConnector, 1);
+  nflDateNav = new GoatDateNavigator("nfl", $('#nfl-games-section'), $('#nfl-date'), $('#nfl-prev-date'), $('#nfl-next-date'), starting_date, apiConnector, 7);
 
-  $('#today-label').html("Today " + today.getMonthDateAbbrev());
-  
-
-  //load games
-  apiConnector.game(today.getDateString(), "nba", function(data) {
-    $('#games-loader').hide();
-    gameInjector.todayGameInfo(data);
+  //initial loader: load games
+  apiConnector.getNBAGames(starting_date, function(data) {
+    nba_games = data;
+    liveGameManager.maybeRegisterGames(nba_games);
+    work_finished();
   })
 
-  apiConnector.game(tomorrow.getDateString(), "nba", function(data) {
-    $('#upcoming-loader').hide();
-    gameInjector.upcomingGameData(data);//addGamesToSection($('#upcoming-games-section'), data, false);
+  apiConnector.getNFLGames(starting_date, function(data) {
+    nfl_games = data;
+    liveGameManager.maybeRegisterGames(nfl_games);
+    work_finished();
   })
 
-  liveGameManager.poll(function(data) {
-    gameInjector.todayLiveGameData(data);
-  });
+  apiConnector.user_goat_index('nba', function(data) {
+    console.log(data);
+    $('#percentage').html(Math.round(data.accuracy * 100) + "%");
+    $('#correct').html(data.num_correct);
+    $('#total').html(data.num_pick);
+    //$('#user-goat-index').
 
-  $('#next-btn').click(function() {
-    selectNext();
-  })
-  $('#upcoming-label').click(function() {
-    selectPrev();
   })
 
   setInterval(function() {
-    console.log("interval");
     liveGameManager.poll();
   }, 10000)
 

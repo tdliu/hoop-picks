@@ -5,10 +5,9 @@
 //		Upcoming: upcoming_section
 
 
-function GoatGameInjector(today_started_section, today_upcoming_section, upcoming_section) {
-	this._today_started_section = today_started_section;
-	this._today_upcoming_section = today_upcoming_section;
-	this._upcoming_section = upcoming_section;
+function GoatGameInjector(started_section, date_section) {
+	this._started_section = started_section;
+	this._date_section = date_section;
 
 	this._today_game_info_received = false;
 	this._today_live_game_data_received = false;
@@ -32,7 +31,7 @@ GoatGameInjector.prototype.todayLiveGameData = function(live_game_data) {
 
 GoatGameInjector.prototype.upcomingGameData = function(future_games_data) {
 	var goatGames = this.goatGameFactory(future_games_data, false);
-	this.addGamesToSection(this._upcoming_section, goatGames['upcoming']);
+	this.addGamesToSection(this._date_section, goatGames['upcoming']);
 }
 
 GoatGameInjector.prototype.joinTodayGamesAndInject = function() {
@@ -50,8 +49,8 @@ GoatGameInjector.prototype.joinTodayGamesAndInject = function() {
 	}
 
 	var goatGames = this.goatGameFactory(joined, true);
-	this.addGamesToSection(this._today_started_section, goatGames['started'])
-	this.addGamesToSection(this._today_upcoming_section, goatGames['upcoming'])
+	this.addGamesToSection(this._started_section, goatGames['started'])
+	this.addGamesToSection(this._date_section, goatGames['upcoming'])
 }
 
 GoatGameInjector.prototype.goatGameFactory = function(games, is_today) {
@@ -70,8 +69,8 @@ GoatGameInjector.prototype.goatGameFactory = function(games, is_today) {
 			goatGames['upcoming'].push(game);	
 		}
 	}
-	if (goatGames['started'].length > 0) goatGames['started'][goatGames['started'].length - 1].setLast();
-	if (goatGames['upcoming'].length > 0) goatGames['upcoming'][goatGames['upcoming'].length - 1].setLast();
+	//if (goatGames['started'].length > 0) goatGames['started'][goatGames['started'].length - 1].setLast();
+	//if (goatGames['upcoming'].length > 0) goatGames['upcoming'][goatGames['upcoming'].length - 1].setLast();
 	return goatGames;
 }
 

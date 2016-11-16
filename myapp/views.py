@@ -30,7 +30,7 @@ class GameHandler(webapp2.RequestHandler):
             #logging.info(week)
             curr_games_qry = Event.query().filter(Event.week == week)
         else:
-            curr_games_qry = Event.query().filter(Event.date == curr_date)
+            curr_games_qry = Event.query().filter(Event.date == curr_date, Event.sport == 'nba')
         curr_games_raw = curr_games_qry.fetch()
         #logging.info(curr_games_raw)
         #logging.info(curr_games_raw)
@@ -113,9 +113,9 @@ class UserGoatIndexHandler(webapp2.RequestHandler):
         results = q.fetch()
         user_goat_index = results[0]
         responseData = {
-                            'num_pick': num_pick,
-                            'num_correct': num_correct,
-                            'accuracy': accuracy
+                            'num_pick': user_goat_index.num_pick,
+                            'num_correct': user_goat_index.num_correct,
+                            'accuracy': user_goat_index.accuracy
 
         }
         self.response.out.write(json.dumps(responseData))

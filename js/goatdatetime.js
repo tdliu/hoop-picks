@@ -7,18 +7,30 @@ function jsDatetoDatestring(date) {
 }
 
 function getCurrentTimeEastern() {
-	var offset = -4;
+	var offset = -5;
 	var d = new Date();
     var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
     var nd = new Date(utc + (3600000*offset));
     var timestring12 = nd.toLocaleTimeString();
     var timestring24 = timestring12;
-    if (timestring12.indexOf('PM') != -1) {
+    if (timestring12.indexOf('PM') != -1) { //WE ARE IN PM, ADD 12
     	var firstColon = timestring12.indexOf(":");
     	var hour = parseInt(timestring12.substring(0, firstColon)) + 12;
     	timestring24 = "" + hour + ":" + timestring12.substring(firstColon + 1, firstColon + 3);
     }
+    else {
+    	var firstColon = timestring12.indexOf(":");
+    	var hour = parseInt(timestring12.substring(0, firstColon));// + 12;
+    	if (hour == 12) {
+    		hour = 0;
+    	}
+    	timestring24 = "" + hour + ":" + timestring12.substring(firstColon + 1, firstColon + 3);
+    }
 	return new GoatTime(timestring24);
+}
+
+function isEarlyMorning() {
+	return getCurrentTimeEastern().hour <= 6;
 }
 
 // ----------------- CLASS GOAT TIME --------------//
@@ -27,6 +39,10 @@ function GoatTime(timestring) {
 	this.timestring = timestring;
 	this.hour = parseInt(timestring.substring(0, firstColon));
 	this.minutes = parseInt(timestring.substring(firstColon + 1 , firstColon + 3));
+}
+
+GoatTime.prototype.isAfter = function(other) {
+	return this.getDifferenceHours(other) > 0;
 }
 
 GoatTime.prototype.getDifferenceHours = function(other) {
@@ -49,7 +65,6 @@ GoatTime.prototype.getPrettyTime = function() {
 	return prettytime;
 }
 
-
 // ----------------- CLASS GOAT DATE --------------//
 function GoatDate(datestring) {
 	this._datestring = datestring;
@@ -67,13 +82,21 @@ function GoatDate(datestring) {
 	this._month_abbrev = MONTHS[this._month];
 }
 
+GoatDate.prototype.differenceInDays = function(other) {
+	var oneDay = 24*60*60*1000; // hours*minutes*seconds*milliseconds
+	return Math.round((this._jsDate.getTime() - other._jsDate.getTime())/(oneDay));
+}
+
 GoatDate.prototype.getMonthAbbrev = function() {
 	return this._month_abbrev;
 }
 
 GoatDate.prototype.getDateSuffix = function() {
 	var suffix = "th";
-	if (this._date % 10 == 1) {
+	if (this._date == 11 || this._date == 12 || this._date == 13) {
+		return "th";
+	}
+	else if (this._date % 10 == 1) {
 		suffix = 'st';
 	}
 	else if (this._date % 10 == 2) {
@@ -91,6 +114,13 @@ GoatDate.prototype.getMonthDateAbbrev = function() {
 
 GoatDate.prototype.getDateString = function() {
 	return this._datestring;
+}
+
+GoatDate.prototype.getOffset = function(offset_days) {
+	var offset_jsDate = new Date(this._jsDate);
+	offset_jsDate.setDate(offset_jsDate.getDate() + offset_days);
+	var offset = new GoatDate(jsDatetoDatestring(offset_jsDate));
+	return offset;
 }
 
 GoatDate.prototype.getYesterday = function() {
