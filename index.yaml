@@ -9,3 +9,7 @@ indexes:
   - name: sport
   - name: date
     direction: asc
+- kind: UserGoatIndex
+  properties:
+  - name: sport
+  - name: accuracy
