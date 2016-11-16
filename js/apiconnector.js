@@ -3,6 +3,7 @@
 function ApiConnector(today, team_records) {
   this.today = today;
   this.team_records = team_records;
+  console.log(team_records)
 }
 
 ApiConnector.prototype.user_goat_index = function(sport, callback) {
@@ -84,7 +85,7 @@ ApiConnector.prototype.getNFLGames = function(game_date, callback) {
 ApiConnector.prototype.createNBAGames = function(game_date, games) {
   var goatGames = [];
   for (var i = 0; i < games.length; i ++) {
-    var game = new GoatGame(this.today, game_date, games[i], this.team_records);
+    var game = new GoatGame(this.today, game_date, games[i], this.team_records.nba);
     goatGames.push(game);
   }
   return goatGames;
@@ -93,7 +94,7 @@ ApiConnector.prototype.createNBAGames = function(game_date, games) {
 ApiConnector.prototype.createNFLGames = function(game_date, games) {
   var goatGames = [];
   for (var i = 0; i < games.length; i ++) {
-    var game = new GoatGame(this.today, game_date, games[i], this.team_records);
+    var game = new GoatGame(this.today, game_date, games[i], this.team_records.nfl);
     goatGames.push(game);
   }
   return goatGames;

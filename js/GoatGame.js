@@ -58,8 +58,6 @@ function GoatGame(today, game_date, game, team_records) {
     else if (difference_days > 0) { //this game is in the future
     	this.constructUpcomingGame();
     }
-
-    console.log("status: ", this.status)
 }
 
 GoatGame.prototype.constructCompletedGame = function() {
@@ -79,7 +77,6 @@ GoatGame.prototype.constructCompletedGame = function() {
 	else {
 		this.correctness = "incorrect";
 	}
-	console.log(this.correctness)
     this.elem = $(completed_card_template(this));
 }
 

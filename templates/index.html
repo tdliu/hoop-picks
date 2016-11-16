@@ -148,7 +148,10 @@
     <script src="js/app.js"></script>
     <script>
     {% if logged_in %}
-    init("{{curr_date}}", true, {{nba_team_records | safe }});
+    var team_records = {};
+    team_records.nba = {{nba_team_records | safe }};
+    team_records.nfl = {{nfl_team_records | safe}};
+    init("{{curr_date}}", true, team_records);
     {% else %}
     init("{{curr_date}}", false, {{nba_team_records | safe }});
     {% endif %}
