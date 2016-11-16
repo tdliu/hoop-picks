@@ -9,7 +9,6 @@ var gameInjector;
 var dateNav;
 var apiConnector;
 
-
 //-------------- SEMAPHORE -------------------//
 
 var num_finished = 0
@@ -34,6 +33,7 @@ function finished() {
 //-------------- INITIALIZE -------------------//
 
 function init(datestring, logged, team_records) {
+  $('#right-content').hide();
   logged_in = logged;
 
   today = new GoatDate(datestring);
@@ -64,12 +64,13 @@ function init(datestring, logged, team_records) {
   })
 
   apiConnector.user_goat_index('nba', function(data) {
-    console.log(data);
-    $('#percentage').html(Math.round(data.accuracy * 100) + "%");
-    $('#correct').html(data.num_correct);
-    $('#total').html(data.num_pick);
-    //$('#user-goat-index').
-
+    console.log("data", data)
+    if (data) {
+      $('#percentage').html(Math.round(data.accuracy * 100) + "%");
+      $('#correct').html(data.num_correct);
+      $('#total').html(data.num_pick);  
+      $('#right-content').show();
+    }
   })
 
   setInterval(function() {
