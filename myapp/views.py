@@ -128,7 +128,8 @@ class UserGoatIndexHandler(webapp2.RequestHandler):
                 responseData = {
                                     'num_pick': num_pick,
                                     'num_correct': num_correct,
-                                    'accuracy': accuracy
+                                    'accuracy': accuracy,
+                                    'rank': rank
 
                 }
         else:
