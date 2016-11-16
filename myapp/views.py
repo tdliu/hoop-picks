@@ -96,14 +96,14 @@ class LiveGameHandler(webapp2.RequestHandler):
             url =  "http://data.nba.net/data/10s/prod/v1/{}/scoreboard.json".format(curr_date_str)
             #import json
             r = urlfetch.fetch(url)
-            current_live_data = json.loads(r.content)['games']
+            nba_current_live_data = json.loads(r.content)['games']
             last_polled_ts = curr_ts
             logging.info("new nba poll")
-            self.response.out.write(json.dumps(current_live_data))
+            self.response.out.write(json.dumps(nba_current_live_data))
 
         else:
             logging.info("using cached nba poll")
-            self.response.out.write(json.dumps(current_live_data))
+            self.response.out.write(json.dumps(nba_current_live_data))
 
 class UserGoatIndexHandler(webapp2.RequestHandler):
     def get(self):
