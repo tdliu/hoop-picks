@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/css/flexboxgrid.min.css">
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.css" />
+
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,500,700|Shrikhand" rel="stylesheet">
+
+    <title>Goat Index</title>
+
+    <script src="https://www.gstatic.com/firebasejs/3.6.3/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCyC7WNpwar0SJr5XqxewMsYrISocl12lM",
+        authDomain: "goatindex-e7638.firebaseapp.com",
+        databaseURL: "https://goatindex-e7638.firebaseio.com",
+        storageBucket: "goatindex-e7638.appspot.com",
+        messagingSenderId: "1041806276577"
+      };
+      firebase.initializeApp(config);
+    </script>
+
+    <script src="https://cdn.firebase.com/libs/firebaseui/1.0.0/firebaseui.js"></script>
+
+  </head>
+
+  <body>
+      <div class="row">
+        <div id="firebaseui-auth" class="col-xs-12 col-sm-12 col-lg-12"></div>
+      </div>
+    
+  </body>
+  <script type="text/javascript" src="/js/signin.js"></script>
+
+</html>

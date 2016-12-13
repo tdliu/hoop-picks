@@ -5,11 +5,13 @@ threadsafe: true
 # [START handlers]
 handlers:
 - url: /css
-  static_dir: css
+  static_dir: public/css
 - url: /js
-  static_dir: js
+  static_dir: public/js
 - url: /img
   static_dir: img
+- url: /src
+  static_dir: src
 
 - url: /favicon\.ico
   static_files: favicon.ico

@@ -101,6 +101,10 @@ class MainPage(webapp2.RequestHandler):
         self.response.write(template.render(template_values))
 # [END main_page]
 
+class SignInHandler(webapp2.RequestHandler):
+    def get(self):
+        template = JINJA_ENVIRONMENT.get_template('templates/signin.html')
+        self.response.write(template.render());
 
 class PickHandler(webapp2.RequestHandler):
     def post(self):
@@ -141,6 +145,7 @@ class PickHandler(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
     ('/', MainPage),
+    ('/signin/', SignInHandler),
     ('/pick/', PickHandler),
     #('/db_update', CronDbUpdate),
     ('/live_game/', LiveGameHandler),
