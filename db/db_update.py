@@ -259,7 +259,7 @@ def update_all_nfl_games(date):
 
 def recalculate_goat_index(sport):
     ndb.delete_multi(
-        UserGoatIndex.query().fetch(keys_only = True)
+        UserGoatIndex.query().filter(UserGoatIndex.sport == sport).fetch(keys_only = True)
     )
     q = Pick.query().filter(Pick.sport == sport) # sport == "nba"
     picks = q.fetch()
@@ -276,6 +276,14 @@ def recalculate_goat_index(sport):
                 goat_index.num_correct = goat_index.num_correct + 1
             goat_indexes.append(goat_index)
     ndb.put_multi(goat_indexes)
+
+def update_goat_index_rankings(sport):
+    ugi_query = UserGoatIndex.query().filter(UserGoatIndex.sport == sport)
+    ugi_list = ugi_query.fetch()
+    for ugi in ugi_list:
+        rank = 1 + len(UserGoatIndex.query().filter(UserGoatIndex.accuracy > ugi.accuracy).filter(UserGoatIndex.sport == sport).fetch())
+        ugi.rank = rank
+        ugi.put()
 
 #def insert_nfl_date_to_week():
 #qry = Event.query().filter(Event.sport == "nfl")

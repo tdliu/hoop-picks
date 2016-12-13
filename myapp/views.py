@@ -110,16 +110,26 @@ class UserGoatIndexHandler(webapp2.RequestHandler):
         user = users.get_current_user()
         if user:
             sport = self.request.get('sport')
-            q = UserGoatIndex.query().filter(UserGoatIndex.sport == sport)
+            if sport == "all":
+                q = UserGoatIndex.query().filter(UserGoatIndex.user_id == user.user_id())
+            else:
+                q = UserGoatIndex.query().filter(UserGoatIndex.sport == sport).filter(UserGoatIndex.user_id == user.user_id())
             results = q.fetch()
             if len(results) == 0:
                 responseData = None
             else:
-                user_goat_index = results[0]
+                user_goat_indexes = results
+                num_pick = 0
+                num_correct = 0
+                for ugi in user_goat_indexes:
+                    num_pick = num_pick + ugi.num_pick
+                    num_correct = num_correct + ugi.num_correct
+                accuracy = float(num_correct)/num_pick
                 responseData = {
-                                    'num_pick': user_goat_index.num_pick,
-                                    'num_correct': user_goat_index.num_correct,
-                                    'accuracy': user_goat_index.accuracy
+                                    'num_pick': num_pick,
+                                    'num_correct': num_correct,
+                                    'accuracy': accuracy,
+                                    'rank': rank
 
                 }
         else:
