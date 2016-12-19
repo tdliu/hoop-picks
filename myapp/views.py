@@ -136,3 +136,28 @@ class UserGoatIndexHandler(webapp2.RequestHandler):
             responseData = None
         self.response.out.write(json.dumps(responseData))
 
+
+# THESE ARE THE NEW HANDLERS
+class UserHandler(webapp2.RequestHandler):
+    def get(self):
+        user_id = self.request.get('user_id');
+        #do magic with user_id
+        groups = [
+            {
+                'group_id' : '12345',
+                'sport' : 'NBA',
+                'creator' : 'abcdef',
+                'name' : "Stanford",
+                'password' : 'password123',
+                'password_required' : True,
+                'user_ids' : ['ghijkl', 'mnopqr'],
+                'public' : True
+            }
+        ]
+        responseData = {
+            'goat_indeces' : [],
+            'groups' : groups,
+            'success' : True,
+            'message' : "success",
+        }
+        self.response.out.write(json.dumps(responseData))
