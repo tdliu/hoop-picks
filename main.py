@@ -32,12 +32,13 @@ import json
 
 import jinja2
 import webapp2
-from db.db_update import insert_nba_games
-from db.db_update import update_nba_games
-from db.db_update import recalculate_goat_index
-from db.db_update import insert_nfl_games
+#from db.db_update import insert_nba_games
+#from db.db_update import update_nba_games
+#from db.db_update import recalculate_goat_index
+#from db.db_update import insert_nfl_games
 from myapp.views import *
-from db.urls import *
+#from db.urls import *
+from myapp.db_handlers import *
 
 
 
@@ -150,8 +151,8 @@ app = webapp2.WSGIApplication([
     #('/db_update', CronDbUpdate),
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
-    ('/admin/insert_nba_games/', InsertNBAGames),
-    ('/admin/insert_nfl_games/', InsertNFLGames),
+    ('/insert_nba_games/', InsertNBAGames),
+    ('/insert_nfl_games/', InsertNFLGames),
     ('/cron/recalculate_goat_index/', RecalculateGoatIndex),
     ('/user_goat_index/', UserGoatIndexHandler),
     #('/update_schema/', UpdateSchemaHandler),
