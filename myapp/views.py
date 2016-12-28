@@ -149,6 +149,7 @@ class UserHandler(webapp2.RequestHandler):
         id_token = self.request.headers['Authorization'].split(' ').pop()
         claims = google.oauth2.id_token.verify_firebase_token(id_token, HTTP_REQUEST);
         if not claims:
+            logging.info("AUTHENTICATION FAILED")
             #not authenticated!!! bad!!
 
         user_id = claims['sub'];
