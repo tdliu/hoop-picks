@@ -36,6 +36,8 @@ handlers:
 
 # [START libraries]
 libraries:
+- name: ssl
+  version: 2.7
 - name: webapp2
   version: latest
 - name: jinja2
