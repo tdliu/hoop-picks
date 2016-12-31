@@ -180,6 +180,7 @@ class UserHandler(webapp2.RequestHandler):
 
         user_id = claims['sub'];
         #do magic with user_id
+        
         groups = [
             {
                 'group_id' : '12345',
