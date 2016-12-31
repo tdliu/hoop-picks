@@ -1,6 +1,19 @@
 from google.appengine.ext import ndb
 import math
 
+class User(ndb.Model):
+    # Set user_id as key.
+    #user_id = ndb.StringProperty()
+    groups = ndb.KeyProperty(kind = Group, repeated = True)
+
+class Group(ndb.Model):
+    # Set group name as key.
+    sport = ndb.StringProperty()
+    creator = ndb.KeyProperty(kind = User)
+    password = ndb.StringProperty()
+    password_required = ndb.BooleanProperty(default = False)
+    users = ndb.KeyProperty(kind = User, repeated = True)
+    public = ndb.BooleanProperty(default = True)
 
 class Option(ndb.Model):
     tri_code = ndb.StringProperty()
