@@ -1,0 +1,4 @@
+
+class GoatDateEventGrid extends Component {
+	
+}

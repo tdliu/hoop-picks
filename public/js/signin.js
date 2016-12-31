@@ -1,4 +1,5 @@
 var authUi = new firebaseui.auth.AuthUI(firebase.auth());
+var userIdToken;
 
 var uiConfig = {
 	callbacks: {

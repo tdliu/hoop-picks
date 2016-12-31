@@ -8,10 +8,16 @@ import webapp2
 from google.appengine.api import urlfetch
 import logging
 from models import Option, Outcome, Event, Pick, UserGoatIndex
+
+import google.auth.transport.requests
+import google.oauth2.id_token
+import requests_toolbelt.adapters.appengine
 #from google.appengine.api import memcache
 #import urllib2
 #from xml.etree import ElementTree
 
+requests_toolbelt.adapters.appengine.monkeypatch()
+HTTP_REQUEST = google.auth.transport.requests.Request()
 
 
 class GameHandler(webapp2.RequestHandler):
@@ -138,9 +144,41 @@ class UserGoatIndexHandler(webapp2.RequestHandler):
 
 
 # THESE ARE THE NEW HANDLERS
+
+class GroupCreateHandler(webapp2.RequestHandler):
+    def post(self):
+        id_token = self.request.headers['Authorization'].split(' ').pop()
+        claims = google.oauth2.id_token.verify_firebase_token(id_token, HTTP_REQUEST);
+        if not claims:
+            logging.info("AUTHENTICATION FAILED")
+            #not authenticated!!! bad!!
+
+        user_id = claims['sub'];
+        data = json.loads(self.request.body)
+        name = data['name'];
+        password_required = data['password_required'];
+        password = data['password'] if password_required else None;
+        sport = data['sport'];
+
+        #DO MAGIC 
+        responseData = {
+            'group' : None,
+            'success' : False,
+            'problem_param' : 'name',
+            'message' : "This team name has been taken" 
+        }
+        self.response.out.write(json.dumps(responseData))
+        
+
 class UserHandler(webapp2.RequestHandler):
     def get(self):
-        user_id = self.request.get('user_id');
+        id_token = self.request.headers['Authorization'].split(' ').pop()
+        claims = google.oauth2.id_token.verify_firebase_token(id_token, HTTP_REQUEST);
+        if not claims:
+            logging.info("AUTHENTICATION FAILED")
+            #not authenticated!!! bad!!
+
+        user_id = claims['sub'];
         #do magic with user_id
         groups = [
             {
