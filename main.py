@@ -128,16 +128,19 @@ class PickHandler(webapp2.RequestHandler):
             user_id = user_id,
             event = ndb.Key("Event", game_id)
         )
-        pick.pick = ndb.Key("Option", team_id)
-        logging.info(pick.pick)
-        #pick.score = []
-        pick.num_pick = pick.num_pick + 1
-        pick.put()
         responseData = {
             'user_id': user_id,
-            'team_id': team_id,
             'game_id': game_id,
             'success' : True}
+        # Is user making or removing pick.
+        if team_id:
+            pick.pick = ndb.Key("Option", team_id)
+            pick.num_pick = pick.num_pick + 1
+            responseData['team_id'] = team_id
+        else:
+            pick.pick = None
+        #pick.score = []
+        pick.put()
         self.response.out.write(json.dumps(responseData))
 
 
