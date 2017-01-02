@@ -169,6 +169,13 @@ class GroupCreateHandler(webapp2.RequestHandler):
         }
         self.response.out.write(json.dumps(responseData))
         
+class GroupHandler(webapp2.RequestHandler):
+    def get(self):
+        group_id = self.request.get('group_id');
+
+        
+
+
 
 class UserHandler(webapp2.RequestHandler):
     def get(self):

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 //components
-import CreateGroup from './CreateGroup.jsx'
+import CreateGroup from './CreateGroup.jsx';
+import Group from '/.Group.jsx';
 
 //material ui components
 import {List, ListItem} from 'material-ui/List';
@@ -12,8 +13,6 @@ import Paper from 'material-ui/Paper';
 //icons
 import AddIcon from 'material-ui/svg-icons/content/add-circle-outline';
 import Warning from 'material-ui/svg-icons/alert/error-outline';
-
-import axios from 'axios';
 
 const styles = {
 	paper: {
@@ -60,11 +59,16 @@ class Groups extends Component {
 		);
 	}
 
-	renderGroup(group, i) {
+	renderGroupListItem(group, i) {
 		return (
 			<ListItem primaryText={group.name} key={i}/>
+		);	
+	}
+
+	renderGroup() {
+		return (
+			<Group />
 		);
-		
 	}
 
 	renderNotSignedIn() {
@@ -86,14 +90,16 @@ class Groups extends Component {
 		for (var i = 0; i < this.props.groups.length; i++) {
 			
 			groups.push(
-				this.renderGroup(this.props.groups[i], i)
+				this.renderGroupListItem(this.props.groups[i], i)
 			);
 		}
 
 		return (
 			<Paper style={styles.paper}>
+				{ this.renderCreateGroupButton() }
+
 				<List>
-					{ this.renderCreateGroupButton() }
+					
 					<Subheader>Your Groups</Subheader>
 					{ groups }
 				</List>
@@ -104,7 +110,8 @@ class Groups extends Component {
 	renderCreateGroup() {
 		return (
 			<CreateGroup 
-				currentUser={this.props.currentUser}
+				currentUser={ this.props.currentUser }
+				currentUserToken={ this.props.currentUserToken }
 			/>
 		);
 	}

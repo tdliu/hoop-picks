@@ -19,7 +19,7 @@ var uiConfig = {
 };
 
 function handleAuthStateChanged(user) {
-	console.log('auth state changed');
+	console.log('auth state changed on signin page');
 }
 
 authUi.start('#firebaseui-auth', uiConfig);

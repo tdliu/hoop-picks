@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 
+import ApiConnector from '../ApiConnector.jsx';
+
 //material ui components
 import RaisedButton from 'material-ui/RaisedButton';
 import Paper from 'material-ui/Paper';
@@ -10,10 +12,6 @@ import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 
 import CircularProgress from 'material-ui/CircularProgress';
-
-//icons
-
-import axios from 'axios';
 
 const styles = {
 	paper: {
@@ -38,6 +36,9 @@ class CreateGroup extends Component {
 			passwordError: "",
 			sport: 1,
 			loading: false,
+			nameValue: null,
+			sportValue: null,
+			passwordValue: null,
 		}
 
 	}
@@ -54,6 +55,7 @@ class CreateGroup extends Component {
 				<div className="col-xs-12 col-sm-12" style={styles.formItem}>
 					<TextField 
 						hintText="Password" 
+						onChange={ e => { this.setState({passwordValue: e.target.value}) } }
 						errorText={ this.state.passwordError }
 					/> 
 				</div>
@@ -66,6 +68,39 @@ class CreateGroup extends Component {
 
 	submit() {
 		this.setState({loading : true});
+		var params = {
+			name:  this.state.nameValue,
+			password_required: this.state.passwordRequired,
+			password: this.state.passwordValue,
+			sport: this.state.sportValue,
+		}
+
+		ApiConnector.createGroup(this.props.currentUserToken, params, res => {
+			console.log(res);
+			if (res.data.success) {
+				
+			}
+			else {
+				if (res.data.problem_param) {
+					if (res.data.problem_param == 'name') {
+						this.setState({
+							nameError: res.data.message,
+							loading: false
+						})
+					}
+					else if (re.data.problem_parapm == 'password') {
+						this.setState({
+							nameError: res.data.message,
+							loading: false
+						})
+					}
+
+				}
+				else {
+
+				}
+			}
+		})
 	}
 
 	renderSubmit() {
@@ -104,6 +139,7 @@ class CreateGroup extends Component {
 						<TextField 
 							hintText="Group Name" 
 							errorText={ this.state.nameError }
+							onChange={ e => { this.setState({nameValue: e.target.value}) } }
 						/>
 					</div>
 					<div className="col-xs-12 col-sm-12" style={styles.formItem}>
@@ -117,7 +153,9 @@ class CreateGroup extends Component {
 					
 					<div className="col-xs-12 col-sm-12" style={styles.formItem}>
 						Sport
-						<DropDownMenu value={this.state.sport} onChange={this.handleChange}>
+						<DropDownMenu 
+							value={this.state.sport} 
+							onChange={ e => { this.setState({sportValue: e.target.value}) } }>
 				          <MenuItem value={1} primaryText="NBA" />
 				        </DropDownMenu>
 
