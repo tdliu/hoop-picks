@@ -115,7 +115,7 @@ class PickHandler(webapp2.RequestHandler):
         #sport = data['sport']
         sport = game_id[:3] # temporary solution
         team_id = data['team_id']
-        logging.info(user_id)
+        #logging.info(user_id)
         # Check if game has started
         if (datetime.datetime.utcnow() > ndb.Key("Event", game_id).get().start_time): # we don't want the user to see the change
             responseData = { 'success' : False, 'message': "Pick submitted after start time." }
