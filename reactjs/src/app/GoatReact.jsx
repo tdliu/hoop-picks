@@ -62,24 +62,27 @@ class App extends Component {
 			})
 
 			user.getToken().then( iDToken => {
+				console.log(iDToken)
 				this.setState({
 					currentUserToken : iDToken,
 				})
-				console.log("id token: ", iDToken)
 
-				ApiConnector.getUser(user, iDToken, res => {
+				ApiConnector.getUser(iDToken, res => {
 					console.log("USER: ", res)
 					this.setState({
 						user_groups : res.data.groups,
 						user_goat_indeces : res.data.goat_indeces,
 					})
 				})
+			})
+			.catch(function(error) {
+				console.log(error);
 			});
 		 } 
 		 else {
-			console.log("changed: not signed in")
 			this.setState({
-				currentUser: user,
+				currentUser: null,
+				currentUserToken: null
 			})
 		  }
 	}
@@ -130,6 +133,7 @@ class App extends Component {
 				<div className="col-xs-12 col-sm-12 col-lg-8">
 					<GoatDateEventGrid 
 						currentUser= { this.state.currentUser } 
+						currentUserToken = { this.state.currentUserToken }
 						snackbarAlert={ message => {this.snackbarAlert(message) } } 
 					/>
 				</div>
@@ -147,6 +151,7 @@ class App extends Component {
 				<div className="col-xs-12 col-sm-12 col-lg-8">
 					<Groups 
 						currentUser={ this.state.currentUser }
+						currentUserToken={ this.state.currentUserToken }
 						groups={ this.state.user_groups }
 					/>
 				</div>
@@ -162,7 +167,11 @@ class App extends Component {
 		return (
 			<MuiThemeProvider>
 			<div>
-				<GoatAppBar currentUser={ this.state.currentUser } onSignOut={ () => { this.handleSignOut() }}/>
+				<GoatAppBar 
+					currentUser={ this.state.currentUser } 
+					currentUserToken={ this.state.currentUserToken }
+					onSignOut={ () => { this.handleSignOut() }}
+				/>
 
 				<BottomNavigation selectedIndex={this.state.navIndex}>
 				  <BottomNavigationItem
@@ -207,3 +216,4 @@ ReactDOM.render(
   <App />,
   document.getElementById('app')
 );
+
