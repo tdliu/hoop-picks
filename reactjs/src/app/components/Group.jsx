@@ -7,27 +7,15 @@ class Group extends Component {
 	constructor(props) {
 		super(props);
 
-		
 
 	}
 
 	renderMemebers() {
 
-
-		return (
-
-
-		);
 	}
 
 	render() {
-		return (
-			<List>
-				<Subheader>Group Members</Subheader>
-				{ this.renderMembers() }
-			</List>
-
-		);
+		
 	}
 }
 

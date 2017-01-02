@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 //components
 import CreateGroup from './CreateGroup.jsx';
-import Group from '/.Group.jsx';
+import Group from './Group.jsx';
 
 //material ui components
 import {List, ListItem} from 'material-ui/List';
