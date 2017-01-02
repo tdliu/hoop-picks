@@ -99,7 +99,6 @@ class Groups extends Component {
 				{ this.renderCreateGroupButton() }
 
 				<List>
-					
 					<Subheader>Your Groups</Subheader>
 					{ groups }
 				</List>
@@ -133,3 +132,4 @@ class Groups extends Component {
 }
 
 export default Groups;
+

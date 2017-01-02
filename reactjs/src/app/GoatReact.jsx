@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import SvgIcon from 'material-ui/SvgIcon';
+
 import GoatAppBar from './components/GoatAppBar.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+
 import Groups from './components/Groups.jsx';
 import GoatDateEventGrid from './components/GoatDateEventGrid.jsx';
+import DebugPanel from './components/DebugPanel.jsx'
 
 import firebase from 'firebase';
 import firebaseui from 'firebaseui';
@@ -16,6 +18,7 @@ import ApiConnector from './ApiConnector.jsx';
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
 
+import SvgIcon from 'material-ui/SvgIcon';
 import AccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ViewComfy from 'material-ui/svg-icons/image/view-comfy';
 import ViewCarousel from 'material-ui/svg-icons/action/view-carousel';
@@ -43,6 +46,7 @@ class App extends Component {
 			snackbarMessage : "",
 			navIndex : 0,
 			user_groups: [],
+			debugUrl: null,
 		}	
 	}
 
@@ -167,6 +171,8 @@ class App extends Component {
 		return (
 			<MuiThemeProvider>
 			<div>
+				<DebugPanel firebaseToken={ this.state.currentUserToken } />
+				
 				<GoatAppBar 
 					currentUser={ this.state.currentUser } 
 					currentUserToken={ this.state.currentUserToken }
@@ -207,13 +213,19 @@ class App extends Component {
 				/>
 
 			</div>
+			
 		  </MuiThemeProvider>
 		);
 	};
 }
 
+function makeRequest(url) {
+	console.log(url);
+}
+
 ReactDOM.render(
-  <App />,
+	<App />
+  ,
   document.getElementById('app')
 );
 

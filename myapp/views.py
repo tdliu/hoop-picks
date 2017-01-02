@@ -148,7 +148,6 @@ class UserGoatIndexHandler(webapp2.RequestHandler):
 class GroupCreateHandler(webapp2.RequestHandler):
     def post(self):
         id_token = self.request.headers['Authorization'].split(' ').pop()
-        claims = google.oauth2.id_token.verify_firebase_token(id_token, HTTP_REQUEST);
         if not claims:
             logging.info("AUTHENTICATION FAILED")
             #not authenticated!!! bad!!
@@ -172,6 +171,7 @@ class GroupCreateHandler(webapp2.RequestHandler):
 
 class UserHandler(webapp2.RequestHandler):
     def get(self):
+        logging.info(self.request.headers);
         id_token = self.request.headers['Authorization'].split(' ').pop()
         claims = google.oauth2.id_token.verify_firebase_token(id_token, HTTP_REQUEST);
         if not claims:
