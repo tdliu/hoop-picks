@@ -71,23 +71,13 @@
 	
 	var _GoatAppBar2 = _interopRequireDefault(_GoatAppBar);
 	
+	var _GoatNavigation = __webpack_require__(/*! ./components/GoatNavigation.jsx */ 642);
+	
+	var _GoatNavigation2 = _interopRequireDefault(_GoatNavigation);
+	
 	var _Snackbar = __webpack_require__(/*! material-ui/Snackbar */ 413);
 	
 	var _Snackbar2 = _interopRequireDefault(_Snackbar);
-	
-	var _BottomNavigation = __webpack_require__(/*! material-ui/BottomNavigation */ 417);
-	
-	var _LinearProgress = __webpack_require__(/*! material-ui/LinearProgress */ 420);
-	
-	var _LinearProgress2 = _interopRequireDefault(_LinearProgress);
-	
-	var _Paper = __webpack_require__(/*! material-ui/Paper */ 380);
-	
-	var _Paper2 = _interopRequireDefault(_Paper);
-	
-	var _CircularProgress = __webpack_require__(/*! material-ui/CircularProgress */ 422);
-	
-	var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
 	
 	var _Groups = __webpack_require__(/*! ./components/Groups.jsx */ 424);
 	
@@ -105,6 +95,12 @@
 	
 	var _YourGOATIndex2 = _interopRequireDefault(_YourGOATIndex);
 	
+	var _accountCircle = __webpack_require__(/*! material-ui/svg-icons/action/account-circle */ 412);
+	
+	var _accountCircle2 = _interopRequireDefault(_accountCircle);
+	
+	var _colors = __webpack_require__(/*! material-ui/styles/colors */ 280);
+	
 	var _firebase = __webpack_require__(/*! firebase */ 626);
 	
 	var _firebase2 = _interopRequireDefault(_firebase);
@@ -121,32 +117,6 @@
 	
 	var _reactTapEventPlugin2 = _interopRequireDefault(_reactTapEventPlugin);
 	
-	var _SvgIcon = __webpack_require__(/*! material-ui/SvgIcon */ 378);
-	
-	var _SvgIcon2 = _interopRequireDefault(_SvgIcon);
-	
-	var _accountCircle = __webpack_require__(/*! material-ui/svg-icons/action/account-circle */ 412);
-	
-	var _accountCircle2 = _interopRequireDefault(_accountCircle);
-	
-	var _viewComfy = __webpack_require__(/*! material-ui/svg-icons/image/view-comfy */ 638);
-	
-	var _viewComfy2 = _interopRequireDefault(_viewComfy);
-	
-	var _viewCarousel = __webpack_require__(/*! material-ui/svg-icons/action/view-carousel */ 639);
-	
-	var _viewCarousel2 = _interopRequireDefault(_viewCarousel);
-	
-	var _group = __webpack_require__(/*! material-ui/svg-icons/social/group */ 640);
-	
-	var _group2 = _interopRequireDefault(_group);
-	
-	var _trendingUp = __webpack_require__(/*! material-ui/svg-icons/Action/trending-up */ 641);
-	
-	var _trendingUp2 = _interopRequireDefault(_trendingUp);
-	
-	var _colors = __webpack_require__(/*! material-ui/styles/colors */ 280);
-	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -154,6 +124,18 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	//---------- My Components ----------
+	
+	
+	//-------- Material UI Components ------
+	
+	
+	//------------- SECTIONS ------------------
+	
+	
+	//-----------ICONS --------------
+	
 	
 	(0, _reactTapEventPlugin2.default)();
 	
@@ -175,12 +157,6 @@
 			height: 50
 		}
 	});
-	
-	var styles = {
-		navigation: {
-			boxShadow: "inset 0 7px 9px -7px rgba(0,0,0,0.4)"
-		}
-	};
 	
 	var App = function (_Component) {
 		_inherits(App, _Component);
@@ -284,9 +260,9 @@
 			key: 'renderMainContent',
 			value: function renderMainContent() {
 				if (this.state.navIndex == 0) {
-					return this.renderGames();
-				} else if (this.state.navIndex == 1) {
 					return this.renderLeaderboards();
+				} else if (this.state.navIndex == 1) {
+					return this.renderGames();
 				} else if (this.state.navIndex == 2) {
 					return this.renderGroups();
 				} else if (this.state.navIndex == 3) {
@@ -335,28 +311,6 @@
 				);
 			}
 		}, {
-			key: 'renderYourGOATIndexIcon',
-			value: function renderYourGOATIndexIcon() {
-				if (this.state.is_loading_user) {
-					return _react2.default.createElement(_CircularProgress2.default, { size: 20, thickness: 2 });
-				} else if (this.state.user_goat_indeces) {
-					var percent = this.state.user_goat_indeces.overall.correct / this.state.user_goat_indeces.overall.total;
-					percent *= 100;
-					return _react2.default.createElement(
-						'span',
-						null,
-						_react2.default.createElement(
-							'b',
-							null,
-							percent,
-							'%'
-						)
-					);
-				} else {
-					return _react2.default.createElement(_trendingUp2.default, null);
-				}
-			}
-		}, {
 			key: 'renderYourGOATIndex',
 			value: function renderYourGOATIndex() {
 				return _react2.default.createElement(_YourGOATIndex2.default, {
@@ -384,38 +338,14 @@
 								_this6.handleSignOut();
 							}
 						}),
-						_react2.default.createElement(
-							_BottomNavigation.BottomNavigation,
-							{ style: styles.navigation, selectedIndex: this.state.navIndex },
-							_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
-								label: 'Games',
-								icon: _react2.default.createElement(_viewComfy2.default, null),
-								onTouchTap: function onTouchTap() {
-									return _this6.nav(0);
-								}
-							}),
-							_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
-								label: 'Leaderboards',
-								icon: _react2.default.createElement(_accountCircle2.default, null),
-								onTouchTap: function onTouchTap() {
-									return _this6.nav(1);
-								}
-							}),
-							_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
-								label: 'Groups',
-								icon: _react2.default.createElement(_group2.default, null),
-								onTouchTap: function onTouchTap() {
-									return _this6.nav(2);
-								}
-							}),
-							_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
-								label: 'Your Index',
-								icon: this.renderYourGOATIndexIcon(),
-								onTouchTap: function onTouchTap() {
-									return _this6.nav(3);
-								}
-							})
-						),
+						_react2.default.createElement(_GoatNavigation2.default, {
+							nav: function nav(index) {
+								_this6.nav(index);
+							},
+							goat_indeces: this.state.user_goat_indeces,
+							is_loading_user: this.state.is_loading_user,
+							navIndex: this.state.navIndex
+						}),
 						this.renderMainContent(),
 						_react2.default.createElement(_Snackbar2.default, {
 							open: this.state.snackbarOpen,
@@ -30395,9 +30325,6 @@
 			_this.state = {
 				rightDrawerOpen: false
 			};
-	
-			console.log("app bar constructor current user: ", props.currentUser);
-	
 			return _this;
 		}
 	
@@ -30489,24 +30416,32 @@
 						{ style: styles.bar, zDepth: 2 },
 						_react2.default.createElement(
 							'div',
-							{ className: 'row bottom-xs' },
+							{ className: 'row bottom-xs between-lg' },
 							_react2.default.createElement(
 								'div',
-								{ className: 'col-xs-3' },
-								_react2.default.createElement('img', { src: '/img/goat_medium.png', height: '100px', width: '100px', style: styles.goat })
-							),
-							_react2.default.createElement(
-								'div',
-								{ className: 'col-xs-6' },
+								{ className: 'col-xs-9 col-lg-4' },
 								_react2.default.createElement(
-									'span',
-									{ style: styles.title },
-									' GOAT Index '
+									'div',
+									{ className: 'row bottom-xs' },
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-xs-4 col-lg-3' },
+										_react2.default.createElement('img', { src: '/img/goat_medium.png', height: '100px', width: '100px', style: styles.goat })
+									),
+									_react2.default.createElement(
+										'div',
+										{ className: 'col-xs-8 col-lg-9' },
+										_react2.default.createElement(
+											'span',
+											{ style: styles.title },
+											' GOAT Index '
+										)
+									)
 								)
 							),
 							_react2.default.createElement(
 								'div',
-								{ className: 'col-xs-2' },
+								{ className: 'col-xs-2 col-lg-1' },
 								this.renderRightButton()
 							)
 						)
@@ -72178,6 +72113,175 @@
 	ActionTrendingUp.muiName = 'SvgIcon';
 	
 	exports.default = ActionTrendingUp;
+
+/***/ },
+/* 642 */
+/*!***********************************************!*\
+  !*** ./src/app/components/GoatNavigation.jsx ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+		value: true
+	});
+	
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _BottomNavigation = __webpack_require__(/*! material-ui/BottomNavigation */ 417);
+	
+	var _CircularProgress = __webpack_require__(/*! material-ui/CircularProgress */ 422);
+	
+	var _CircularProgress2 = _interopRequireDefault(_CircularProgress);
+	
+	var _trendingUp = __webpack_require__(/*! material-ui/svg-icons/Action/trending-up */ 641);
+	
+	var _trendingUp2 = _interopRequireDefault(_trendingUp);
+	
+	var _viewComfy = __webpack_require__(/*! material-ui/svg-icons/image/view-comfy */ 638);
+	
+	var _viewComfy2 = _interopRequireDefault(_viewComfy);
+	
+	var _viewCarousel = __webpack_require__(/*! material-ui/svg-icons/action/view-carousel */ 639);
+	
+	var _viewCarousel2 = _interopRequireDefault(_viewCarousel);
+	
+	var _group = __webpack_require__(/*! material-ui/svg-icons/social/group */ 640);
+	
+	var _group2 = _interopRequireDefault(_group);
+	
+	var _colors = __webpack_require__(/*! material-ui/styles/colors */ 280);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+	
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+	
+	var NAV_INDEX_LIVE = 0;
+	var NAV_INDEX_GAMES = 1;
+	var NAV_INDEX_GROUPS = 2;
+	var NAV_INDEX_GOAT_INDEX = 3;
+	
+	var styles = {
+		navigation: {
+			boxShadow: "inset 0 7px 9px -7px rgba(0,0,0,0.4)"
+		},
+		live: {
+			color: 'grey',
+			fontWeight: '700'
+		},
+		liveSelected: {
+			color: _colors.pink800,
+			fontWeight: '700'
+		},
+		index: {}
+	};
+	
+	var GoatNavigation = function (_Component) {
+		_inherits(GoatNavigation, _Component);
+	
+		function GoatNavigation(props) {
+			_classCallCheck(this, GoatNavigation);
+	
+			return _possibleConstructorReturn(this, (GoatNavigation.__proto__ || Object.getPrototypeOf(GoatNavigation)).call(this, props));
+		}
+	
+		_createClass(GoatNavigation, [{
+			key: 'renderYourGOATIndexIcon',
+			value: function renderYourGOATIndexIcon() {
+				if (this.props.is_loading_user) {
+					return _react2.default.createElement(_CircularProgress2.default, { size: 20, thickness: 2 });
+				} else if (this.props.goat_indeces) {
+					var percent = this.props.goat_indeces.overall.correct / this.props.goat_indeces.overall.total;
+					percent *= 100;
+					if (this.props.navIndex == NAV_INDEX_GOAT_INDEX) {
+						return _react2.default.createElement(
+							'div',
+							{ style: styles.liveSelected },
+							percent,
+							'%'
+						);
+					} else {
+						return _react2.default.createElement(
+							'div',
+							{ style: styles.live },
+							percent,
+							'%'
+						);
+					}
+				} else {
+					return _react2.default.createElement(_trendingUp2.default, null);
+				}
+			}
+		}, {
+			key: 'renderLiveIcon',
+			value: function renderLiveIcon() {
+				if (this.props.navIndex == NAV_INDEX_LIVE) {
+					return _react2.default.createElement(
+						'div',
+						{ style: styles.liveSelected },
+						'LIVE'
+					);
+				} else {
+					return _react2.default.createElement(
+						'div',
+						{ style: styles.live },
+						'LIVE'
+					);
+				}
+			}
+		}, {
+			key: 'render',
+			value: function render() {
+				var _this2 = this;
+	
+				return _react2.default.createElement(
+					_BottomNavigation.BottomNavigation,
+					{ style: styles.navigation, selectedIndex: this.props.navIndex },
+					_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
+						label: 'Scores',
+						icon: this.renderLiveIcon(),
+						onTouchTap: function onTouchTap() {
+							return _this2.props.nav(NAV_INDEX_LIVE);
+						}
+					}),
+					_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
+						label: 'Games',
+						icon: _react2.default.createElement(_viewComfy2.default, null),
+						onTouchTap: function onTouchTap() {
+							return _this2.props.nav(NAV_INDEX_GAMES);
+						}
+					}),
+					_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
+						label: 'Groups',
+						icon: _react2.default.createElement(_group2.default, null),
+						onTouchTap: function onTouchTap() {
+							return _this2.props.nav(NAV_INDEX_GROUPS);
+						}
+					}),
+					_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
+						label: 'Your Index',
+						icon: this.renderYourGOATIndexIcon(),
+						onTouchTap: function onTouchTap() {
+							return _this2.props.nav(NAV_INDEX_GOAT_INDEX);
+						}
+					})
+				);
+			}
+		}]);
+	
+		return GoatNavigation;
+	}(_react.Component);
+	
+	exports.default = GoatNavigation;
 
 /***/ }
 /******/ ]);

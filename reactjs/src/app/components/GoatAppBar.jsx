@@ -46,9 +46,6 @@ class GoatAppBar extends Component {
 	    this.state = {
 	      rightDrawerOpen: false,
 	    };
-
-	    console.log("app bar constructor current user: ", props.currentUser)
-	    
 	}
 
 	componentDidMount() {
@@ -117,14 +114,18 @@ class GoatAppBar extends Component {
 		return (
 			<div>
 				<Paper style={styles.bar} zDepth={2}>
-					<div className="row bottom-xs">
-						<div className="col-xs-3">
-							<img src="/img/goat_medium.png" height="100px" width="100px" style={styles.goat}/>
+					<div className="row bottom-xs between-lg">
+						<div className="col-xs-9 col-lg-4">
+							<div className="row bottom-xs">
+								<div className="col-xs-4 col-lg-3">
+									<img src="/img/goat_medium.png" height="100px" width="100px" style={styles.goat}/>
+								</div>
+								<div className="col-xs-8 col-lg-9">
+									<span style={styles.title}> GOAT Index </span>
+								</div>
+							</div>
 						</div>
-						<div className="col-xs-6">
-							<span style={styles.title}> GOAT Index </span>
-						</div>
-						<div className="col-xs-2">
+						<div className="col-xs-2 col-lg-1">
 							{ this.renderRightButton() }
 						</div>
 					</div>

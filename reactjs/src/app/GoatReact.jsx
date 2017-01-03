@@ -3,17 +3,23 @@ import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
+//---------- My Components ----------
 import GoatAppBar from './components/GoatAppBar.jsx';
-import Snackbar from 'material-ui/Snackbar';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
-import LinearProgress from 'material-ui/LinearProgress';
-import Paper from 'material-ui/Paper';
-import CircularProgress from 'material-ui/CircularProgress';
+import GoatNavigation from './components/GoatNavigation.jsx';
 
+//-------- Material UI Components ------
+import Snackbar from 'material-ui/Snackbar';
+
+//------------- SECTIONS ------------------
 import Groups from './components/Groups.jsx';
 import GoatDateEventGrid from './components/GoatDateEventGrid.jsx';
 import DebugPanel from './components/DebugPanel.jsx'
 import YourGOATIndex from './components/YourGOATIndex.jsx';
+
+//-----------ICONS --------------
+import AccountCircle from 'material-ui/svg-icons/action/account-circle';
+
+import {pink800} from 'material-ui/styles/colors';
 
 import firebase from 'firebase';
 import firebaseui from 'firebaseui';
@@ -22,15 +28,6 @@ import ApiConnector from './ApiConnector.jsx';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-
-import SvgIcon from 'material-ui/SvgIcon';
-import AccountCircle from 'material-ui/svg-icons/action/account-circle';
-import ViewComfy from 'material-ui/svg-icons/image/view-comfy';
-import ViewCarousel from 'material-ui/svg-icons/action/view-carousel';
-import GroupsIcon from 'material-ui/svg-icons/social/group';
-import Index from 'material-ui/svg-icons/Action/trending-up';
-
-import {pink800} from 'material-ui/styles/colors';
 
 // Initialize Firebase
 var config = {
@@ -50,12 +47,6 @@ const muiTheme = getMuiTheme({
     height: 50,
   },
 });
-
-const styles = {
-	navigation: {
-		boxShadow: "inset 0 7px 9px -7px rgba(0,0,0,0.4)"
-	}
-}
 
 class App extends Component {
 	constructor() {
@@ -144,10 +135,10 @@ class App extends Component {
 
 	renderMainContent() {
 		if (this.state.navIndex == 0) {
-			return this.renderGames();
+			return this.renderLeaderboards()
 		}
 		else if (this.state.navIndex == 1) {
-			return this.renderLeaderboards()
+			return this.renderGames();
 		}
 		else if (this.state.navIndex == 2) {
 			return this.renderGroups()
@@ -189,20 +180,6 @@ class App extends Component {
 		);
 	}
 
-	renderYourGOATIndexIcon() {
-		if (this.state.is_loading_user) {
-			return <CircularProgress size={20} thickness={2} />
-		}
-		else if (this.state.user_goat_indeces) {
-			var percent = this.state.user_goat_indeces.overall.correct / this.state.user_goat_indeces.overall.total;
-			percent *= 100;
-			return <span><b>{ percent }%</b></span>;
-		}
-		else {
-			return <Index />
-		}
-	}
-
 	renderYourGOATIndex() {
 		return (
 			<YourGOATIndex 
@@ -220,36 +197,17 @@ class App extends Component {
 		return (
 			<MuiThemeProvider muiTheme={muiTheme}>
 			<div>
-
 				<GoatAppBar 
 					currentUser={ this.state.currentUser } 
 					currentUserToken={ this.state.currentUserToken }
 					onSignOut={ () => { this.handleSignOut() }}
 				/>
-
-				<BottomNavigation style={styles.navigation} selectedIndex={this.state.navIndex}>
-
-					<BottomNavigationItem
-						label="Games"
-						icon={<ViewComfy />}
-						onTouchTap={() => this.nav(0)}
-					/>
-					<BottomNavigationItem
-						label="Leaderboards"
-						icon={<AccountCircle />}
-						onTouchTap={() => this.nav(1)}
-					/>
-					<BottomNavigationItem
-						label="Groups"
-						icon={<GroupsIcon />}
-						onTouchTap={() => this.nav(2)}
-					/>
-					<BottomNavigationItem
-						label="Your Index"
-						icon={ this.renderYourGOATIndexIcon() }
-						onTouchTap={() => this.nav(3)}
-					/>
-				</BottomNavigation>				
+				<GoatNavigation 
+					nav= { index => {this.nav(index) } }
+					goat_indeces= { this.state.user_goat_indeces }
+					is_loading_user= { this.state.is_loading_user }
+					navIndex= { this.state.navIndex }
+				/>
 
 				{ this.renderMainContent() }
 
