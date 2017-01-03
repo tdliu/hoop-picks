@@ -211,7 +211,7 @@ class App extends Component {
 
 				{ this.renderMainContent() }
 
-				{/*<DebugPanel firebaseToken={ this.state.currentUserToken } /> */}
+				<DebugPanel firebaseToken={ this.state.currentUserToken } />
 
 				<Snackbar
 					open= { this.state.snackbarOpen }

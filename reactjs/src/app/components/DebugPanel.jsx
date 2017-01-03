@@ -49,64 +49,78 @@ class DebugPanel extends Component {
 	render() {
 		return (
 			
-			<Paper>
-				<h4 style={{padding:8}}> DEBUG </h4>
-				<RaisedButton
-					label="Log current options"
-					onClick={ () => { console.log(this.state) } }
-					style={{marginBottom: 16, margin: 16}}
-				/>
-				<RadioButtonGroup 
-					name="which_token" 
-					defaultSelected="debugToken"
-					onChange= { (event, value) => { this.setState({which_token: value}) } }
-					>
+			<Paper style={{ padding: 16, marginTop: 8 }}>
+				<div className="row">
+					<div className="col-xs-6 offset-xs-1">
+						<h4> DEBUG </h4>
+					</div>
+					<div class="col-xs-12">
+						<RaisedButton
+							label="Log current options"
+							onClick={ () => { console.log(this.state) } }
+							style={{marginBottom: 16, margin: 16}}
+						/>
+					</div>
+					<div className="col-xs-12">
+						<RadioButtonGroup 
+							name="which_token" 
+							defaultSelected="debugToken"
+							onChange= { (event, value) => { this.setState({which_token: value}) } }
+							>
 
-					<RadioButton
-						value="debugToken"
-						label="Use Debug Token (12345)"
-						style={ {paddingLeft: 16} }
-					/>
-					<RadioButton
-						value="firebaseToken"
-						label="Use Firebase Auth Token"
-						style={ {paddingLeft: 16} }
-					/>
-				</RadioButtonGroup>
+							<RadioButton
+								value="debugToken"
+								label="Use Debug Token (12345)"
+								style={ {marginLeft: 16} }
+							/>
+							<RadioButton
+								value="firebaseToken"
+								label="Use Firebase Auth Token"
+								style={ {marginLeft: 16} }
+							/>
+						</RadioButtonGroup>
+					</div>
+					<div className="col-xs-12">
+						<TextField 
+							hintText="get url" 
+							onChange={ e => { this.setState({get_url: e.target.value}) } }
+							errorText="example: /game/?sport=nba&date=20150404"
+							errorStyle={ {color: 'black' }}
+						/>
+					</div>
+					<div className="col-xs-12">
+						<RaisedButton
+							label="Submit GET Request"
+							onClick={ () => {  this.submitGet() } }
+						/>
+					</div>
+					<div className="col-xs-12">
+						<TextField 
+							hintText="POST url"
+							onChange={ e => { this.setState({post_url: e.target.value}) } }
+							errorText="example: /group/create/"
+							errorStyle={ {color: 'black' }}
+						/>
+					</div>
+					<div className="col-xs-12">
+						<TextField 
+							hintText="POST args"
+							onChange={ e => { this.setState({post_args: e.target.value}) } }
+							errorText="{ sport: 'nba', date: '20161414'}"
+							errorStyle={ {color: 'black' }}
+						/>
+					
+					</div>
+					<div className="col-xs-12">
+						<RaisedButton
+							label="Submit POST Request"
+							onClick={ () => { this.submitPost() } }
+						/>
+					
+					</div>
 
-
-				<TextField 
-					hintText="get url" 
-					onChange={ e => { this.setState({get_url: e.target.value}) } }
-					style={ {margin: 8, paddingTop: 16} }
-					errorText="example: /game/?sport=nba&date=20150404"
-					errorStyle={ {color: 'black' }}
-				/>
-				<RaisedButton
-					label="Submit GET Request"
-					onClick={ () => {  this.submitGet() } }
-					style={{margin: 16}}
-				/>
-
-				<TextField 
-					hintText="POST url"
-					onChange={ e => { this.setState({post_url: e.target.value}) } }
-					style={ {margin: 8} }
-					errorText="example: /group/create/"
-					errorStyle={ {color: 'black' }}
-				/>
-				<TextField 
-					hintText="POST args"
-					onChange={ e => { this.setState({post_args: e.target.value}) } }
-					style={ {margin: 8} }
-					errorText="{ sport: 'nba', date: '20161414'}"
-					errorStyle={ {color: 'black' }}
-				/>
-				<RaisedButton
-					label="Submit POST Request"
-					onClick={ () => { this.submitPost() } }
-					style={{margin: 16}}
-				/>
+					
+			</div>
 			</Paper>
 			
 		);

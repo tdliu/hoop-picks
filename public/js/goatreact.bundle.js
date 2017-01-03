@@ -347,6 +347,7 @@
 							navIndex: this.state.navIndex
 						}),
 						this.renderMainContent(),
+						_react2.default.createElement(_DebugPanel2.default, { firebaseToken: this.state.currentUserToken }),
 						_react2.default.createElement(_Snackbar2.default, {
 							open: this.state.snackbarOpen,
 							message: this.state.snackbarMessage,
@@ -67759,80 +67760,111 @@
 	
 				return _react2.default.createElement(
 					_Paper2.default,
-					null,
+					{ style: { padding: 16, marginTop: 8 } },
 					_react2.default.createElement(
-						'h4',
-						{ style: { padding: 8 } },
-						' DEBUG '
-					),
-					_react2.default.createElement(_RaisedButton2.default, {
-						label: 'Log current options',
-						onClick: function onClick() {
-							console.log(_this2.state);
-						},
-						style: { marginBottom: 16, margin: 16 }
-					}),
-					_react2.default.createElement(
-						_RadioButton.RadioButtonGroup,
-						{
-							name: 'which_token',
-							defaultSelected: 'debugToken',
-							onChange: function onChange(event, value) {
-								_this2.setState({ which_token: value });
-							}
-						},
-						_react2.default.createElement(_RadioButton.RadioButton, {
-							value: 'debugToken',
-							label: 'Use Debug Token (12345)',
-							style: { paddingLeft: 16 }
-						}),
-						_react2.default.createElement(_RadioButton.RadioButton, {
-							value: 'firebaseToken',
-							label: 'Use Firebase Auth Token',
-							style: { paddingLeft: 16 }
-						})
-					),
-					_react2.default.createElement(_TextField2.default, {
-						hintText: 'get url',
-						onChange: function onChange(e) {
-							_this2.setState({ get_url: e.target.value });
-						},
-						style: { margin: 8, paddingTop: 16 },
-						errorText: 'example: /game/?sport=nba&date=20150404',
-						errorStyle: { color: 'black' }
-					}),
-					_react2.default.createElement(_RaisedButton2.default, {
-						label: 'Submit GET Request',
-						onClick: function onClick() {
-							_this2.submitGet();
-						},
-						style: { margin: 16 }
-					}),
-					_react2.default.createElement(_TextField2.default, {
-						hintText: 'POST url',
-						onChange: function onChange(e) {
-							_this2.setState({ post_url: e.target.value });
-						},
-						style: { margin: 8 },
-						errorText: 'example: /group/create/',
-						errorStyle: { color: 'black' }
-					}),
-					_react2.default.createElement(_TextField2.default, {
-						hintText: 'POST args',
-						onChange: function onChange(e) {
-							_this2.setState({ post_args: e.target.value });
-						},
-						style: { margin: 8 },
-						errorText: '{ sport: \'nba\', date: \'20161414\'}',
-						errorStyle: { color: 'black' }
-					}),
-					_react2.default.createElement(_RaisedButton2.default, {
-						label: 'Submit POST Request',
-						onClick: function onClick() {
-							_this2.submitPost();
-						},
-						style: { margin: 16 }
-					})
+						'div',
+						{ className: 'row' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-6 offset-xs-1' },
+							_react2.default.createElement(
+								'h4',
+								null,
+								' DEBUG '
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ 'class': 'col-xs-12' },
+							_react2.default.createElement(_RaisedButton2.default, {
+								label: 'Log current options',
+								onClick: function onClick() {
+									console.log(_this2.state);
+								},
+								style: { marginBottom: 16, margin: 16 }
+							})
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-12' },
+							_react2.default.createElement(
+								_RadioButton.RadioButtonGroup,
+								{
+									name: 'which_token',
+									defaultSelected: 'debugToken',
+									onChange: function onChange(event, value) {
+										_this2.setState({ which_token: value });
+									}
+								},
+								_react2.default.createElement(_RadioButton.RadioButton, {
+									value: 'debugToken',
+									label: 'Use Debug Token (12345)',
+									style: { marginLeft: 16 }
+								}),
+								_react2.default.createElement(_RadioButton.RadioButton, {
+									value: 'firebaseToken',
+									label: 'Use Firebase Auth Token',
+									style: { marginLeft: 16 }
+								})
+							)
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-12' },
+							_react2.default.createElement(_TextField2.default, {
+								hintText: 'get url',
+								onChange: function onChange(e) {
+									_this2.setState({ get_url: e.target.value });
+								},
+								errorText: 'example: /game/?sport=nba&date=20150404',
+								errorStyle: { color: 'black' }
+							})
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-12' },
+							_react2.default.createElement(_RaisedButton2.default, {
+								label: 'Submit GET Request',
+								onClick: function onClick() {
+									_this2.submitGet();
+								}
+							})
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-12' },
+							_react2.default.createElement(_TextField2.default, {
+								hintText: 'POST url',
+								onChange: function onChange(e) {
+									_this2.setState({ post_url: e.target.value });
+								},
+								errorText: 'example: /group/create/',
+								errorStyle: { color: 'black' }
+							})
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-12' },
+							_react2.default.createElement(_TextField2.default, {
+								hintText: 'POST args',
+								onChange: function onChange(e) {
+									_this2.setState({ post_args: e.target.value });
+								},
+								errorText: '{ sport: \'nba\', date: \'20161414\'}',
+								errorStyle: { color: 'black' }
+							})
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-12' },
+							_react2.default.createElement(_RaisedButton2.default, {
+								label: 'Submit POST Request',
+								onClick: function onClick() {
+									_this2.submitPost();
+								}
+							})
+						)
+					)
 				);
 			}
 		}]);
