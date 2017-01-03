@@ -49,7 +49,7 @@ class DebugPanel extends Component {
 	render() {
 		return (
 			
-			<Paper style={ {margin: 8} }>
+			<Paper>
 				<h4 style={{padding:8}}> DEBUG </h4>
 				<RaisedButton
 					label="Log current options"

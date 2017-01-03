@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 import GoatAppBar from './components/GoatAppBar.jsx';
 import Snackbar from 'material-ui/Snackbar';
@@ -24,6 +25,8 @@ import ViewComfy from 'material-ui/svg-icons/image/view-comfy';
 import ViewCarousel from 'material-ui/svg-icons/action/view-carousel';
 import GroupsIcon from 'material-ui/svg-icons/social/group';
 
+import {pink800} from 'material-ui/styles/colors';
+
 // Initialize Firebase
 var config = {
 	apiKey: "AIzaSyCyC7WNpwar0SJr5XqxewMsYrISocl12lM",
@@ -33,6 +36,15 @@ var config = {
 	messagingSenderId: "1041806276577"
 };
 firebase.initializeApp(config);
+
+const muiTheme = getMuiTheme({
+  palette: {
+  	primary1Color: pink800,
+  },
+  appBar: {
+    height: 50,
+  },
+});
 
 class App extends Component {
 	constructor() {
@@ -169,10 +181,9 @@ class App extends Component {
 
 	render() {
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={muiTheme}>
 			<div>
-				<DebugPanel firebaseToken={ this.state.currentUserToken } />
-				
+
 				<GoatAppBar 
 					currentUser={ this.state.currentUser } 
 					currentUserToken={ this.state.currentUserToken }
@@ -203,6 +214,8 @@ class App extends Component {
 				</BottomNavigation>
 
 				{ this.renderMainContent() }
+
+				{/*<DebugPanel firebaseToken={ this.state.currentUserToken } /> */}
 
 				<Snackbar
 					open= { this.state.snackbarOpen }
