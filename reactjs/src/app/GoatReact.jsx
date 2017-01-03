@@ -10,6 +10,7 @@ import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigati
 import Groups from './components/Groups.jsx';
 import GoatDateEventGrid from './components/GoatDateEventGrid.jsx';
 import DebugPanel from './components/DebugPanel.jsx'
+import YourGOATIndex from './components/YourGOATIndex.jsx';
 
 import firebase from 'firebase';
 import firebaseui from 'firebaseui';
@@ -24,6 +25,7 @@ import AccountCircle from 'material-ui/svg-icons/action/account-circle';
 import ViewComfy from 'material-ui/svg-icons/image/view-comfy';
 import ViewCarousel from 'material-ui/svg-icons/action/view-carousel';
 import GroupsIcon from 'material-ui/svg-icons/social/group';
+import Index from 'material-ui/svg-icons/Action/trending-up';
 
 import {pink800} from 'material-ui/styles/colors';
 
@@ -139,7 +141,7 @@ class App extends Component {
 			return this.renderGroups()
 		}
 		else if (this.state.navIndex == 3) {
-			return this.renderFeed()
+			return this.renderYourGOATIndex()
 		}
 	}
 
@@ -175,6 +177,27 @@ class App extends Component {
 		);
 	}
 
+	renderYourGOATIndexIcon() {
+		if (this.state.user_goat_indeces) {
+			console.log(this.state.user_goat_indeces)
+			var percent = this.state.user_goat_indeces.overall.correct / this.state.user_goat_indeces.overall.total;
+			percent *= 100;
+			return <span>{ percent }%</span>;	
+		}
+		else {
+			return <Index />
+		}
+	}
+
+	renderYourGOATIndex() {
+		return (
+			<YourGOATIndex 
+				goat_indeces={ this.state.user_goat_indeces }
+			/>
+
+		);
+	}
+
 	renderFeed() {
 
 	}
@@ -207,8 +230,8 @@ class App extends Component {
 					onTouchTap={() => this.nav(2)}
 				  />
 				  <BottomNavigationItem
-					label="Feed"
-					icon={<ViewCarousel />}
+					label="Your Index"
+					icon={ this.renderYourGOATIndexIcon() }
 					onTouchTap={() => this.nav(3)}
 				  />
 				</BottomNavigation>

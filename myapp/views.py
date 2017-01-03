@@ -193,7 +193,16 @@ class UserHandler(webapp2.RequestHandler):
             }
         ]
         responseData = {
-            'goat_indeces' : [],
+            'goat_indeces' : {
+                "overall" : {
+                    'total': 50,
+                    'correct': 34
+                },
+                "NBA" : {
+                    'total': 20,
+                    'correct': 10
+                }
+            },
             'groups' : groups,
             'success' : True,
             'message' : "success",

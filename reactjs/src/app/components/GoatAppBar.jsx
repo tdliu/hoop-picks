@@ -118,7 +118,6 @@ class GoatAppBar extends Component {
 			<div>
 				<Paper style={styles.bar} zDepth={2}>
 					<div className="row bottom-xs">
-						
 						<div className="col-xs-3">
 							<img src="/img/goat_medium.png" height="100px" width="100px" style={styles.goat}/>
 						</div>
