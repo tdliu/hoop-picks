@@ -12,6 +12,14 @@ class YourGOATIndex extends Component {
 		};
 	}
 
+	renderZeroState() {
+		return (
+			<Paper style={ { marginTop: 8, padding: 16 } }>
+				<span style={ {padding: 8 } }>Log In to see your GOAT Index</span>
+			</Paper>
+		);
+	}
+
 	renderOverallIndex() {
 		return (
 			<Paper style={ { marginTop: 8 } }>
@@ -41,9 +49,14 @@ class YourGOATIndex extends Component {
 	}
 
 	render() {
-		return (
-			this.renderOverallIndex()
-		);
+		if (!this.props.goat_indeces) {
+			return this.renderZeroState();
+		}
+		else {
+			return (
+				this.renderOverallIndex()
+			);	
+		}
 	}
 }
 

@@ -6,6 +6,9 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import GoatAppBar from './components/GoatAppBar.jsx';
 import Snackbar from 'material-ui/Snackbar';
 import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+import LinearProgress from 'material-ui/LinearProgress';
+import Paper from 'material-ui/Paper';
+import CircularProgress from 'material-ui/CircularProgress';
 
 import Groups from './components/Groups.jsx';
 import GoatDateEventGrid from './components/GoatDateEventGrid.jsx';
@@ -48,6 +51,12 @@ const muiTheme = getMuiTheme({
   },
 });
 
+const styles = {
+	navigation: {
+		boxShadow: "inset 0 7px 9px -7px rgba(0,0,0,0.4)"
+	}
+}
+
 class App extends Component {
 	constructor() {
 		super();
@@ -61,6 +70,7 @@ class App extends Component {
 			navIndex : 0,
 			user_groups: [],
 			debugUrl: null,
+			is_loading_user: false,
 		}	
 	}
 
@@ -90,8 +100,10 @@ class App extends Component {
 					this.setState({
 						user_groups : res.data.groups,
 						user_goat_indeces : res.data.goat_indeces,
+						is_loading_user: false,
 					})
 				})
+				this.setState({ is_loading_user: true })
 			})
 			.catch(function(error) {
 				console.log(error);
@@ -178,11 +190,13 @@ class App extends Component {
 	}
 
 	renderYourGOATIndexIcon() {
-		if (this.state.user_goat_indeces) {
-			console.log(this.state.user_goat_indeces)
+		if (this.state.is_loading_user) {
+			return <CircularProgress size={20} thickness={2} />
+		}
+		else if (this.state.user_goat_indeces) {
 			var percent = this.state.user_goat_indeces.overall.correct / this.state.user_goat_indeces.overall.total;
 			percent *= 100;
-			return <span>{ percent }%</span>;	
+			return <span><b>{ percent }%</b></span>;
 		}
 		else {
 			return <Index />
@@ -213,28 +227,29 @@ class App extends Component {
 					onSignOut={ () => { this.handleSignOut() }}
 				/>
 
-				<BottomNavigation selectedIndex={this.state.navIndex}>
-				  <BottomNavigationItem
-					label="Games"
-					icon={<ViewComfy />}
-					onTouchTap={() => this.nav(0)}
-				  />
-				  <BottomNavigationItem
-					label="Leaderboards"
-					icon={<AccountCircle />}
-					onTouchTap={() => this.nav(1)}
-				  />
-				  <BottomNavigationItem
-					label="Groups"
-					icon={<GroupsIcon />}
-					onTouchTap={() => this.nav(2)}
-				  />
-				  <BottomNavigationItem
-					label="Your Index"
-					icon={ this.renderYourGOATIndexIcon() }
-					onTouchTap={() => this.nav(3)}
-				  />
-				</BottomNavigation>
+				<BottomNavigation style={styles.navigation} selectedIndex={this.state.navIndex}>
+
+					<BottomNavigationItem
+						label="Games"
+						icon={<ViewComfy />}
+						onTouchTap={() => this.nav(0)}
+					/>
+					<BottomNavigationItem
+						label="Leaderboards"
+						icon={<AccountCircle />}
+						onTouchTap={() => this.nav(1)}
+					/>
+					<BottomNavigationItem
+						label="Groups"
+						icon={<GroupsIcon />}
+						onTouchTap={() => this.nav(2)}
+					/>
+					<BottomNavigationItem
+						label="Your Index"
+						icon={ this.renderYourGOATIndexIcon() }
+						onTouchTap={() => this.nav(3)}
+					/>
+				</BottomNavigation>				
 
 				{ this.renderMainContent() }
 
