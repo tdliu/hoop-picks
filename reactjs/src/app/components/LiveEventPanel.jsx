@@ -37,7 +37,7 @@ class LiveEventPanel extends Component {
 
 	componentDidMount() {
 		this.getLiveEvents();
-		setInterval(() => { this.getLiveEvents() }, 10000);
+		//setInterval(() => { this.getLiveEvents() }, 10000);
 	}
 
 	componentWillUnmount() {

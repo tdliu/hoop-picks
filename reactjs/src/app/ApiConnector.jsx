@@ -52,8 +52,13 @@ class ApiConnector {
 	}
 
 	//EVENTS
-	getEvents() {
-		console.log("FETCH EVENTS")
+	getEvents(token, sport, date, callback) {
+		var url='/game/?sport=' + sport + '&date=' + date;
+		var config = null;
+		if (token) {
+			var config = this.createAuthConfig()	
+		}
+		this.sendGetRequest(url, config, callback)
 	}
 
 	//LIVE EVENTS

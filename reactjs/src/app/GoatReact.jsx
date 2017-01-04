@@ -49,10 +49,9 @@ const muiTheme = getMuiTheme({
   },
 });
 
-const NAV_INDEX_LIVE = 0;
-const NAV_INDEX_GAMES = 1;
-const NAV_INDEX_GROUPS = 2;
-const NAV_INDEX_GOAT_INDEX = 3;
+const NAV_INDEX_GAMES = 0;
+const NAV_INDEX_GROUPS = 1;
+const NAV_INDEX_GOAT_INDEX = 2;
 
 class App extends Component {
 	constructor() {
@@ -140,10 +139,7 @@ class App extends Component {
 	}
 
 	renderMainContent() {
-		if (this.state.navIndex == NAV_INDEX_LIVE) {
-			return this.renderLiveGames();
-		}
-		else if (this.state.navIndex == NAV_INDEX_GAMES) {
+		if (this.state.navIndex == NAV_INDEX_GAMES) {
 			return this.renderGames();
 		}
 		else if (this.state.navIndex == NAV_INDEX_GROUPS) {
@@ -165,17 +161,6 @@ class App extends Component {
 					/>
 				</div>
 			</div>
-		);
-	}
-
-	renderLiveGames() {
-		return (
-			<div className="row center-lg">
-				<div className="col-xs-12 col-sm-12 col-lg-8">
-					<LiveEventPanel />
-				</div>
-			</div>
-
 		);
 	}
 

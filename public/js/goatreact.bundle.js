@@ -162,10 +162,9 @@
 		}
 	});
 	
-	var NAV_INDEX_LIVE = 0;
-	var NAV_INDEX_GAMES = 1;
-	var NAV_INDEX_GROUPS = 2;
-	var NAV_INDEX_GOAT_INDEX = 3;
+	var NAV_INDEX_GAMES = 0;
+	var NAV_INDEX_GROUPS = 1;
+	var NAV_INDEX_GOAT_INDEX = 2;
 	
 	var App = function (_Component) {
 		_inherits(App, _Component);
@@ -268,9 +267,7 @@
 		}, {
 			key: 'renderMainContent',
 			value: function renderMainContent() {
-				if (this.state.navIndex == NAV_INDEX_LIVE) {
-					return this.renderLiveGames();
-				} else if (this.state.navIndex == NAV_INDEX_GAMES) {
+				if (this.state.navIndex == NAV_INDEX_GAMES) {
 					return this.renderGames();
 				} else if (this.state.navIndex == NAV_INDEX_GROUPS) {
 					return this.renderGroups();
@@ -296,19 +293,6 @@
 								_this5.snackbarAlert(message);
 							}
 						})
-					)
-				);
-			}
-		}, {
-			key: 'renderLiveGames',
-			value: function renderLiveGames() {
-				return _react2.default.createElement(
-					'div',
-					{ className: 'row center-lg' },
-					_react2.default.createElement(
-						'div',
-						{ className: 'col-xs-12 col-sm-12 col-lg-8' },
-						_react2.default.createElement(_LiveEventPanel2.default, null)
 					)
 				);
 			}
@@ -41475,10 +41459,9 @@
 	
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
-	var NAV_INDEX_LIVE = 0;
-	var NAV_INDEX_GAMES = 1;
-	var NAV_INDEX_GROUPS = 2;
-	var NAV_INDEX_GOAT_INDEX = 3;
+	var NAV_INDEX_GAMES = 0;
+	var NAV_INDEX_GROUPS = 1;
+	var NAV_INDEX_GOAT_INDEX = 2;
 	
 	var styles = {
 		navigation: {
@@ -41511,7 +41494,7 @@
 					return _react2.default.createElement(_CircularProgress2.default, { size: 20, thickness: 2 });
 				} else if (this.props.goat_indeces) {
 					var percent = this.props.goat_indeces.overall.correct / this.props.goat_indeces.overall.total;
-					percent *= 100;
+					percent *= 100.0;
 					if (this.props.navIndex == NAV_INDEX_GOAT_INDEX) {
 						return _react2.default.createElement(
 							'div',
@@ -41532,23 +41515,6 @@
 				}
 			}
 		}, {
-			key: 'renderLiveIcon',
-			value: function renderLiveIcon() {
-				if (this.props.navIndex == NAV_INDEX_LIVE) {
-					return _react2.default.createElement(
-						'div',
-						{ style: styles.liveSelected },
-						'LIVE'
-					);
-				} else {
-					return _react2.default.createElement(
-						'div',
-						{ style: styles.live },
-						'LIVE'
-					);
-				}
-			}
-		}, {
 			key: 'render',
 			value: function render() {
 				var _this2 = this;
@@ -41556,13 +41522,6 @@
 				return _react2.default.createElement(
 					_BottomNavigation.BottomNavigation,
 					{ style: styles.navigation, selectedIndex: this.props.navIndex },
-					_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
-						label: 'Scores',
-						icon: this.renderLiveIcon(),
-						onTouchTap: function onTouchTap() {
-							return _this2.props.nav(NAV_INDEX_LIVE);
-						}
-					}),
 					_react2.default.createElement(_BottomNavigation.BottomNavigationItem, {
 						label: 'Games',
 						icon: _react2.default.createElement(_viewComfy2.default, null),
@@ -43502,8 +43461,13 @@
 	
 		}, {
 			key: 'getEvents',
-			value: function getEvents() {
-				console.log("FETCH EVENTS");
+			value: function getEvents(token, sport, date, callback) {
+				var url = '/game/?sport=' + sport + '&date=' + date;
+				var config = null;
+				if (token) {
+					var config = this.createAuthConfig();
+				}
+				this.sendGetRequest(url, config, callback);
 			}
 	
 			//LIVE EVENTS
@@ -49108,6 +49072,14 @@
 	
 	var _GoatEvent2 = _interopRequireDefault(_GoatEvent);
 	
+	var _LiveEvent = __webpack_require__(/*! ./LiveEvent.jsx */ 632);
+	
+	var _LiveEvent2 = _interopRequireDefault(_LiveEvent);
+	
+	var _ApiConnector = __webpack_require__(/*! ../ApiConnector.jsx */ 429);
+	
+	var _ApiConnector2 = _interopRequireDefault(_ApiConnector);
+	
 	var _chevronLeft = __webpack_require__(/*! material-ui/svg-icons/navigation/chevron-left */ 498);
 	
 	var _chevronLeft2 = _interopRequireDefault(_chevronLeft);
@@ -49120,6 +49092,14 @@
 	
 	var _FlatButton2 = _interopRequireDefault(_FlatButton);
 	
+	var _RaisedButton = __webpack_require__(/*! material-ui/RaisedButton */ 455);
+	
+	var _RaisedButton2 = _interopRequireDefault(_RaisedButton);
+	
+	var _IconButton = __webpack_require__(/*! material-ui/IconButton */ 337);
+	
+	var _IconButton2 = _interopRequireDefault(_IconButton);
+	
 	var _LinearProgress = __webpack_require__(/*! material-ui/LinearProgress */ 475);
 	
 	var _LinearProgress2 = _interopRequireDefault(_LinearProgress);
@@ -49127,6 +49107,8 @@
 	var _Paper = __webpack_require__(/*! material-ui/Paper */ 380);
 	
 	var _Paper2 = _interopRequireDefault(_Paper);
+	
+	var _Toolbar = __webpack_require__(/*! material-ui/Toolbar */ 645);
 	
 	var _axios = __webpack_require__(/*! axios */ 430);
 	
@@ -49148,7 +49130,7 @@
 		h4: {
 			fontFamily: "Roboto",
 			fontSize: "1.2rem",
-			margin: 16
+			marginBottom: 4
 		},
 		container: {
 			paddingLeft: 16,
@@ -49160,6 +49142,9 @@
 		},
 		label: {
 			color: "black"
+		},
+		navButton: {
+			margin: 8
 		}
 	};
 	
@@ -49178,9 +49163,13 @@
 			}
 	
 			_this.state = {
-				events: [],
-				moment: moment,
-				todays_date: moment.format("YYYYMMDD"),
+				scheduledEvents: [],
+				liveEvents: [],
+				poll: true,
+				todays_datestring: moment.format("YYYYMMDD"),
+				todays_moment: (0, _momentTimezone2.default)(moment),
+				cursor_moment: moment,
+				cursor_datestring: moment.format("YYYYMMDD"),
 				date_cursor_label: moment.format("MMM Do"),
 				loading: true
 			};
@@ -49188,34 +49177,72 @@
 		}
 	
 		_createClass(GoatDateEventGrid, [{
-			key: 'navigate',
-			value: function navigate(negative_one_or_positive_one) {
+			key: 'navigateToToday',
+			value: function navigateToToday() {
 				var _this2 = this;
 	
-				var newMoment = this.state.moment.add(negative_one_or_positive_one, 'd');
+				var newMoment = this.state.todays_moment;
 	
 				this.setState({ loading: true });
-				_axios2.default.get('/game/?sport=nba&date=' + newMoment.format("YYYYMMDD")).then(function (res) {
+				_ApiConnector2.default.getEvents(null, 'nba', newMoment.format("YYYYMMDD"), function (res) {
 					_this2.setState({
-						events: res.data,
-						moment: newMoment,
-						todays_date: newMoment.format("YYYYMMDD"),
+						scheduledEvents: res.data,
+						cursor_moment: (0, _momentTimezone2.default)(newMoment),
+						cursor_datestring: newMoment.format("YYYYMMDD"),
 						date_cursor_label: newMoment.format("MMM Do"),
 						loading: false
 					});
 				});
 			}
 		}, {
-			key: 'componentDidMount',
-			value: function componentDidMount() {
+			key: 'navigate',
+			value: function navigate(negative_one_or_positive_one) {
 				var _this3 = this;
 	
-				_axios2.default.get('/game/?sport=nba&date=' + this.state.todays_date).then(function (res) {
+				var newMoment = this.state.cursor_moment.add(negative_one_or_positive_one, 'd');
+	
+				this.setState({ loading: true });
+				_ApiConnector2.default.getEvents(null, 'nba', newMoment.format("YYYYMMDD"), function (res) {
 					_this3.setState({
-						events: res.data,
+						scheduledEvents: res.data,
+						cursor_moment: newMoment,
+						cursor_datestring: newMoment.format("YYYYMMDD"),
+						date_cursor_label: newMoment.format("MMM Do"),
 						loading: false
 					});
-					console.log(res);
+				});
+			}
+		}, {
+			key: 'getLiveEvents',
+			value: function getLiveEvents() {
+				var _this4 = this;
+	
+				if (!this.state.poll) return;
+				_ApiConnector2.default.getLiveEvents(function (res) {
+					if (res.status == 200) {
+						console.log(res.data);
+						_this4.setState({
+							liveEvents: res.data,
+							loading: false
+						});
+					}
+				});
+			}
+		}, {
+			key: 'componentDidMount',
+			value: function componentDidMount() {
+				var _this5 = this;
+	
+				this.getLiveEvents();
+				setInterval(function () {
+					_this5.getLiveEvents();
+				}, 10000);
+	
+				_ApiConnector2.default.getEvents(null, 'nba', this.state.todays_datestring, function (res) {
+					_this5.setState({
+						scheduledEvents: res.data,
+						loading: false
+					});
 				});
 			}
 		}, {
@@ -49227,16 +49254,68 @@
 				}
 			}
 		}, {
+			key: 'componentWillUnmount',
+			value: function componentWillUnmount() {
+				this.setState({
+					poll: false
+				});
+			}
+		}, {
+			key: 'hasScheduledEventStarted',
+			value: function hasScheduledEventStarted(event, moment) {
+				var scheduled_moment = _momentTimezone2.default.tz(event.time, "HH:mm:ss", "America/New_York");
+				//NOT the scheduled time is before now aka the scheduled time is after now
+				return !scheduled_moment.isBefore(moment);
+			}
+		}, {
+			key: 'getLiveEventFromScheduledEvent',
+			value: function getLiveEventFromScheduledEvent(scheduled_event) {
+				var id = scheduled_event.game_id;
+				for (var i = 0; i < this.state.liveEvents.length; i++) {
+					if ("nba" + this.state.liveEvents[i].gameId == id) {
+						return this.state.liveEvents[i];
+					}
+				}
+				console.log("not found", id);
+				return null;
+			}
+		}, {
 			key: 'renderEvents',
 			value: function renderEvents() {
+				var today_is_today = this.state.cursor_datestring === this.state.todays_datestring;
+				var now_eastern = (0, _momentTimezone2.default)().tz('America/New_York');
+	
 				var events = [];
-				for (var i = 0; i < this.state.events.length; i++) {
-					events.push(_react2.default.createElement(_GoatEvent2.default, {
-						key: i,
-						data: this.state.events[i],
-						currentUser: this.props.currentUser,
-						snackbarAlert: this.props.snackbarAlert
-					}));
+				for (var i = 0; i < this.state.scheduledEvents.length; i++) {
+					var curr_event = this.state.scheduledEvents[i];
+					var rendered_event = null;
+	
+					if (today_is_today && this.hasScheduledEventStarted(curr_event)) {
+						var live_event_data = this.getLiveEventFromScheduledEvent(curr_event);
+						if (!live_event_data) {
+							rendered_event = _react2.default.createElement(_GoatEvent2.default, {
+								key: i,
+								data: this.state.scheduledEvents[i],
+								currentUser: this.props.currentUser,
+								snackbarAlert: this.props.snackbarAlert,
+								enabled: false
+							});
+						} else {
+							rendered_event = _react2.default.createElement(_LiveEvent2.default, {
+								key: i,
+								data: live_event_data
+							});
+						}
+					} else {
+						rendered_event = _react2.default.createElement(_GoatEvent2.default, {
+							key: i,
+							data: this.state.scheduledEvents[i],
+							currentUser: this.props.currentUser,
+							snackbarAlert: this.props.snackbarAlert,
+							enabled: true
+						});
+					}
+					events.push(rendered_event);
 				}
 				return events;
 			}
@@ -49248,9 +49327,23 @@
 				}
 			}
 		}, {
+			key: 'renderTodayButton',
+			value: function renderTodayButton() {
+				var _this6 = this;
+	
+				var today_is_today = this.state.cursor_datestring === this.state.todays_datestring;
+				return _react2.default.createElement(_RaisedButton2.default, {
+					label: 'Today',
+					style: styles.navButton,
+					onClick: function onClick() {
+						_this6.navigateToToday();
+					},
+					disabled: today_is_today });
+			}
+		}, {
 			key: 'render',
 			value: function render() {
-				var _this4 = this;
+				var _this7 = this;
 	
 				return _react2.default.createElement(
 					_Paper2.default,
@@ -49275,20 +49368,35 @@
 						_react2.default.createElement(
 							'div',
 							{ className: 'col-xs col-sm col-lg-2' },
-							_react2.default.createElement(_FlatButton2.default, { icon: _react2.default.createElement(_chevronLeft2.default, null), onClick: function onClick() {
-									_this4.navigate(-1);
+							_react2.default.createElement(_FlatButton2.default, { label: this.state.date_cursor_label, disabled: true, labelStyle: styles.label })
+						)
+					),
+					_react2.default.createElement(
+						'div',
+						{ className: 'row center-xs' },
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-3 col-sm col-lg-2' },
+							this.renderTodayButton()
+						),
+						_react2.default.createElement(
+							'div',
+							{ className: 'col-xs-3 col-sm col-lg-2' },
+							_react2.default.createElement(_RaisedButton2.default, {
+								style: styles.navButton,
+								icon: _react2.default.createElement(_chevronLeft2.default, null),
+								onClick: function onClick() {
+									return _this7.navigate(-1);
 								} })
 						),
 						_react2.default.createElement(
 							'div',
-							{ className: 'col-xs col-sm col-lg-2' },
-							_react2.default.createElement(_FlatButton2.default, { label: this.state.date_cursor_label, disabled: true, labelStyle: styles.label })
-						),
-						_react2.default.createElement(
-							'div',
-							{ className: 'col-xs col-sm col-lg-2' },
-							_react2.default.createElement(_FlatButton2.default, { icon: _react2.default.createElement(_chevronRight2.default, null), onClick: function onClick() {
-									_this4.navigate(1);
+							{ className: 'col-xs-3 col-sm col-lg-2' },
+							_react2.default.createElement(_RaisedButton2.default, {
+								style: styles.navButton,
+								icon: _react2.default.createElement(_chevronRight2.default, null),
+								onClick: function onClick() {
+									return _this7.navigate(1);
 								} })
 						)
 					),
@@ -49379,6 +49487,7 @@
 		}, {
 			key: 'homeClicked',
 			value: function homeClicked() {
+				if (!this.props.enabled) return;
 				if (this.state.homePicked) {
 					this.setState({ homePicked: false });
 					this.sendPick(null);
@@ -49390,6 +49499,7 @@
 		}, {
 			key: 'awayClicked',
 			value: function awayClicked() {
+				if (!this.props.enabled) return;
 				if (this.state.awayPicked) {
 					this.setState({ awayPicked: false });
 					this.sendPick(null);
@@ -71171,12 +71281,8 @@
 		_createClass(LiveEventPanel, [{
 			key: 'componentDidMount',
 			value: function componentDidMount() {
-				var _this2 = this;
-	
 				this.getLiveEvents();
-				setInterval(function () {
-					_this2.getLiveEvents();
-				}, 10000);
+				//setInterval(() => { this.getLiveEvents() }, 10000);
 			}
 		}, {
 			key: 'componentWillUnmount',
@@ -71189,13 +71295,13 @@
 		}, {
 			key: 'getLiveEvents',
 			value: function getLiveEvents() {
-				var _this3 = this;
+				var _this2 = this;
 	
 				if (!this.state.poll) return;
 				_ApiConnector2.default.getLiveEvents(function (res) {
 					if (res.status == 200) {
 						console.log(res.data);
-						_this3.setState({
+						_this2.setState({
 							events: res.data,
 							loading: false
 						});
@@ -72674,6 +72780,622 @@
 	};
 	
 	module.exports = keyOf;
+
+/***/ },
+/* 645 */
+/*!****************************************!*\
+  !*** ./~/material-ui/Toolbar/index.js ***!
+  \****************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.default = exports.ToolbarTitle = exports.ToolbarSeparator = exports.ToolbarGroup = exports.Toolbar = undefined;
+	
+	var _Toolbar2 = __webpack_require__(/*! ./Toolbar */ 646);
+	
+	var _Toolbar3 = _interopRequireDefault(_Toolbar2);
+	
+	var _ToolbarGroup2 = __webpack_require__(/*! ./ToolbarGroup */ 647);
+	
+	var _ToolbarGroup3 = _interopRequireDefault(_ToolbarGroup2);
+	
+	var _ToolbarSeparator2 = __webpack_require__(/*! ./ToolbarSeparator */ 648);
+	
+	var _ToolbarSeparator3 = _interopRequireDefault(_ToolbarSeparator2);
+	
+	var _ToolbarTitle2 = __webpack_require__(/*! ./ToolbarTitle */ 649);
+	
+	var _ToolbarTitle3 = _interopRequireDefault(_ToolbarTitle2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	exports.Toolbar = _Toolbar3.default;
+	exports.ToolbarGroup = _ToolbarGroup3.default;
+	exports.ToolbarSeparator = _ToolbarSeparator3.default;
+	exports.ToolbarTitle = _ToolbarTitle3.default;
+	exports.default = _Toolbar3.default;
+
+/***/ },
+/* 646 */
+/*!******************************************!*\
+  !*** ./~/material-ui/Toolbar/Toolbar.js ***!
+  \******************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 330);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _objectWithoutProperties2 = __webpack_require__(/*! babel-runtime/helpers/objectWithoutProperties */ 335);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ 179);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 205);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 206);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ 210);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ 257);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _simpleAssign = __webpack_require__(/*! simple-assign */ 336);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function getStyles(props, context) {
+	  var noGutter = props.noGutter;
+	  var _context$muiTheme = context.muiTheme,
+	      baseTheme = _context$muiTheme.baseTheme,
+	      toolbar = _context$muiTheme.toolbar;
+	
+	
+	  return {
+	    root: {
+	      boxSizing: 'border-box',
+	      WebkitTapHighlightColor: 'rgba(0,0,0,0)', // Remove mobile color flashing (deprecated)
+	      backgroundColor: toolbar.backgroundColor,
+	      height: toolbar.height,
+	      padding: noGutter ? 0 : '0px ' + baseTheme.spacing.desktopGutter + 'px',
+	      display: 'flex',
+	      justifyContent: 'space-between'
+	    }
+	  };
+	}
+	
+	var Toolbar = function (_Component) {
+	  (0, _inherits3.default)(Toolbar, _Component);
+	
+	  function Toolbar() {
+	    (0, _classCallCheck3.default)(this, Toolbar);
+	    return (0, _possibleConstructorReturn3.default)(this, (Toolbar.__proto__ || (0, _getPrototypeOf2.default)(Toolbar)).apply(this, arguments));
+	  }
+	
+	  (0, _createClass3.default)(Toolbar, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          children = _props.children,
+	          className = _props.className,
+	          noGutter = _props.noGutter,
+	          style = _props.style,
+	          other = (0, _objectWithoutProperties3.default)(_props, ['children', 'className', 'noGutter', 'style']);
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+	
+	      var styles = getStyles(this.props, this.context);
+	
+	      return _react2.default.createElement(
+	        'div',
+	        (0, _extends3.default)({}, other, { className: className, style: prepareStyles((0, _simpleAssign2.default)({}, styles.root, style)) }),
+	        children
+	      );
+	    }
+	  }]);
+	  return Toolbar;
+	}(_react.Component);
+	
+	Toolbar.defaultProps = {
+	  noGutter: false
+	};
+	Toolbar.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	process.env.NODE_ENV !== "production" ? Toolbar.propTypes = {
+	  /**
+	   * Can be a `ToolbarGroup` to render a group of related items.
+	   */
+	  children: _react.PropTypes.node,
+	  /**
+	   * The css class name of the root element.
+	   */
+	  className: _react.PropTypes.string,
+	  /**
+	   * Do not apply `desktopGutter` to the `Toolbar`.
+	   */
+	  noGutter: _react.PropTypes.bool,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object
+	} : void 0;
+	exports.default = Toolbar;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 3)))
+
+/***/ },
+/* 647 */
+/*!***********************************************!*\
+  !*** ./~/material-ui/Toolbar/ToolbarGroup.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 330);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _objectWithoutProperties2 = __webpack_require__(/*! babel-runtime/helpers/objectWithoutProperties */ 335);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ 179);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 205);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 206);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ 210);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ 257);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _simpleAssign = __webpack_require__(/*! simple-assign */ 336);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function getStyles(props, context) {
+	  var firstChild = props.firstChild,
+	      lastChild = props.lastChild;
+	  var _context$muiTheme = context.muiTheme,
+	      baseTheme = _context$muiTheme.baseTheme,
+	      button = _context$muiTheme.button,
+	      toolbar = _context$muiTheme.toolbar;
+	
+	
+	  var marginHorizontal = baseTheme.spacing.desktopGutter;
+	  var marginVertical = (toolbar.height - button.height) / 2;
+	
+	  var styles = {
+	    root: {
+	      position: 'relative',
+	      marginLeft: firstChild ? -marginHorizontal : undefined,
+	      marginRight: lastChild ? -marginHorizontal : undefined,
+	      display: 'flex',
+	      justifyContent: 'space-between',
+	      alignItems: 'center'
+	    },
+	    dropDownMenu: {
+	      root: {
+	        color: toolbar.color, // removes hover color change, we want to keep it
+	        marginRight: baseTheme.spacing.desktopGutter,
+	        flex: 1,
+	        whiteSpace: 'nowrap'
+	      },
+	      controlBg: {
+	        backgroundColor: toolbar.menuHoverColor,
+	        borderRadius: 0
+	      },
+	      underline: {
+	        display: 'none'
+	      }
+	    },
+	    button: {
+	      margin: marginVertical + 'px ' + marginHorizontal + 'px',
+	      position: 'relative'
+	    },
+	    icon: {
+	      root: {
+	        cursor: 'pointer',
+	        lineHeight: toolbar.height + 'px',
+	        paddingLeft: baseTheme.spacing.desktopGutter
+	      }
+	    },
+	    span: {
+	      color: toolbar.iconColor,
+	      lineHeight: toolbar.height + 'px'
+	    }
+	  };
+	
+	  return styles;
+	}
+	
+	var ToolbarGroup = function (_Component) {
+	  (0, _inherits3.default)(ToolbarGroup, _Component);
+	
+	  function ToolbarGroup() {
+	    (0, _classCallCheck3.default)(this, ToolbarGroup);
+	    return (0, _possibleConstructorReturn3.default)(this, (ToolbarGroup.__proto__ || (0, _getPrototypeOf2.default)(ToolbarGroup)).apply(this, arguments));
+	  }
+	
+	  (0, _createClass3.default)(ToolbarGroup, [{
+	    key: 'handleMouseLeaveFontIcon',
+	    value: function handleMouseLeaveFontIcon(style) {
+	      return function (event) {
+	        event.target.style.zIndex = 'auto';
+	        event.target.style.color = style.root.color;
+	      };
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+	
+	      var _props = this.props,
+	          children = _props.children,
+	          className = _props.className,
+	          firstChild = _props.firstChild,
+	          lastChild = _props.lastChild,
+	          style = _props.style,
+	          other = (0, _objectWithoutProperties3.default)(_props, ['children', 'className', 'firstChild', 'lastChild', 'style']);
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+	
+	      var styles = getStyles(this.props, this.context);
+	
+	      var newChildren = _react2.default.Children.map(children, function (currentChild) {
+	        if (!currentChild) {
+	          return null;
+	        }
+	        if (!currentChild.type) {
+	          return currentChild;
+	        }
+	        switch (currentChild.type.muiName) {
+	          case 'DropDownMenu':
+	            return _react2.default.cloneElement(currentChild, {
+	              style: (0, _simpleAssign2.default)({}, styles.dropDownMenu.root, currentChild.props.style),
+	              underlineStyle: styles.dropDownMenu.underline
+	            });
+	          case 'RaisedButton':
+	          case 'FlatButton':
+	            return _react2.default.cloneElement(currentChild, {
+	              style: (0, _simpleAssign2.default)({}, styles.button, currentChild.props.style)
+	            });
+	          case 'FontIcon':
+	            return _react2.default.cloneElement(currentChild, {
+	              style: (0, _simpleAssign2.default)({}, styles.icon.root, currentChild.props.style),
+	              color: currentChild.props.color || _this2.context.muiTheme.toolbar.iconColor,
+	              hoverColor: currentChild.props.hoverColor || _this2.context.muiTheme.toolbar.hoverColor
+	            });
+	          case 'ToolbarSeparator':
+	          case 'ToolbarTitle':
+	            return _react2.default.cloneElement(currentChild, {
+	              style: (0, _simpleAssign2.default)({}, styles.span, currentChild.props.style)
+	            });
+	          default:
+	            return currentChild;
+	        }
+	      }, this);
+	
+	      return _react2.default.createElement(
+	        'div',
+	        (0, _extends3.default)({}, other, { className: className, style: prepareStyles((0, _simpleAssign2.default)({}, styles.root, style)) }),
+	        newChildren
+	      );
+	    }
+	  }]);
+	  return ToolbarGroup;
+	}(_react.Component);
+	
+	ToolbarGroup.defaultProps = {
+	  firstChild: false,
+	  lastChild: false
+	};
+	ToolbarGroup.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	process.env.NODE_ENV !== "production" ? ToolbarGroup.propTypes = {
+	  /**
+	   * Can be any node or number of nodes.
+	   */
+	  children: _react.PropTypes.node,
+	  /**
+	   * The css class name of the root element.
+	   */
+	  className: _react.PropTypes.string,
+	  /**
+	   * Set this to true for if the `ToolbarGroup` is the first child of `Toolbar`
+	   * to prevent setting the left gap.
+	   */
+	  firstChild: _react.PropTypes.bool,
+	  /**
+	   * Set this to true for if the `ToolbarGroup` is the last child of `Toolbar`
+	   * to prevent setting the right gap.
+	   */
+	  lastChild: _react.PropTypes.bool,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object
+	} : void 0;
+	exports.default = ToolbarGroup;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 3)))
+
+/***/ },
+/* 648 */
+/*!***************************************************!*\
+  !*** ./~/material-ui/Toolbar/ToolbarSeparator.js ***!
+  \***************************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 330);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _objectWithoutProperties2 = __webpack_require__(/*! babel-runtime/helpers/objectWithoutProperties */ 335);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ 179);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 205);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 206);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ 210);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ 257);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _simpleAssign = __webpack_require__(/*! simple-assign */ 336);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function getStyles(props, context) {
+	  var _context$muiTheme = context.muiTheme,
+	      baseTheme = _context$muiTheme.baseTheme,
+	      toolbar = _context$muiTheme.toolbar;
+	
+	
+	  return {
+	    root: {
+	      backgroundColor: toolbar.separatorColor,
+	      display: 'block',
+	      height: baseTheme.spacing.desktopGutterMore,
+	      marginLeft: baseTheme.spacing.desktopGutter,
+	      width: 1
+	    }
+	  };
+	}
+	
+	var ToolbarSeparator = function (_Component) {
+	  (0, _inherits3.default)(ToolbarSeparator, _Component);
+	
+	  function ToolbarSeparator() {
+	    (0, _classCallCheck3.default)(this, ToolbarSeparator);
+	    return (0, _possibleConstructorReturn3.default)(this, (ToolbarSeparator.__proto__ || (0, _getPrototypeOf2.default)(ToolbarSeparator)).apply(this, arguments));
+	  }
+	
+	  (0, _createClass3.default)(ToolbarSeparator, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          className = _props.className,
+	          style = _props.style,
+	          other = (0, _objectWithoutProperties3.default)(_props, ['className', 'style']);
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+	
+	      var styles = getStyles(this.props, this.context);
+	
+	      return _react2.default.createElement('span', (0, _extends3.default)({}, other, { className: className, style: prepareStyles((0, _simpleAssign2.default)({}, styles.root, style)) }));
+	    }
+	  }]);
+	  return ToolbarSeparator;
+	}(_react.Component);
+	
+	ToolbarSeparator.muiName = 'ToolbarSeparator';
+	ToolbarSeparator.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	process.env.NODE_ENV !== "production" ? ToolbarSeparator.propTypes = {
+	  /**
+	   * The css class name of the root element.
+	   */
+	  className: _react.PropTypes.string,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object
+	} : void 0;
+	exports.default = ToolbarSeparator;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 3)))
+
+/***/ },
+/* 649 */
+/*!***********************************************!*\
+  !*** ./~/material-ui/Toolbar/ToolbarTitle.js ***!
+  \***********************************************/
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(process) {'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends2 = __webpack_require__(/*! babel-runtime/helpers/extends */ 330);
+	
+	var _extends3 = _interopRequireDefault(_extends2);
+	
+	var _objectWithoutProperties2 = __webpack_require__(/*! babel-runtime/helpers/objectWithoutProperties */ 335);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	var _getPrototypeOf = __webpack_require__(/*! babel-runtime/core-js/object/get-prototype-of */ 179);
+	
+	var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+	
+	var _classCallCheck2 = __webpack_require__(/*! babel-runtime/helpers/classCallCheck */ 205);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _createClass2 = __webpack_require__(/*! babel-runtime/helpers/createClass */ 206);
+	
+	var _createClass3 = _interopRequireDefault(_createClass2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(/*! babel-runtime/helpers/possibleConstructorReturn */ 210);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(/*! babel-runtime/helpers/inherits */ 257);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	var _simpleAssign = __webpack_require__(/*! simple-assign */ 336);
+	
+	var _simpleAssign2 = _interopRequireDefault(_simpleAssign);
+	
+	var _react = __webpack_require__(/*! react */ 1);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
+	function getStyles(props, context) {
+	  var _context$muiTheme = context.muiTheme,
+	      baseTheme = _context$muiTheme.baseTheme,
+	      toolbar = _context$muiTheme.toolbar;
+	
+	
+	  return {
+	    root: {
+	      paddingRight: baseTheme.spacing.desktopGutterLess,
+	      lineHeight: toolbar.height + 'px',
+	      fontSize: toolbar.titleFontSize,
+	      fontFamily: baseTheme.fontFamily,
+	      position: 'relative',
+	      textOverflow: 'ellipsis',
+	      whiteSpace: 'nowrap',
+	      overflow: 'hidden'
+	    }
+	  };
+	}
+	
+	var ToolbarTitle = function (_Component) {
+	  (0, _inherits3.default)(ToolbarTitle, _Component);
+	
+	  function ToolbarTitle() {
+	    (0, _classCallCheck3.default)(this, ToolbarTitle);
+	    return (0, _possibleConstructorReturn3.default)(this, (ToolbarTitle.__proto__ || (0, _getPrototypeOf2.default)(ToolbarTitle)).apply(this, arguments));
+	  }
+	
+	  (0, _createClass3.default)(ToolbarTitle, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          className = _props.className,
+	          style = _props.style,
+	          text = _props.text,
+	          other = (0, _objectWithoutProperties3.default)(_props, ['className', 'style', 'text']);
+	      var prepareStyles = this.context.muiTheme.prepareStyles;
+	
+	      var styles = getStyles(this.props, this.context);
+	
+	      return _react2.default.createElement(
+	        'span',
+	        (0, _extends3.default)({}, other, { className: className, style: prepareStyles((0, _simpleAssign2.default)({}, styles.root, style)) }),
+	        text
+	      );
+	    }
+	  }]);
+	  return ToolbarTitle;
+	}(_react.Component);
+	
+	ToolbarTitle.muiName = 'ToolbarTitle';
+	ToolbarTitle.contextTypes = {
+	  muiTheme: _react.PropTypes.object.isRequired
+	};
+	process.env.NODE_ENV !== "production" ? ToolbarTitle.propTypes = {
+	  /**
+	   * The css class name of the root element.
+	   */
+	  className: _react.PropTypes.string,
+	  /**
+	   * Override the inline-styles of the root element.
+	   */
+	  style: _react.PropTypes.object,
+	  /**
+	   * The text to be displayed.
+	   */
+	  text: _react.PropTypes.string
+	} : void 0;
+	exports.default = ToolbarTitle;
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(/*! ./~/process/browser.js */ 3)))
 
 /***/ }
 /******/ ]);

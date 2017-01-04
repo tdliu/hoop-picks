@@ -10,10 +10,9 @@ import GroupsIcon from 'material-ui/svg-icons/social/group';
 
 import {pink800} from 'material-ui/styles/colors';
 
-const NAV_INDEX_LIVE = 0;
-const NAV_INDEX_GAMES = 1;
-const NAV_INDEX_GROUPS = 2;
-const NAV_INDEX_GOAT_INDEX = 3;
+const NAV_INDEX_GAMES = 0;
+const NAV_INDEX_GROUPS = 1;
+const NAV_INDEX_GOAT_INDEX = 2;
 
 const styles = {
 	navigation: {
@@ -45,7 +44,7 @@ class GoatNavigation extends Component {
 		}
 		else if (this.props.goat_indeces) {
 			var percent = this.props.goat_indeces.overall.correct / this.props.goat_indeces.overall.total;
-			percent *= 100;
+			percent *= 100.0;
 			if (this.props.navIndex == NAV_INDEX_GOAT_INDEX) {
 				return <div style={ styles.liveSelected }>{ percent }%</div>;
 			}
@@ -58,23 +57,9 @@ class GoatNavigation extends Component {
 		}
 	}
 
-	renderLiveIcon() {
-		if (this.props.navIndex == NAV_INDEX_LIVE) {
-			return <div style={ styles.liveSelected } >LIVE</div>
-		}
-		else {
-			return <div style={ styles.live } >LIVE</div>
-		}
-	}
-
 	render() {
 		return (
 			<BottomNavigation style={styles.navigation} selectedIndex={this.props.navIndex}>
-					<BottomNavigationItem
-						label="Scores"
-						icon={ this.renderLiveIcon() }
-						onTouchTap={() => this.props.nav(NAV_INDEX_LIVE)}
-					/>
 					<BottomNavigationItem
 						label="Games"
 						icon={<ViewComfy />}

@@ -31,6 +31,8 @@ class GoatEvent extends Component {
 	}
 
 	homeClicked() {
+		if (!this.props.enabled)
+			return
 		if (this.state.homePicked) {
 			this.setState({ homePicked: false});
 			this.sendPick(null);
@@ -42,6 +44,8 @@ class GoatEvent extends Component {
 	}
 
 	awayClicked() {
+		if (!this.props.enabled)
+			return
 		if (this.state.awayPicked) {
 			this.setState({ awayPicked: false});
 			this.sendPick(null);
