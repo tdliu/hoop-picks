@@ -1,12 +1,26 @@
 import React, {Component} from 'react';
 import ReactDOM from 'react-dom';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import SvgIcon from 'material-ui/SvgIcon';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+
+//---------- My Components ----------
 import GoatAppBar from './components/GoatAppBar.jsx';
+import GoatNavigation from './components/GoatNavigation.jsx';
+
+//-------- Material UI Components ------
 import Snackbar from 'material-ui/Snackbar';
-import {BottomNavigation, BottomNavigationItem} from 'material-ui/BottomNavigation';
+
+//------------- SECTIONS ------------------
 import Groups from './components/Groups.jsx';
 import GoatDateEventGrid from './components/GoatDateEventGrid.jsx';
+import DebugPanel from './components/DebugPanel.jsx'
+import YourGOATIndex from './components/YourGOATIndex.jsx';
+import LiveEventPanel from './components/LiveEventPanel.jsx';
+
+//-----------ICONS --------------
+import AccountCircle from 'material-ui/svg-icons/action/account-circle';
+
+import {pink800} from 'material-ui/styles/colors';
 
 import firebase from 'firebase';
 import firebaseui from 'firebaseui';
@@ -15,11 +29,6 @@ import ApiConnector from './ApiConnector.jsx';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 injectTapEventPlugin();
-
-import AccountCircle from 'material-ui/svg-icons/action/account-circle';
-import ViewComfy from 'material-ui/svg-icons/image/view-comfy';
-import ViewCarousel from 'material-ui/svg-icons/action/view-carousel';
-import GroupsIcon from 'material-ui/svg-icons/social/group';
 
 // Initialize Firebase
 var config = {
@@ -30,6 +39,20 @@ var config = {
 	messagingSenderId: "1041806276577"
 };
 firebase.initializeApp(config);
+
+const muiTheme = getMuiTheme({
+  palette: {
+  	primary1Color: pink800,
+  },
+  appBar: {
+    height: 50,
+  },
+});
+
+const NAV_INDEX_LIVE = 0;
+const NAV_INDEX_GAMES = 1;
+const NAV_INDEX_GROUPS = 2;
+const NAV_INDEX_GOAT_INDEX = 3;
 
 class App extends Component {
 	constructor() {
@@ -43,6 +66,8 @@ class App extends Component {
 			snackbarMessage : "",
 			navIndex : 0,
 			user_groups: [],
+			debugUrl: null,
+			is_loading_user: false,
 		}	
 	}
 
@@ -72,8 +97,10 @@ class App extends Component {
 					this.setState({
 						user_groups : res.data.groups,
 						user_goat_indeces : res.data.goat_indeces,
+						is_loading_user: false,
 					})
 				})
+				this.setState({ is_loading_user: true })
 			})
 			.catch(function(error) {
 				console.log(error);
@@ -113,17 +140,17 @@ class App extends Component {
 	}
 
 	renderMainContent() {
-		if (this.state.navIndex == 0) {
+		if (this.state.navIndex == NAV_INDEX_LIVE) {
+			return this.renderLiveGames();
+		}
+		else if (this.state.navIndex == NAV_INDEX_GAMES) {
 			return this.renderGames();
 		}
-		else if (this.state.navIndex == 1) {
-			return this.renderLeaderboards()
-		}
-		else if (this.state.navIndex == 2) {
+		else if (this.state.navIndex == NAV_INDEX_GROUPS) {
 			return this.renderGroups()
 		}
-		else if (this.state.navIndex == 3) {
-			return this.renderFeed()
+		else if (this.state.navIndex == NAV_INDEX_GOAT_INDEX) {
+			return this.renderYourGOATIndex()
 		}
 	}
 
@@ -141,8 +168,15 @@ class App extends Component {
 		);
 	}
 
-	renderLeaderboards() {
+	renderLiveGames() {
+		return (
+			<div className="row center-lg">
+				<div className="col-xs-12 col-sm-12 col-lg-8">
+					<LiveEventPanel />
+				</div>
+			</div>
 
+		);
 	}
 
 	renderGroups() {
@@ -159,44 +193,38 @@ class App extends Component {
 		);
 	}
 
+	renderYourGOATIndex() {
+		return (
+			<YourGOATIndex 
+				goat_indeces={ this.state.user_goat_indeces }
+			/>
+
+		);
+	}
+
 	renderFeed() {
 
 	}
 
 	render() {
 		return (
-			<MuiThemeProvider>
+			<MuiThemeProvider muiTheme={muiTheme}>
 			<div>
 				<GoatAppBar 
 					currentUser={ this.state.currentUser } 
 					currentUserToken={ this.state.currentUserToken }
 					onSignOut={ () => { this.handleSignOut() }}
 				/>
-
-				<BottomNavigation selectedIndex={this.state.navIndex}>
-				  <BottomNavigationItem
-					label="Games"
-					icon={<ViewComfy />}
-					onTouchTap={() => this.nav(0)}
-				  />
-				  <BottomNavigationItem
-					label="Leaderboards"
-					icon={<AccountCircle />}
-					onTouchTap={() => this.nav(1)}
-				  />
-				  <BottomNavigationItem
-					label="Groups"
-					icon={<GroupsIcon />}
-					onTouchTap={() => this.nav(2)}
-				  />
-				  <BottomNavigationItem
-					label="Feed"
-					icon={<ViewCarousel />}
-					onTouchTap={() => this.nav(3)}
-				  />
-				</BottomNavigation>
+				<GoatNavigation 
+					nav= { index => {this.nav(index) } }
+					goat_indeces= { this.state.user_goat_indeces }
+					is_loading_user= { this.state.is_loading_user }
+					navIndex= { this.state.navIndex }
+				/>
 
 				{ this.renderMainContent() }
+
+				<DebugPanel firebaseToken={ this.state.currentUserToken } />
 
 				<Snackbar
 					open= { this.state.snackbarOpen }
@@ -207,13 +235,19 @@ class App extends Component {
 				/>
 
 			</div>
+			
 		  </MuiThemeProvider>
 		);
 	};
 }
 
+function makeRequest(url) {
+	console.log(url);
+}
+
 ReactDOM.render(
-  <App />,
+	<App />
+  ,
   document.getElementById('app')
 );
 

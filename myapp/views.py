@@ -29,7 +29,7 @@ class GameHandler(webapp2.RequestHandler):
         #if curr_date is None:
         sport = self.request.get('sport')
         #sport = 'nfl'
-        logging.info(sport)
+        
         if sport == "nfl":
             qry = Event.query().filter(Event.sport == "nfl", Event.date > curr_date).order(Event.date)
             week = qry.fetch(1)[0].week
@@ -42,7 +42,7 @@ class GameHandler(webapp2.RequestHandler):
         #logging.info(curr_games_raw)
         responseData = []
         for curr_game in curr_games_raw:
-            logging.info(curr_game)
+            
             #curr_pick = Pick.query().filter(Pick.event.id() == curr_game.key.id())
             start_time = curr_game.start_time - datetime.timedelta(hours = 5) # to ET
             start_time = start_time.strftime("%H:%M:%S")
@@ -61,7 +61,7 @@ class GameHandler(webapp2.RequestHandler):
             if sport == "nfl":
                 game_data['week'] = week
                 #logging.info("HELLO")
-                logging.info(curr_game.date)
+                
                 game_data['date'] = curr_game.date.strftime("%Y%m%d")
             if len(curr_game.outcome.scores) > 0:
                 game_data['scores'] = curr_game.outcome.scores
@@ -104,11 +104,11 @@ class LiveGameHandler(webapp2.RequestHandler):
             r = urlfetch.fetch(url)
             nba_current_live_data = json.loads(r.content)['games']
             last_polled_ts = curr_ts
-            logging.info("new nba poll")
+            
             self.response.out.write(json.dumps(nba_current_live_data))
 
         else:
-            logging.info("using cached nba poll")
+            #logging.info("using cached nba poll")
             self.response.out.write(json.dumps(nba_current_live_data))
 
 class UserGoatIndexHandler(webapp2.RequestHandler):
@@ -148,7 +148,6 @@ class UserGoatIndexHandler(webapp2.RequestHandler):
 class GroupCreateHandler(webapp2.RequestHandler):
     def post(self):
         id_token = self.request.headers['Authorization'].split(' ').pop()
-        claims = google.oauth2.id_token.verify_firebase_token(id_token, HTTP_REQUEST);
         if not claims:
             logging.info("AUTHENTICATION FAILED")
             #not authenticated!!! bad!!
@@ -172,6 +171,7 @@ class GroupCreateHandler(webapp2.RequestHandler):
 
 class UserHandler(webapp2.RequestHandler):
     def get(self):
+        #logging.info(self.request.headers);
         id_token = self.request.headers['Authorization'].split(' ').pop()
         claims = google.oauth2.id_token.verify_firebase_token(id_token, HTTP_REQUEST);
         if not claims:
@@ -194,7 +194,16 @@ class UserHandler(webapp2.RequestHandler):
             }
         ]
         responseData = {
-            'goat_indeces' : [],
+            'goat_indeces' : {
+                "overall" : {
+                    'total': 50,
+                    'correct': 34
+                },
+                "NBA" : {
+                    'total': 20,
+                    'correct': 10
+                }
+            },
             'groups' : groups,
             'success' : True,
             'message' : "success",

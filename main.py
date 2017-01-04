@@ -96,8 +96,8 @@ class MainPage(webapp2.RequestHandler):
             'nfl_team_records': json.dumps(nfl_team_records),
             'logged_in' : logged_in
         }
-        logging.info("HEY")
-        logging.info(nfl_team_records)
+        #logging.info("HEY")
+        #logging.info(nfl_team_records)
         template = JINJA_ENVIRONMENT.get_template('templates/index.html')
         self.response.write(template.render(template_values))
 # [END main_page]

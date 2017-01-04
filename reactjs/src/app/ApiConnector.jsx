@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 class ApiConnector {
+
 	sendGetRequest(url, config, callback) {
 		axios.get(url, config)
 			.then(res => {
@@ -12,13 +13,32 @@ class ApiConnector {
 			});
 	}
 
+	sendPostRequest(url, params, config, callback) {
+		axios.post(url, params, config)
+			.then(res => {
+				callback(res);
+			});
+	}
+	
+
 	createAuthorizationHeader(token) {
 		return { 
 			authorization: 'Bearer ' + token
 		};
 	}
 
-	createAuthConfig(token) {
+	createDebugAuthorizationHeader() {
+		return { 
+			authorization: 'Bearer ' + '12345'
+		};
+	}
+
+	createAuthConfig(token, debug) {
+		if (debug) {
+			return {
+				headers: this.createDebugAuthorizationHeader()
+			}
+		}
 		return {
 			headers: this.createAuthorizationHeader(token)
 		}
@@ -36,8 +56,13 @@ class ApiConnector {
 		console.log("FETCH EVENTS")
 	}
 
-	//GROUPS
+	//LIVE EVENTS
+	getLiveEvents(callback) {
+		var url = '/live_game/';
+		this.sendGetRequest(url, null, callback);
+	}
 
+	//GROUPS
 	getGroupAsGroupOwner(token, group_id, callack) {
 		var url ='/group/';
 		var config = this.createAuthConfig(token);
