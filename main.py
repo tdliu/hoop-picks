@@ -32,12 +32,13 @@ import json
 
 import jinja2
 import webapp2
-from db.db_update import insert_nba_games
-from db.db_update import update_nba_games
-from db.db_update import recalculate_goat_index
-from db.db_update import insert_nfl_games
+#from db.db_update import insert_nba_games
+#from db.db_update import update_nba_games
+#from db.db_update import recalculate_goat_index
+#from db.db_update import insert_nfl_games
 from myapp.views import *
-from db.urls import *
+#from db.urls import *
+from myapp.db_handlers import *
 
 
 
@@ -108,38 +109,38 @@ class SignInHandler(webapp2.RequestHandler):
 
 class PickHandler(webapp2.RequestHandler):
     def post(self):
-        user = users.get_current_user()
-        user_id = user.user_id()
         data = json.loads(self.request.body)
+        user_id = data['user_id']
         game_id = data['game_id']
         #sport = data['sport']
         sport = game_id[:3] # temporary solution
-        team = data['team']
+        team_id = data['team_id']
+        #logging.info(user_id)
+        # Check if game has started
         if (datetime.datetime.utcnow() > ndb.Key("Event", game_id).get().start_time): # we don't want the user to see the change
             responseData = { 'success' : False, 'message': "Pick submitted after start time." }
             self.response.out.write(json.dumps(responseData))
             return
-        # MAGIC
-        # validate:
-            #game has not started yet
-            #team is a valid choice
-            # etc.
-        # use get_or_insert instead
-        curr_pick_qry = Pick.query().filter(Pick.user_id == user.user_id())
-        curr_pick_qry = curr_pick_qry.filter(Pick.event == ndb.Key("Event", game_id))
-        curr_pick = curr_pick_qry.fetch()
-        if len(curr_pick) > 0:
-            # do this
-            curr_pick[0].pick = ndb.Key("Option", team)
-            curr_pick[0].last_updated = datetime.datetime.now()
-            curr_pick[0].num_change = curr_pick[0].num_change + 1
-            curr_pick[0].put()
+        pick_id = user_id + game_id
+        pick = Pick.get_or_insert(
+            pick_id,
+            sport = sport,
+            user_id = user_id,
+            event = ndb.Key("Event", game_id)
+        )
+        responseData = {
+            'user_id': user_id,
+            'game_id': game_id,
+            'success' : True}
+        # Is user making or removing pick.
+        if team_id:
+            pick.pick = ndb.Key("Option", team_id)
+            pick.num_pick = pick.num_pick + 1
+            responseData['team_id'] = team_id
         else:
-            pick = Pick(user_id = user_id, sport = sport, event = ndb.Key("Event", game_id), pick = ndb.Key("Option", team)) # use team_id as key in future
-            pick.put()
-
-        responseData = { 'success' : True }
-        #logging.info(team);
+            pick.pick = None
+        #pick.score = []
+        pick.put()
         self.response.out.write(json.dumps(responseData))
 
 
@@ -150,8 +151,8 @@ app = webapp2.WSGIApplication([
     #('/db_update', CronDbUpdate),
     ('/live_game/', LiveGameHandler),
     ('/game/', GameHandler),
-    ('/admin/insert_nba_games/', InsertNBAGames),
-    ('/admin/insert_nfl_games/', InsertNFLGames),
+    ('/insert_nba_games/', InsertNBAGames),
+    ('/insert_nfl_games/', InsertNFLGames),
     ('/cron/recalculate_goat_index/', RecalculateGoatIndex),
     ('/user_goat_index/', UserGoatIndexHandler),
     #('/update_schema/', UpdateSchemaHandler),

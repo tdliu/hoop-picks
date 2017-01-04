@@ -1,6 +1,20 @@
 from google.appengine.ext import ndb
 import math
 
+class Group(ndb.Model):
+    # Set group name as key.
+    sport = ndb.StringProperty()
+    creator = ndb.StringProperty()
+    password = ndb.StringProperty()
+    password_required = ndb.BooleanProperty(default = False)
+    users = ndb.StringProperty(repeated = True)
+    public = ndb.BooleanProperty(default = True)
+
+
+class User(ndb.Model):
+    # Set user_id as key.
+    #user_id = ndb.StringProperty()
+    groups = ndb.KeyProperty(kind = Group, repeated = True)
 
 class Option(ndb.Model):
     tri_code = ndb.StringProperty()
@@ -41,7 +55,7 @@ class Pick(ndb.Model):
     prev_picks = ndb.KeyProperty(kind = Option, repeated = True)
     event = ndb.KeyProperty(kind = Event)
     pick = ndb.KeyProperty(kind = Option)
-    num_change = ndb.IntegerProperty(default = 0)
+    num_pick = ndb.IntegerProperty(default = 0)
 
 class UserGoatIndex(ndb.Model):
     user_id = ndb.StringProperty()

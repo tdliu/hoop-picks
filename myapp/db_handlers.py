@@ -1,11 +1,13 @@
 #!/usr/bin/env python
-from db_update import *
+from db.db_update import *
 from google.appengine.api import users
 import datetime
 import logging
 import webapp2
+from constants import admin_users
 
 
+'''
 class InsertNBAGames(webapp2.RequestHandler):
     def get(self):
         user = users.get_current_user()
@@ -19,19 +21,48 @@ class InsertNBAGames(webapp2.RequestHandler):
                 self.response.write('You are not an administrator.')
         else:
             self.response.write('You are not logged in.')
+'''
+
+class InsertNBAGames(webapp2.RequestHandler):
+    def get(self):
+        user_id = self.request.get('user_id', default_value = None)
+        if user_id:
+            if user_id in admin_users:
+                self.response.write('You are an administrator. Inserting NBA games')
+                insert_nba_games(datetime.date(2016,10,29))
+                logging.info("Inserted NBA games.")
+            else:
+                self.response.write('You are not an administrator.')
+        else:
+            self.response.write('You are not logged in.')
+
+class InsertNFLGames(webapp2.RequestHandler):
+    def get(self):
+        user_id = self.request.get('user_id', default_value = None)
+        if user_id:
+            if user_id in admin_users:
+                self.response.write('You are an administrator. Inserting NFL games.')
+                insert_nfl_games()
+            else:
+                self.response.write('You are not an administrator.')
+        else:
+            self.response.write('You are not logged in.')
+
         
-        
+'''        
 class InsertNFLGames(webapp2.RequestHandler):
 	def get(self):
 		user = users.get_current_user()
 		if user:
 			if users.is_current_user_admin():
-				self.response.write('You are an administrator.\nInserting NFL games.')
+				self.response.write('You are an administrator. Inserting NFL games.')
 				insert_nfl_games()
 			else:
 				self.response.write('You are not an administrator.')
 		else:
 			self.response.write('You are not logged in.')
+'''
+
 
 class UpdateNBAGames(webapp2.RequestHandler):
     def get(self):
