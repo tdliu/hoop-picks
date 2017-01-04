@@ -54,7 +54,7 @@ class DebugPanel extends Component {
 					<div className="col-xs-6 offset-xs-1">
 						<h4> DEBUG </h4>
 					</div>
-					<div class="col-xs-12">
+					<div className="col-xs-12">
 						<RaisedButton
 							label="Log current options"
 							onClick={ () => { console.log(this.state) } }

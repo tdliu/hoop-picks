@@ -56,6 +56,12 @@ class ApiConnector {
 		console.log("FETCH EVENTS")
 	}
 
+	//LIVE EVENTS
+	getLiveEvents(callback) {
+		var url = '/live_game/';
+		this.sendGetRequest(url, null, callback);
+	}
+
 	//GROUPS
 	getGroupAsGroupOwner(token, group_id, callack) {
 		var url ='/group/';

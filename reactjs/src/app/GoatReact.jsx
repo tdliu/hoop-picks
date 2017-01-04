@@ -15,6 +15,7 @@ import Groups from './components/Groups.jsx';
 import GoatDateEventGrid from './components/GoatDateEventGrid.jsx';
 import DebugPanel from './components/DebugPanel.jsx'
 import YourGOATIndex from './components/YourGOATIndex.jsx';
+import LiveEventPanel from './components/LiveEventPanel.jsx';
 
 //-----------ICONS --------------
 import AccountCircle from 'material-ui/svg-icons/action/account-circle';
@@ -47,6 +48,11 @@ const muiTheme = getMuiTheme({
     height: 50,
   },
 });
+
+const NAV_INDEX_LIVE = 0;
+const NAV_INDEX_GAMES = 1;
+const NAV_INDEX_GROUPS = 2;
+const NAV_INDEX_GOAT_INDEX = 3;
 
 class App extends Component {
 	constructor() {
@@ -134,16 +140,16 @@ class App extends Component {
 	}
 
 	renderMainContent() {
-		if (this.state.navIndex == 0) {
-			return this.renderLeaderboards()
+		if (this.state.navIndex == NAV_INDEX_LIVE) {
+			return this.renderLiveGames();
 		}
-		else if (this.state.navIndex == 1) {
+		else if (this.state.navIndex == NAV_INDEX_GAMES) {
 			return this.renderGames();
 		}
-		else if (this.state.navIndex == 2) {
+		else if (this.state.navIndex == NAV_INDEX_GROUPS) {
 			return this.renderGroups()
 		}
-		else if (this.state.navIndex == 3) {
+		else if (this.state.navIndex == NAV_INDEX_GOAT_INDEX) {
 			return this.renderYourGOATIndex()
 		}
 	}
@@ -162,8 +168,15 @@ class App extends Component {
 		);
 	}
 
-	renderLeaderboards() {
+	renderLiveGames() {
+		return (
+			<div className="row center-lg">
+				<div className="col-xs-12 col-sm-12 col-lg-8">
+					<LiveEventPanel />
+				</div>
+			</div>
 
+		);
 	}
 
 	renderGroups() {
