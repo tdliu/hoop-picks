@@ -15,7 +15,6 @@ import Groups from './components/Groups.jsx';
 import GoatDateEventGrid from './components/GoatDateEventGrid.jsx';
 import DebugPanel from './components/DebugPanel.jsx'
 import YourGOATIndex from './components/YourGOATIndex.jsx';
-import LiveEventPanel from './components/LiveEventPanel.jsx';
 
 //-----------ICONS --------------
 import AccountCircle from 'material-ui/svg-icons/action/account-circle';

@@ -229,17 +229,17 @@ class GoatDateEventGrid extends Component {
 						<FlatButton label={this.state.date_cursor_label} disabled={true} labelStyle={styles.label} />
 					</div>
 				</div>
-				<div className="row center-xs">
-					<div className="col-xs-3 col-sm col-lg-2"> 
+				<div className="row center-xs ">
+					<div className="col-xs-3 col-sm col-lg-1"> 
 						{ this.renderTodayButton() }
 					</div>	
-					<div className="col-xs-3 col-sm col-lg-2"> 
+					<div className="col-xs-3 col-sm col-lg-1"> 
 						<RaisedButton 
 							style={ styles.navButton }
 							icon={<NavigationChevronLeft />}
 							onClick={ () => (this.navigate(-1)) } />
 					</div>
-					<div className="col-xs-3 col-sm col-lg-2"> 
+					<div className="col-xs-3 col-sm col-lg-1"> 
 						<RaisedButton 
 							style={ styles.navButton }
 							icon={<NavigationChevronRight />} 

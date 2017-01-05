@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Card, CardActions, CardHeader, CardText} from 'material-ui/Card';
 import GoatEventOption from './GoatEventOption.jsx'
 import axios from 'axios';
+import Moment from 'moment';
 
 const styles = {
 	card: {
@@ -15,15 +16,20 @@ const styles = {
 class GoatEvent extends Component {
 	constructor(props) {
 		super(props);
+		var formattedTime = null;
+		if (props.data.time) {
+			formattedTime = Moment(props.data.time, "HH:mm:ss").format("h:mm a");
+		}
 		this.state = {
 			homePicked : false,
 			awayPicked : true,
+			formattedTime: formattedTime,
 		};
 	}
 
 	formatTime() {
-		if (this.props.data.time) {
-			return this.props.data.time;
+		if (this.state.formattedTime) {
+			return this.state.formattedTime;
 		}
 		else {
 			return "!time!";
@@ -83,8 +89,7 @@ class GoatEvent extends Component {
 				<Card style={styles.card}>
 					<CardHeader
 					  subtitle={ this.formatTime() }
-					  actAsExpander={true}
-					  showExpandableButton={true}
+					  textStyle={{paddingRight: 0}}
 					/>
 
 					<GoatEventOption 
