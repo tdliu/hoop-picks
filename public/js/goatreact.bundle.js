@@ -49258,10 +49258,13 @@
 			}
 		}, {
 			key: 'hasScheduledEventStarted',
-			value: function hasScheduledEventStarted(event, moment) {
-				var scheduled_moment = _momentTimezone2.default.tz(event.time, "HH:mm:ss", "America/New_York");
+			value: function hasScheduledEventStarted(event, now_moment) {
+				var string = now_moment.format("YYYYMMDD ") + event.time;
+				var scheduled_moment = _momentTimezone2.default.tz(string, "YYYYMMDD HH:mm:ss", "America/New_York");
+				console.log(event.time, now_moment.isBefore(scheduled_moment));
+				//console.log(!scheduled_moment.isBefore(moment), event.time, scheduled_moment, moment);
 				//NOT the scheduled time is before now aka the scheduled time is after now
-				return !scheduled_moment.isBefore(moment);
+				return scheduled_moment.isBefore(now_moment);
 			}
 		}, {
 			key: 'getLiveEventFromScheduledEvent',
@@ -49279,14 +49282,14 @@
 			key: 'renderEvents',
 			value: function renderEvents() {
 				var today_is_today = this.state.cursor_datestring === this.state.todays_datestring;
-				var now_eastern = (0, _momentTimezone2.default)().tz('America/New_York');
+				var now_eastern = (0, _momentTimezone2.default)().tz("America/New_York");
 	
 				var events = [];
 				for (var i = 0; i < this.state.scheduledEvents.length; i++) {
 					var curr_event = this.state.scheduledEvents[i];
 					var rendered_event = null;
 	
-					if (today_is_today && this.hasScheduledEventStarted(curr_event)) {
+					if (today_is_today && this.hasScheduledEventStarted(curr_event, now_eastern)) {
 						var live_event_data = this.getLiveEventFromScheduledEvent(curr_event);
 						if (!live_event_data) {
 							rendered_event = _react2.default.createElement(_GoatEvent2.default, {
