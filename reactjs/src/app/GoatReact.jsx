@@ -84,6 +84,8 @@ class App extends Component {
 				currentUser: user,
 			})
 
+			ga('set', 'userId', user.uid); // Set the user ID using signed-in user_id.
+
 			user.getToken().then( iDToken => {
 				console.log(iDToken)
 				this.setState({

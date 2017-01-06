@@ -204,6 +204,8 @@
 						currentUser: user
 					});
 	
+					ga('set', 'userId', user.uid); // Set the user ID using signed-in user_id.
+	
 					user.getToken().then(function (iDToken) {
 						console.log(iDToken);
 						_this2.setState({
